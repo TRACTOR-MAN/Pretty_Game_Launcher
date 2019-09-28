@@ -1,0 +1,88 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "MAKE",
+            "options": {
+                "cwd": "${workspaceFolder}/Build/Obj"
+            },
+            "presentation": 
+            {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": 
+            {
+                "base": "$gcc"
+            },
+            "command": "make -j16 all && ./Game_Launcher",
+            "group": 
+            {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": "QMAKE"
+        },
+        {
+            "type": "shell",
+            "label": "MAKE ALL",
+            "options": {
+                "cwd": "${workspaceFolder}/Build/Obj"
+            },
+            "presentation": 
+            {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": 
+            {
+                "base": "$gcc"
+            },
+            "command": "make -j16 clean && make -j16 all && ./Game_Launcher",
+            "group": 
+            {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": "QMAKE"
+        },
+        {
+            "type": "shell",
+            "label": "QMAKE",
+            "options": {
+                "cwd": "${workspaceFolder}/Project"
+            },
+            "presentation": 
+            {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": 
+            {
+                "base": "$gcc"
+            },
+            "command": "qmake Game_Launcher.pro -spec linux-g++ CONFIG+=debug -o ../Build/Obj/makefile",
+            "group": 
+            {
+                "kind": "none",
+                "isDefault": true
+            },
+        },
+    ]
+    
+}
