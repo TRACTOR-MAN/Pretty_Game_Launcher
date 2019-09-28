@@ -9,6 +9,8 @@ class MainWindow;
 
 class MainWindow : public QMainWindow
 {
+    // Macro to allow the QT meta object compiler to convert this 
+    // class allong with the associated form to machine generated code.
     Q_OBJECT
 
 public:
