@@ -3,7 +3,9 @@
 
 #include <QMainWindow>
 
-namespace Ui {
+// Forward decleration of the MainWindow class
+namespace Ui 
+{
 class MainWindow;
 }
 
