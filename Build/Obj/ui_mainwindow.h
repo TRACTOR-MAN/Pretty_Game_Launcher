@@ -17,7 +17,6 @@
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
-#include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -26,46 +25,50 @@ class Ui_MainWindow
 {
 public:
     QAction *actionTest_1;
+    QAction *actionAdd_New_Game;
     QWidget *centralWidget;
     QCommandLinkButton *commandLinkButton;
     QMenuBar *menuBar;
-    QMenu *menuTest;
-    QToolBar *mainToolBar;
+    QMenu *taskMenu;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
+        MainWindow->setEnabled(true);
         MainWindow->resize(1057, 774);
+#ifndef QT_NO_TOOLTIP
+        MainWindow->setToolTip(QString::fromUtf8(""));
+#endif // QT_NO_TOOLTIP
+        MainWindow->setStyleSheet(QString::fromUtf8(""));
         MainWindow->setInputMethodHints(Qt::ImhNone);
         actionTest_1 = new QAction(MainWindow);
         actionTest_1->setObjectName(QString::fromUtf8("actionTest_1"));
-        actionTest_1->setCheckable(true);
+        actionTest_1->setCheckable(false);
+        actionTest_1->setEnabled(false);
+        actionAdd_New_Game = new QAction(MainWindow);
+        actionAdd_New_Game->setObjectName(QString::fromUtf8("actionAdd_New_Game"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         commandLinkButton = new QCommandLinkButton(centralWidget);
         commandLinkButton->setObjectName(QString::fromUtf8("commandLinkButton"));
-        commandLinkButton->setGeometry(QRect(430, 290, 168, 41));
-        commandLinkButton->setCheckable(true);
-        commandLinkButton->setChecked(true);
-        commandLinkButton->setDescription(QString::fromUtf8(""));
+        commandLinkButton->setGeometry(QRect(220, 140, 177, 41));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 1057, 22));
-        menuTest = new QMenu(menuBar);
-        menuTest->setObjectName(QString::fromUtf8("menuTest"));
+        taskMenu = new QMenu(menuBar);
+        taskMenu->setObjectName(QString::fromUtf8("taskMenu"));
         MainWindow->setMenuBar(menuBar);
-        mainToolBar = new QToolBar(MainWindow);
-        mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
-        MainWindow->addToolBar(Qt::TopToolBarArea, mainToolBar);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
+        statusBar->setMouseTracking(true);
+        statusBar->setTabletTracking(false);
         MainWindow->setStatusBar(statusBar);
 
-        menuBar->addAction(menuTest->menuAction());
-        menuTest->addAction(actionTest_1);
+        menuBar->addAction(taskMenu->menuAction());
+        taskMenu->addAction(actionAdd_New_Game);
 
         retranslateUi(MainWindow);
         QObject::connect(commandLinkButton, SIGNAL(clicked()), MainWindow, SLOT(CustomFunction()));
@@ -75,10 +78,11 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", nullptr));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Pretty Game Launcher", nullptr));
         actionTest_1->setText(QApplication::translate("MainWindow", "Test_1", nullptr));
-        commandLinkButton->setText(QApplication::translate("MainWindow", "Load of shit", nullptr));
-        menuTest->setTitle(QApplication::translate("MainWindow", "Test", nullptr));
+        actionAdd_New_Game->setText(QApplication::translate("MainWindow", "Add New Game", nullptr));
+        commandLinkButton->setText(QApplication::translate("MainWindow", "CommandLinkButton", nullptr));
+        taskMenu->setTitle(QApplication::translate("MainWindow", "File", nullptr));
     } // retranslateUi
 
 };

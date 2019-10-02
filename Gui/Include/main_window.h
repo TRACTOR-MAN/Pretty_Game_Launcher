@@ -3,7 +3,8 @@
 
 #include <QMainWindow>
 
-// Forward decleration of the MainWindow class
+// Forward decleration of the MainWindow class created in the form,
+// confusingly, it has the same name as our MainWindow class.
 namespace Ui 
 {
 class MainWindow;
