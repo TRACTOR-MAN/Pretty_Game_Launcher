@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
     QByteArrayData data[3];
-    char stringdata0[27];
+    char stringdata0[44];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,11 +32,12 @@ struct qt_meta_stringdata_MainWindow_t {
 static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_MainWindow = {
     {
 QT_MOC_LITERAL(0, 0, 10), // "MainWindow"
-QT_MOC_LITERAL(1, 11, 14), // "CustomFunction"
-QT_MOC_LITERAL(2, 26, 0) // ""
+QT_MOC_LITERAL(1, 11, 31), // "on_actionAdd_New_Game_triggered"
+QT_MOC_LITERAL(2, 43, 0) // ""
 
     },
-    "MainWindow\0CustomFunction\0"
+    "MainWindow\0on_actionAdd_New_Game_triggered\0"
+    ""
 };
 #undef QT_MOC_LITERAL
 
@@ -68,7 +69,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         auto *_t = static_cast<MainWindow *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->CustomFunction(); break;
+        case 0: _t->on_actionAdd_New_Game_triggered(); break;
         default: ;
         }
     }

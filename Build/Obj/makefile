@@ -53,10 +53,14 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../../Gui/main.cpp \
-		../../Gui/main_window.cpp moc_main_window.cpp
+		../../Gui/main_window.cpp \
+		../../Gui/add_new_game_dialogue.cpp moc_main_window.cpp \
+		moc_add_new_game_dialogue.cpp
 OBJECTS       = main.o \
 		main_window.o \
-		moc_main_window.o
+		add_new_game_dialogue.o \
+		moc_main_window.o \
+		moc_add_new_game_dialogue.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -144,8 +148,10 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		../../../Project/Game_Launcher.pro ../../Gui/Include/main_window.h ../../Gui/main.cpp \
-		../../Gui/main_window.cpp
+		../../../Project/Game_Launcher.pro ../../Gui/Include/main_window.h \
+		../../Gui/Include/add_new_game_dialogue.h ../../Gui/main.cpp \
+		../../Gui/main_window.cpp \
+		../../Gui/add_new_game_dialogue.cpp
 QMAKE_TARGET  = Game_Launcher
 DESTDIR       = 
 TARGET        = Game_Launcher
@@ -154,7 +160,7 @@ TARGET        = Game_Launcher
 first: all
 ####### Build rules
 
-Game_Launcher: ui_mainwindow.h $(OBJECTS)  
+Game_Launcher: ui_mainwindow.h ui_add_new_game_dialogue.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 makefile: ../../Project/Game_Launcher.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -355,9 +361,9 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../../Gui/Include/main_window.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../../Gui/main.cpp ../../Gui/main_window.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../../UI/mainwindow.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../../Gui/Include/main_window.h ../../Gui/Include/add_new_game_dialogue.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../Gui/main.cpp ../../Gui/main_window.cpp ../../Gui/add_new_game_dialogue.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../UI/mainwindow.ui ../../UI/add_new_game_dialogue.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -389,24 +395,33 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++11 -Wall -W -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_main_window.cpp
+compiler_moc_header_make_all: moc_main_window.cpp moc_add_new_game_dialogue.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_main_window.cpp
+	-$(DEL_FILE) moc_main_window.cpp moc_add_new_game_dialogue.cpp
 moc_main_window.cpp: ../../Gui/Include/main_window.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/General/QT_Projects/Game_Launcher/Build/Obj/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/General/QT_Projects/Game_Launcher/Project -I/mnt/General/QT_Projects/Game_Launcher/Gui/Include -I/mnt/General/QT_Projects/Game_Launcher/Control/Include -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../../Gui/Include/main_window.h -o moc_main_window.cpp
 
+moc_add_new_game_dialogue.cpp: ../../Gui/Include/add_new_game_dialogue.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/General/QT_Projects/Game_Launcher/Build/Obj/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/General/QT_Projects/Game_Launcher/Project -I/mnt/General/QT_Projects/Game_Launcher/Gui/Include -I/mnt/General/QT_Projects/Game_Launcher/Control/Include -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../../Gui/Include/add_new_game_dialogue.h -o moc_add_new_game_dialogue.cpp
+
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_mainwindow.h
+compiler_uic_make_all: ui_mainwindow.h ui_add_new_game_dialogue.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_mainwindow.h
+	-$(DEL_FILE) ui_mainwindow.h ui_add_new_game_dialogue.h
 ui_mainwindow.h: ../../UI/mainwindow.ui \
 		/usr/lib/qt5/bin/uic
 	/usr/lib/qt5/bin/uic ../../UI/mainwindow.ui -o ui_mainwindow.h
+
+ui_add_new_game_dialogue.h: ../../UI/add_new_game_dialogue.ui \
+		/usr/lib/qt5/bin/uic
+	/usr/lib/qt5/bin/uic ../../UI/add_new_game_dialogue.ui -o ui_add_new_game_dialogue.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -422,11 +437,19 @@ main.o: ../../Gui/main.cpp ../../Gui/Include/main_window.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../../Gui/main.cpp
 
 main_window.o: ../../Gui/main_window.cpp ../../Gui/Include/main_window.h \
-		ui_mainwindow.h
+		ui_mainwindow.h \
+		../../Gui/Include/add_new_game_dialogue.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main_window.o ../../Gui/main_window.cpp
+
+add_new_game_dialogue.o: ../../Gui/add_new_game_dialogue.cpp ../../Gui/Include/add_new_game_dialogue.h \
+		ui_add_new_game_dialogue.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o add_new_game_dialogue.o ../../Gui/add_new_game_dialogue.cpp
 
 moc_main_window.o: moc_main_window.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_main_window.o moc_main_window.cpp
+
+moc_add_new_game_dialogue.o: moc_add_new_game_dialogue.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_add_new_game_dialogue.o moc_add_new_game_dialogue.cpp
 
 ####### Install
 

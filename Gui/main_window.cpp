@@ -1,44 +1,36 @@
 #include <QMainWindow>
 #include "main_window.h"
 #include "ui_mainwindow.h"
-#include <iostream>
+#include "add_new_game_dialogue.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    addNewGame(nullptr)
 {
     // Set up the main window based upon the form.
-    ui->setupUi(this);
+    ui->setupUi( this );
 
-    // This is how to set a background image for a widget
-    ui->centralWidget->setStyleSheet(
-                                     "#centralWidget { \
-                                      border-image: url(\"/mnt/SSD_Games/ROMs/PS3/BLUS-30036/PS3_GAME/PIC1.PNG\") 0 0 0 0 stretch stretch; \
-                                      }"
-                                    );
-                                    
-    ui->commandLinkButton->setStyleSheet( 
-                                         "#commandLinkButton { \
-                                          background-color: pink \
-                                          }"
-                                        );
+    // Fill the screen from start up
+    this->showMaximized( );
 
-    ui->menuBar->setStyleSheet          ( 
-                                         "#menuBar { \
-                                          background-color: blue \
-                                          }"
-                                        
-                                        );
-    
+    // Need to ensure this opens up in screen one    
 }
 
 MainWindow::~MainWindow()
 {
+    // Delete this instance of the UI
     delete ui;
+    // Delete our instance of Add_New_Game_Dialogue
+    delete addNewGame;
 }
 
-// My first slot, that works.
-void MainWindow::CustomFunction( void )
+void MainWindow::on_actionAdd_New_Game_triggered()
 {
-    std::cout << "hello world" << std::endl;
+    // Take some memory from the heap and create a new instance of addNewGame
+    // If we dont do it this way, the dialoge gets trashed on the stack as soon
+    // as MainWindow::on_actionAdd_New_Game_triggered goes out of scope
+    addNewGame = new(Add_New_Game_Dialogue);
+
+    addNewGame->show();
 }

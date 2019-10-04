@@ -12,7 +12,6 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QCommandLinkButton>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
@@ -27,7 +26,6 @@ public:
     QAction *actionTest_1;
     QAction *actionAdd_New_Game;
     QWidget *centralWidget;
-    QCommandLinkButton *commandLinkButton;
     QMenuBar *menuBar;
     QMenu *taskMenu;
     QStatusBar *statusBar;
@@ -51,9 +49,6 @@ public:
         actionAdd_New_Game->setObjectName(QString::fromUtf8("actionAdd_New_Game"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
-        commandLinkButton = new QCommandLinkButton(centralWidget);
-        commandLinkButton->setObjectName(QString::fromUtf8("commandLinkButton"));
-        commandLinkButton->setGeometry(QRect(220, 140, 177, 41));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
@@ -71,7 +66,6 @@ public:
         taskMenu->addAction(actionAdd_New_Game);
 
         retranslateUi(MainWindow);
-        QObject::connect(commandLinkButton, SIGNAL(clicked()), MainWindow, SLOT(CustomFunction()));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -81,7 +75,6 @@ public:
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Pretty Game Launcher", nullptr));
         actionTest_1->setText(QApplication::translate("MainWindow", "Test_1", nullptr));
         actionAdd_New_Game->setText(QApplication::translate("MainWindow", "Add New Game", nullptr));
-        commandLinkButton->setText(QApplication::translate("MainWindow", "CommandLinkButton", nullptr));
         taskMenu->setTitle(QApplication::translate("MainWindow", "File", nullptr));
     } // retranslateUi
 

@@ -27,13 +27,16 @@ CONFIG += c++11
 SOURCES += \
         ../Gui/main.cpp \
         ../Gui/main_window.cpp \
+        ../Gui/add_new_game_dialogue.cpp
 
 HEADERS += \
-        ../Gui/Include/main_window.h
+        ../Gui/Include/main_window.h \
+        ../Gui/Include/add_new_game_dialogue.h
 
 INCLUDEPATH += \
         ../Gui/Include \
         ../Control/Include
 
 FORMS += \
-        ../UI/mainwindow.ui
+        ../UI/mainwindow.ui \
+        ../UI/add_new_game_dialogue.ui
