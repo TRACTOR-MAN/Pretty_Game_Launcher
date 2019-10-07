@@ -18,6 +18,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QToolButton>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -38,7 +39,7 @@ public:
     QWidget *widget_2;
     QHBoxLayout *horizontalLayout_4;
     QLabel *label_3;
-    QComboBox *comboBox_2;
+    QToolButton *toolButton;
     QWidget *widget;
     QHBoxLayout *horizontalLayout;
     QSpacerItem *horizontalSpacer;
@@ -104,12 +105,10 @@ public:
 
         horizontalLayout_4->addWidget(label_3);
 
-        comboBox_2 = new QComboBox(widget_2);
-        comboBox_2->setObjectName(QString::fromUtf8("comboBox_2"));
-        sizePolicy1.setHeightForWidth(comboBox_2->sizePolicy().hasHeightForWidth());
-        comboBox_2->setSizePolicy(sizePolicy1);
+        toolButton = new QToolButton(widget_2);
+        toolButton->setObjectName(QString::fromUtf8("toolButton"));
 
-        horizontalLayout_4->addWidget(comboBox_2);
+        horizontalLayout_4->addWidget(toolButton);
 
 
         verticalLayout->addWidget(widget_2);
@@ -139,8 +138,9 @@ public:
 
 
         retranslateUi(Add_New_Game_Dialogue);
-        QObject::connect(buttonBox, SIGNAL(accepted()), Add_New_Game_Dialogue, SLOT(accept()));
         QObject::connect(buttonBox, SIGNAL(rejected()), Add_New_Game_Dialogue, SLOT(reject()));
+        QObject::connect(buttonBox, SIGNAL(accepted()), Add_New_Game_Dialogue, SLOT(accept()));
+        QObject::connect(toolButton, SIGNAL(clicked()), Add_New_Game_Dialogue, SLOT(searchForFile()));
 
         QMetaObject::connectSlotsByName(Add_New_Game_Dialogue);
     } // setupUi
@@ -151,6 +151,7 @@ public:
         label->setText(QApplication::translate("Add_New_Game_Dialogue", "Game Title", nullptr));
         label_2->setText(QApplication::translate("Add_New_Game_Dialogue", "Game Icon", nullptr));
         label_3->setText(QApplication::translate("Add_New_Game_Dialogue", "Launch Script", nullptr));
+        toolButton->setText(QApplication::translate("Add_New_Game_Dialogue", "...", nullptr));
     } // retranslateUi
 
 };

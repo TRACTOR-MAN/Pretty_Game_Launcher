@@ -30,7 +30,10 @@ void MainWindow::on_actionAdd_New_Game_triggered()
     // Take some memory from the heap and create a new instance of addNewGame
     // If we dont do it this way, the dialoge gets trashed on the stack as soon
     // as MainWindow::on_actionAdd_New_Game_triggered goes out of scope
-    addNewGame = new(Add_New_Game_Dialogue);
+    if( addNewGame == nullptr )
+    {
+        addNewGame = new(Add_New_Game_Dialogue);
+    }
 
     addNewGame->show();
 }
