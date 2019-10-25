@@ -30,6 +30,10 @@ class Add_New_Game_Dialogue : public QDialog
 
     private slots:
         void searchForFile( );
+        void updateSelectedFile( const QString selectedFile );
+    
+    signals:
+        void textChanged( const QString newString );
 
     private:
         Ui::Add_New_Game_Dialogue * ui;

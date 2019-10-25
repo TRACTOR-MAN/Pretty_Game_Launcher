@@ -1,6 +1,1 @@
-Build/Debug/main_window.o
-Build/Debug/main.o
-Build/Debug/moc_main_window.o
-Build/Obj/main_window.o
-Build/Obj/main.o
-Build/Obj/moc_main_window.o
+*.o

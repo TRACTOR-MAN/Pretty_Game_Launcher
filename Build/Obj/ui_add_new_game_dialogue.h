@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'add_new_game_dialogue.ui'
 **
-** Created by: Qt User Interface Compiler version 5.12.2
+** Created by: Qt User Interface Compiler version 5.12.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -39,6 +39,7 @@ public:
     QWidget *widget_2;
     QHBoxLayout *horizontalLayout_4;
     QLabel *label_3;
+    QLineEdit *selectedFile;
     QToolButton *toolButton;
     QWidget *widget;
     QHBoxLayout *horizontalLayout;
@@ -50,7 +51,7 @@ public:
         if (Add_New_Game_Dialogue->objectName().isEmpty())
             Add_New_Game_Dialogue->setObjectName(QString::fromUtf8("Add_New_Game_Dialogue"));
         Add_New_Game_Dialogue->resize(400, 301);
-        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(Add_New_Game_Dialogue->sizePolicy().hasHeightForWidth());
@@ -105,6 +106,11 @@ public:
 
         horizontalLayout_4->addWidget(label_3);
 
+        selectedFile = new QLineEdit(widget_2);
+        selectedFile->setObjectName(QString::fromUtf8("selectedFile"));
+
+        horizontalLayout_4->addWidget(selectedFile);
+
         toolButton = new QToolButton(widget_2);
         toolButton->setObjectName(QString::fromUtf8("toolButton"));
 
@@ -123,11 +129,8 @@ public:
 
         buttonBox = new QDialogButtonBox(widget);
         buttonBox->setObjectName(QString::fromUtf8("buttonBox"));
-        QSizePolicy sizePolicy2(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(buttonBox->sizePolicy().hasHeightForWidth());
-        buttonBox->setSizePolicy(sizePolicy2);
+        sizePolicy.setHeightForWidth(buttonBox->sizePolicy().hasHeightForWidth());
+        buttonBox->setSizePolicy(sizePolicy);
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
 
@@ -141,6 +144,7 @@ public:
         QObject::connect(buttonBox, SIGNAL(rejected()), Add_New_Game_Dialogue, SLOT(reject()));
         QObject::connect(buttonBox, SIGNAL(accepted()), Add_New_Game_Dialogue, SLOT(accept()));
         QObject::connect(toolButton, SIGNAL(clicked()), Add_New_Game_Dialogue, SLOT(searchForFile()));
+        QObject::connect(Add_New_Game_Dialogue, SIGNAL(textChanged(QString)), selectedFile, SLOT(setText(QString)));
 
         QMetaObject::connectSlotsByName(Add_New_Game_Dialogue);
     } // setupUi
