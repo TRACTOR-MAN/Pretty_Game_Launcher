@@ -4,6 +4,8 @@
 #include "add_new_game_dialogue.h"
 
 MainWindow::MainWindow(QWidget *parent) :
+    // For my own reference, the below line ensures that the QMainWindow
+    // Constructor, with the &QWidget arguement is called :-) 
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     addNewGame(nullptr)

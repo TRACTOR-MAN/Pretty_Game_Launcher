@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets
+QT       += core gui widgets sql
 
 greaterThan(QT_MAJOR_VERSION, 5)
 
@@ -27,15 +27,17 @@ CONFIG += c++11
 SOURCES += \
         ../Gui/main.cpp \
         ../Gui/main_window.cpp \
-        ../Gui/add_new_game_dialogue.cpp
+        ../Gui/add_new_game_dialogue.cpp \
+        ../Control/sqliteDbAccess.cpp
 
 HEADERS += \
         ../Gui/Include/main_window.h \
-        ../Gui/Include/add_new_game_dialogue.h
+        ../Gui/Include/add_new_game_dialogue.h \
+        ../Control/Include/sqliteDbAccess.h
 
 INCLUDEPATH += \
         ../Gui/Include \
-        ../Control/Include
+        ../Control/Include 
 
 FORMS += \
         ../UI/mainwindow.ui \
