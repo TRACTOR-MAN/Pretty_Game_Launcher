@@ -32,6 +32,33 @@
         },
         {
             "type": "shell",
+            "label": "MAKE_NO_RUN",
+            "options": {
+                "cwd": "${workspaceFolder}/Build/Obj"
+            },
+            "presentation": 
+            {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": 
+            {
+                "base": "$gcc"
+            },
+            "command": "make -j16 all",
+            "group": 
+            {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": "QMAKE"
+        },
+        {
+            "type": "shell",
             "label": "MAKE ALL",
             "options": {
                 "cwd": "${workspaceFolder}/Build/Obj"

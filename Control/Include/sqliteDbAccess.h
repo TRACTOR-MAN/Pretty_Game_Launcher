@@ -1,6 +1,16 @@
 // Forward decleration of the QSqlDatabase class
 class QSqlDatabase;
 
+
+// Structure containing the information to display in the GUI
+struct GUI_game_information_st
+{
+    QString gameName;
+    QString gameIconPath;
+    QString gameDescription;
+    QString playTime;
+};
+
 /*! 
  *  \author    Thomas Sutton
  *  \version   1.0
@@ -20,8 +30,10 @@ class sqLiteDbInterface
         // Read in the information that we need to display for each game
         void readGameGuiInformation( );
         
-        // Constant pointer to a database
+        // Constant pointer to an sqlite database
         QSqlDatabase * const my_db;
+        // Constant pointer to a vector containing the information to display in the GUI
+        std::vector<GUI_game_information_st> * const displayData_vp;
 
     private:
         // Copy constructor defined but not used, to protect against undefined 
