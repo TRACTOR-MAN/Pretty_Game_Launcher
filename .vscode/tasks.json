@@ -22,7 +22,7 @@
             {
                 "base": "$gcc"
             },
-            "command": "make -j16 all && ./Game_Launcher",
+            "command": "make -j16 && ./Game_Launcher",
             "group": 
             {
                 "kind": "build",
@@ -49,7 +49,7 @@
             {
                 "base": "$gcc"
             },
-            "command": "make -j16 all",
+            "command": " make -j16",
             "group": 
             {
                 "kind": "build",
@@ -76,7 +76,7 @@
             {
                 "base": "$gcc"
             },
-            "command": "make -j16 clean && make -j16 all && ./Game_Launcher",
+            "command": "make clean -j16 && make -j16 && ./Game_Launcher",
             "group": 
             {
                 "kind": "build",
@@ -103,12 +103,12 @@
             {
                 "base": "$gcc"
             },
-            "command": "qmake Game_Launcher.pro -spec linux-g++ CONFIG+=debug -o ../Build/Obj/makefile",
+            "command": "qmake ${workspaceFolder}/Project/Game_Launcher.pro -spec linux-g++ CONFIG+=debug -o ../Build/Obj/makefile",
             "group": 
             {
-                "kind": "none",
+                "kind": "test",
                 "isDefault": true
-            },
+            }
         },
     ]
     

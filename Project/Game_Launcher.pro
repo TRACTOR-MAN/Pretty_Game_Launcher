@@ -28,12 +28,14 @@ SOURCES += \
         ../Gui/main.cpp \
         ../Gui/main_window.cpp \
         ../Gui/add_new_game_dialogue.cpp \
-        ../Control/sqliteDbAccess.cpp
+        ../Control/sqliteDbAccess.cpp \
+        ../Gui/game_data_gui.cpp
 
 HEADERS += \
         ../Gui/Include/main_window.h \
         ../Gui/Include/add_new_game_dialogue.h \
-        ../Control/Include/sqliteDbAccess.h
+        ../Control/Include/sqliteDbAccess.h \
+        ../Gui/Include/game_data_gui.h
 
 INCLUDEPATH += \
         ../Gui/Include \

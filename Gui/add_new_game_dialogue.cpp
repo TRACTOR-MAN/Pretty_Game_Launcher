@@ -7,7 +7,6 @@ Add_New_Game_Dialogue::Add_New_Game_Dialogue( QWidget *parent ) :
     fileDialog(nullptr)
 {
     ui->setupUi(this);
-
 }
 
 Add_New_Game_Dialogue::~Add_New_Game_Dialogue( )

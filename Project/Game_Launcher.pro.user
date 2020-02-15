@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.8.2, 2020-02-05T22:40:22. -->
+<!-- Written by QtCreator 4.8.2, 2020-02-09T21:02:21. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -57,6 +57,18 @@
   <valuemap type="QVariantMap">
    <valuelist type="QVariantList" key="ClangCodeModel.CustomCommandLineKey"/>
    <value type="bool" key="ClangCodeModel.UseGlobalConfig">true</value>
+   <value type="bool" key="ClangTools.BuildBeforeAnalysis">false</value>
+   <value type="QString" key="ClangTools.DiagnosticConfig">Builtin.TidyAndClazy</value>
+   <valuelist type="QVariantList" key="ClangTools.SelectedDirs">
+    <value type="QString">/mnt/General/QT_Projects/Game_Launcher/Project</value>
+   </valuelist>
+   <valuelist type="QVariantList" key="ClangTools.SelectedFiles">
+    <value type="QString">/mnt/General/QT_Projects/Game_Launcher/Gui/add_new_game_dialogue.cpp</value>
+    <value type="QString">/mnt/General/QT_Projects/Game_Launcher/Gui/main_window.cpp</value>
+    <value type="QString">/mnt/General/QT_Projects/Game_Launcher/Gui/main.cpp</value>
+   </valuelist>
+   <valuelist type="QVariantList" key="ClangTools.SuppressedDiagnostics"/>
+   <value type="bool" key="ClangTools.UseGlobalSettings">true</value>
   </valuemap>
  </data>
  <data>

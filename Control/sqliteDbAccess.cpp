@@ -31,6 +31,9 @@ sqLiteDbInterface::sqLiteDbInterface( ) :
     {
         std::cout << "connection to database good" << std::endl;
     }
+
+    // Read GUI related information from the sqlite database
+    readGameGuiInformation( );
 }
 
 /*!
@@ -82,10 +85,13 @@ void sqLiteDbInterface::readGameGuiInformation( )
 sqLiteDbInterface::~sqLiteDbInterface( )
 {
 
-    #if(0)
-        GUI_game_information_st & lcl_GUI_game_information_s = displayData_v->operator[](0);
+    #if(1)
+        GUI_game_information_st *lcl_GUI_game_information_p = &displayData_vp->operator[](0);
 
-        qDebug( ) << lcl_GUI_game_information_s.gameName<< endl;
+        if( lcl_GUI_game_information_p != nullptr )
+        {   
+            qDebug( ) << lcl_GUI_game_information_p->gameName << endl;
+        }
     #endif
 
     delete my_db;

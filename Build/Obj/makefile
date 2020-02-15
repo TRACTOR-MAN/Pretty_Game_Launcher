@@ -55,14 +55,18 @@ OBJECTS_DIR   = ./
 SOURCES       = ../../Gui/main.cpp \
 		../../Gui/main_window.cpp \
 		../../Gui/add_new_game_dialogue.cpp \
-		../../Control/sqliteDbAccess.cpp moc_main_window.cpp \
-		moc_add_new_game_dialogue.cpp
+		../../Control/sqliteDbAccess.cpp \
+		../../Gui/game_data_gui.cpp moc_main_window.cpp \
+		moc_add_new_game_dialogue.cpp \
+		moc_game_data_gui.cpp
 OBJECTS       = main.o \
 		main_window.o \
 		add_new_game_dialogue.o \
 		sqliteDbAccess.o \
+		game_data_gui.o \
 		moc_main_window.o \
-		moc_add_new_game_dialogue.o
+		moc_add_new_game_dialogue.o \
+		moc_game_data_gui.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -152,10 +156,12 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../../../Project/Game_Launcher.pro ../../Gui/Include/main_window.h \
 		../../Gui/Include/add_new_game_dialogue.h \
-		../../Control/Include/sqliteDbAccess.h ../../Gui/main.cpp \
+		../../Control/Include/sqliteDbAccess.h \
+		../../Gui/Include/game_data_gui.h ../../Gui/main.cpp \
 		../../Gui/main_window.cpp \
 		../../Gui/add_new_game_dialogue.cpp \
-		../../Control/sqliteDbAccess.cpp
+		../../Control/sqliteDbAccess.cpp \
+		../../Gui/game_data_gui.cpp
 QMAKE_TARGET  = Game_Launcher
 DESTDIR       = 
 TARGET        = Game_Launcher
@@ -359,8 +365,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../../Gui/Include/main_window.h ../../Gui/Include/add_new_game_dialogue.h ../../Control/Include/sqliteDbAccess.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../../Gui/main.cpp ../../Gui/main_window.cpp ../../Gui/add_new_game_dialogue.cpp ../../Control/sqliteDbAccess.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../Gui/Include/main_window.h ../../Gui/Include/add_new_game_dialogue.h ../../Control/Include/sqliteDbAccess.h ../../Gui/Include/game_data_gui.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../Gui/main.cpp ../../Gui/main_window.cpp ../../Gui/add_new_game_dialogue.cpp ../../Control/sqliteDbAccess.cpp ../../Gui/game_data_gui.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../UI/mainwindow.ui ../../UI/add_new_game_dialogue.ui $(DISTDIR)/
 
 
@@ -393,9 +399,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++11 -Wall -W -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_main_window.cpp moc_add_new_game_dialogue.cpp
+compiler_moc_header_make_all: moc_main_window.cpp moc_add_new_game_dialogue.cpp moc_game_data_gui.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_main_window.cpp moc_add_new_game_dialogue.cpp
+	-$(DEL_FILE) moc_main_window.cpp moc_add_new_game_dialogue.cpp moc_game_data_gui.cpp
 moc_main_window.cpp: ../../Gui/Include/main_window.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
@@ -405,6 +411,11 @@ moc_add_new_game_dialogue.cpp: ../../Gui/Include/add_new_game_dialogue.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/General/QT_Projects/Game_Launcher/Build/Obj/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/General/QT_Projects/Game_Launcher/Project -I/mnt/General/QT_Projects/Game_Launcher/Gui/Include -I/mnt/General/QT_Projects/Game_Launcher/Control/Include -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtSql -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/9/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../../Gui/Include/add_new_game_dialogue.h -o moc_add_new_game_dialogue.cpp
+
+moc_game_data_gui.cpp: ../../Gui/Include/game_data_gui.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/General/QT_Projects/Game_Launcher/Build/Obj/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/General/QT_Projects/Game_Launcher/Project -I/mnt/General/QT_Projects/Game_Launcher/Gui/Include -I/mnt/General/QT_Projects/Game_Launcher/Control/Include -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtSql -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/9/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../../Gui/Include/game_data_gui.h -o moc_game_data_gui.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -432,7 +443,7 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 ####### Compile
 
 main.o: ../../Gui/main.cpp ../../Gui/Include/main_window.h \
-		../../Control/Include/sqliteDbAccess.h
+		../../Gui/Include/game_data_gui.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../../Gui/main.cpp
 
 main_window.o: ../../Gui/main_window.cpp ../../Gui/Include/main_window.h \
@@ -447,11 +458,18 @@ add_new_game_dialogue.o: ../../Gui/add_new_game_dialogue.cpp ../../Gui/Include/a
 sqliteDbAccess.o: ../../Control/sqliteDbAccess.cpp ../../Control/Include/sqliteDbAccess.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o sqliteDbAccess.o ../../Control/sqliteDbAccess.cpp
 
+game_data_gui.o: ../../Gui/game_data_gui.cpp ../../Gui/Include/game_data_gui.h \
+		../../Control/Include/sqliteDbAccess.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o game_data_gui.o ../../Gui/game_data_gui.cpp
+
 moc_main_window.o: moc_main_window.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_main_window.o moc_main_window.cpp
 
 moc_add_new_game_dialogue.o: moc_add_new_game_dialogue.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_add_new_game_dialogue.o moc_add_new_game_dialogue.cpp
+
+moc_game_data_gui.o: moc_game_data_gui.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_game_data_gui.o moc_game_data_gui.cpp
 
 ####### Install
 
