@@ -56,7 +56,8 @@ SOURCES       = ../../Gui/main.cpp \
 		../../Gui/main_window.cpp \
 		../../Gui/add_new_game_dialogue.cpp \
 		../../Control/sqliteDbAccess.cpp \
-		../../Gui/game_data_gui.cpp moc_main_window.cpp \
+		../../Gui/game_data_gui.cpp qrc_breeze.cpp \
+		moc_main_window.cpp \
 		moc_add_new_game_dialogue.cpp \
 		moc_game_data_gui.cpp
 OBJECTS       = main.o \
@@ -64,6 +65,7 @@ OBJECTS       = main.o \
 		add_new_game_dialogue.o \
 		sqliteDbAccess.o \
 		game_data_gui.o \
+		qrc_breeze.o \
 		moc_main_window.o \
 		moc_add_new_game_dialogue.o \
 		moc_game_data_gui.o
@@ -260,7 +262,8 @@ makefile: ../../Project/Game_Launcher.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		../../Project/Game_Launcher.pro
+		../../Project/Game_Launcher.pro \
+		../../Project/Style_Sheets/breeze.qrc
 	$(QMAKE) -o makefile ../../Project/Game_Launcher.pro -spec linux-g++ CONFIG+=debug
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf:
@@ -350,6 +353,7 @@ makefile: ../../Project/Game_Launcher.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf:
 ../../Project/Game_Launcher.pro:
+../../Project/Style_Sheets/breeze.qrc:
 qmake: FORCE
 	@$(QMAKE) -o makefile ../../Project/Game_Launcher.pro -spec linux-g++ CONFIG+=debug
 
@@ -364,6 +368,7 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
+	$(COPY_FILE) --parents ../../Project/Style_Sheets/breeze.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../Gui/Include/main_window.h ../../Gui/Include/add_new_game_dialogue.h ../../Control/Include/sqliteDbAccess.h ../../Gui/Include/game_data_gui.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../../Gui/main.cpp ../../Gui/main_window.cpp ../../Gui/add_new_game_dialogue.cpp ../../Control/sqliteDbAccess.cpp ../../Gui/game_data_gui.cpp $(DISTDIR)/
@@ -391,8 +396,98 @@ check: first
 
 benchmark: first
 
-compiler_rcc_make_all:
+compiler_rcc_make_all: qrc_breeze.cpp
 compiler_rcc_clean:
+	-$(DEL_FILE) qrc_breeze.cpp
+qrc_breeze.cpp: ../../Project/Style_Sheets/breeze.qrc \
+		/usr/lib/qt5/bin/rcc \
+		../../Project/Style_Sheets/light.qss \
+		../../Project/Style_Sheets/dark.qss \
+		../../Project/Style_Sheets/light/checkbox_checked_disabled.svg \
+		../../Project/Style_Sheets/light/sizegrip.svg \
+		../../Project/Style_Sheets/light/radio_checked-hover.svg \
+		../../Project/Style_Sheets/light/undock-hover.svg \
+		../../Project/Style_Sheets/light/stylesheet-branch-more.svg \
+		../../Project/Style_Sheets/light/down_arrow.svg \
+		../../Project/Style_Sheets/light/branch_closed-on.svg \
+		../../Project/Style_Sheets/light/checkbox_unchecked_disabled.svg \
+		../../Project/Style_Sheets/light/branch_open.svg \
+		../../Project/Style_Sheets/light/left_arrow.svg \
+		../../Project/Style_Sheets/light/stylesheet-branch-end.svg \
+		../../Project/Style_Sheets/light/stylesheet-branch-end-open.svg \
+		../../Project/Style_Sheets/light/undock.svg \
+		../../Project/Style_Sheets/light/checkbox_indeterminate_disabled.svg \
+		../../Project/Style_Sheets/light/hsepartoolbar.svg \
+		../../Project/Style_Sheets/light/right_arrow.svg \
+		../../Project/Style_Sheets/light/checkbox_indeterminate-hover.svg \
+		../../Project/Style_Sheets/light/checkbox_unchecked-hover.svg \
+		../../Project/Style_Sheets/light/checkbox_indeterminate.svg \
+		../../Project/Style_Sheets/light/stylesheet-vline.svg \
+		../../Project/Style_Sheets/light/branch_closed.svg \
+		../../Project/Style_Sheets/light/down_arrow_disabled.svg \
+		../../Project/Style_Sheets/light/right_arrow_disabled.svg \
+		../../Project/Style_Sheets/light/down_arrow-hover.svg \
+		../../Project/Style_Sheets/light/branch_open-on.svg \
+		../../Project/Style_Sheets/light/stylesheet-branch-end-closed.svg \
+		../../Project/Style_Sheets/light/up_arrow-hover.svg \
+		../../Project/Style_Sheets/light/checkbox_checked-hover.svg \
+		../../Project/Style_Sheets/light/vsepartoolbars.svg \
+		../../Project/Style_Sheets/light/transparent.svg \
+		../../Project/Style_Sheets/light/close.svg \
+		../../Project/Style_Sheets/light/radio_unchecked-hover.svg \
+		../../Project/Style_Sheets/light/vmovetoolbar.svg \
+		../../Project/Style_Sheets/light/radio_checked_disabled.svg \
+		../../Project/Style_Sheets/light/checkbox_checked.svg \
+		../../Project/Style_Sheets/light/up_arrow_disabled.svg \
+		../../Project/Style_Sheets/light/close-pressed.svg \
+		../../Project/Style_Sheets/light/up_arrow.svg \
+		../../Project/Style_Sheets/light/left_arrow_disabled.svg \
+		../../Project/Style_Sheets/light/close-hover.svg \
+		../../Project/Style_Sheets/light/radio_unchecked_disabled.svg \
+		../../Project/Style_Sheets/light/hmovetoolbar.svg \
+		../../Project/Style_Sheets/light/radio_checked.svg \
+		../../Project/Style_Sheets/dark/checkbox_checked_disabled.svg \
+		../../Project/Style_Sheets/dark/sizegrip.svg \
+		../../Project/Style_Sheets/dark/undock-hover.svg \
+		../../Project/Style_Sheets/dark/stylesheet-branch-more.svg \
+		../../Project/Style_Sheets/dark/down_arrow.svg \
+		../../Project/Style_Sheets/dark/radio_unchecked.svg \
+		../../Project/Style_Sheets/dark/branch_closed-on.svg \
+		../../Project/Style_Sheets/dark/checkbox_unchecked_disabled.svg \
+		../../Project/Style_Sheets/dark/branch_open.svg \
+		../../Project/Style_Sheets/dark/left_arrow.svg \
+		../../Project/Style_Sheets/dark/stylesheet-branch-end.svg \
+		../../Project/Style_Sheets/dark/stylesheet-branch-end-open.svg \
+		../../Project/Style_Sheets/dark/undock.svg \
+		../../Project/Style_Sheets/dark/checkbox_indeterminate_disabled.svg \
+		../../Project/Style_Sheets/dark/hsepartoolbar.svg \
+		../../Project/Style_Sheets/dark/right_arrow.svg \
+		../../Project/Style_Sheets/dark/checkbox_indeterminate.svg \
+		../../Project/Style_Sheets/dark/stylesheet-vline.svg \
+		../../Project/Style_Sheets/dark/branch_closed.svg \
+		../../Project/Style_Sheets/dark/down_arrow_disabled.svg \
+		../../Project/Style_Sheets/dark/right_arrow_disabled.svg \
+		../../Project/Style_Sheets/dark/down_arrow-hover.svg \
+		../../Project/Style_Sheets/dark/branch_open-on.svg \
+		../../Project/Style_Sheets/dark/stylesheet-branch-end-closed.svg \
+		../../Project/Style_Sheets/dark/up_arrow-hover.svg \
+		../../Project/Style_Sheets/dark/vsepartoolbars.svg \
+		../../Project/Style_Sheets/dark/transparent.svg \
+		../../Project/Style_Sheets/dark/close.svg \
+		../../Project/Style_Sheets/dark/vmovetoolbar.svg \
+		../../Project/Style_Sheets/dark/radio_checked_disabled.svg \
+		../../Project/Style_Sheets/dark/checkbox_checked.svg \
+		../../Project/Style_Sheets/dark/up_arrow_disabled.svg \
+		../../Project/Style_Sheets/dark/close-pressed.svg \
+		../../Project/Style_Sheets/dark/up_arrow.svg \
+		../../Project/Style_Sheets/dark/left_arrow_disabled.svg \
+		../../Project/Style_Sheets/dark/close-hover.svg \
+		../../Project/Style_Sheets/dark/checkbox_unchecked.svg \
+		../../Project/Style_Sheets/dark/radio_unchecked_disabled.svg \
+		../../Project/Style_Sheets/dark/radio_checked.svg \
+		../../Project/Style_Sheets/dark/hmovetoolbar.svg
+	/usr/lib/qt5/bin/rcc -name breeze ../../Project/Style_Sheets/breeze.qrc -o qrc_breeze.cpp
+
 compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) moc_predefs.h
@@ -438,7 +533,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
 
@@ -458,9 +553,12 @@ add_new_game_dialogue.o: ../../Gui/add_new_game_dialogue.cpp ../../Gui/Include/a
 sqliteDbAccess.o: ../../Control/sqliteDbAccess.cpp ../../Control/Include/sqliteDbAccess.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o sqliteDbAccess.o ../../Control/sqliteDbAccess.cpp
 
-game_data_gui.o: ../../Gui/game_data_gui.cpp ../../Gui/Include/game_data_gui.h \
-		../../Control/Include/sqliteDbAccess.h
+game_data_gui.o: ../../Gui/game_data_gui.cpp ../../Control/Include/sqliteDbAccess.h \
+		../../Gui/Include/game_data_gui.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o game_data_gui.o ../../Gui/game_data_gui.cpp
+
+qrc_breeze.o: qrc_breeze.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_breeze.o qrc_breeze.cpp
 
 moc_main_window.o: moc_main_window.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_main_window.o moc_main_window.cpp

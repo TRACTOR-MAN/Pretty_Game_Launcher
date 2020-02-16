@@ -44,3 +44,6 @@ INCLUDEPATH += \
 FORMS += \
         ../UI/mainwindow.ui \
         ../UI/add_new_game_dialogue.ui
+
+RESOURCES += \
+             ./Style_Sheets/breeze.qrc
