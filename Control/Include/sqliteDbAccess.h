@@ -1,3 +1,6 @@
+#ifndef SQ_LITE_DB_ACCESS_H
+#define SQ_LITE_DB_ACCESS_H
+
 // Forward decleration of the QSqlDatabase class
 class QSqlDatabase;
 
@@ -40,3 +43,5 @@ class sqLiteDbInterface
         // side effects
         sqLiteDbInterface( const sqLiteDbInterface & obj );
 };
+
+#endif

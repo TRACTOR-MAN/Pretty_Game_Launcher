@@ -1,12 +1,8 @@
 #include <QtCore>
 #include <QPushButton>
 
-#include "sqliteDbAccess.h"
 #include "game_data_gui.h"
 
-
-/**************** Globals ****************/
-static sqLiteDbInterface my_games_database;
 
 /*!
  *  \author    Thomas Sutton
@@ -18,18 +14,39 @@ static sqLiteDbInterface my_games_database;
  */
 gameDataGuiWidget::gameDataGuiWidget( QWidget &parent ) :
     QWidget(&parent),
+    scrollAreaMaxWidth( 200 ),
     horizLayout_p( new QHBoxLayout ),
-    gameNameWidget( new gameTitleWidget( *this )),
-    prettyWidget( new gamePrettyWidget( *this ))
+    scrollArea( new QScrollArea ),
+    gameNameWidget( new gameTitleWidget( *this, (scrollAreaMaxWidth - 15) )),
+    prettyWidget( new gamePrettyWidget( *this )),
+    myDatabase( new sqLiteDbInterface )
 {
+    // Itterate through the entire database, and add every game name
+    for( uint16_t i = 0U; i < myDatabase->displayData_vp->size(); i++ )
+    {
+        gameNameWidget->addGameTitle( myDatabase->displayData_vp->operator[](i) );
+    }
+
+    // Set the initial image information for the pretty widget
+    prettyWidget->changeGameIcon( myDatabase->displayData_vp->operator[](0) );
+
+    // Change the game information for the info widget
+    prettyWidget->changeGameInfo( myDatabase->displayData_vp->operator[](0) );
+
+    // Change the play time
+    prettyWidget->changePlayTime( myDatabase->displayData_vp->operator[](0) );
+
+    // Add the game name widget to the scroll area
+    scrollArea->setMaximumWidth( scrollAreaMaxWidth );
+    scrollArea->setWidget( gameNameWidget );
+
     // Add the widgets to the main view
-    horizLayout_p->addWidget( gameNameWidget );
+    horizLayout_p->addWidget( scrollArea );
     horizLayout_p->addWidget( prettyWidget );
 
     this->setLayout( horizLayout_p );
 
     this->show();
-
 }
 
 /*!
@@ -45,6 +62,8 @@ gameDataGuiWidget::~gameDataGuiWidget( )
     delete horizLayout_p;
     delete gameNameWidget;
     delete prettyWidget;
+    delete scrollArea;
+    delete myDatabase;
 }
 
 /*!
@@ -55,24 +74,34 @@ gameDataGuiWidget::~gameDataGuiWidget( )
  *  \par       Description:
  *             Constructor for the gameTitleWidget class
  */
-gameTitleWidget::gameTitleWidget( QWidget &parent, int maximum_width ) :
+gameTitleWidget::gameTitleWidget( QWidget &parent, int minimumWidth ) :
     QWidget( &parent ),
     layout( new QVBoxLayout(this) )
-{
-    GUI_game_information_st *lcl_GUI_game_information_p = &my_games_database.displayData_vp->operator[](0);
-
-
-    QPushButton *button_1 = new QPushButton( lcl_GUI_game_information_p->gameName );
-
-    layout->addWidget( button_1 );
-
-    // Set the maximum width of the game name
-    max_width = maximum_width;
-    this->setMaximumWidth( max_width );
+{    
+    this->setMinimumWidth( minimumWidth );
 
     this->setLayout( layout );
 
     this->show( );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      16/02/2020
+ *
+ *  \par       Description:
+ *             Member function for adding an element to the game title widget
+ */
+void gameTitleWidget::addGameTitle( GUI_game_information_st guiInformation )
+{
+    QPushButton * pushButton = new QPushButton( guiInformation.gameName );
+
+    // Add the push button to the layout
+    layout->addWidget( pushButton );
+
+    // Add the button pointer to the button pointer list
+    buttonPtrList.push_back( pushButton );
 }
 
 /*!
@@ -86,6 +115,12 @@ gameTitleWidget::gameTitleWidget( QWidget &parent, int maximum_width ) :
 gameTitleWidget::~gameTitleWidget( )
 {
     delete layout;
+
+    // Clean up all button objects
+    for ( uint16_t i = 0; i < buttonPtrList.size(); i++)
+    {
+        delete buttonPtrList[i];
+    }
 }
 
 /*!
@@ -98,16 +133,85 @@ gameTitleWidget::~gameTitleWidget( )
  */
 gamePrettyWidget::gamePrettyWidget( QWidget &parent ) :
     QWidget( &parent ),
+    vertLayout( new QVBoxLayout ),
+    timeVertLayout( new QVBoxLayout ),
+    gameDescriptionBox( new QGroupBox( "Game Description" ) ),
+    playTimeBox( new QGroupBox( "Game Play Time" ) ),
+    gameImage( new QLabel ),
+    launchButton( new QPushButton("Launch Game") ),
+    gameInformation( new QLabel ),
+    playTime( new QLabel ),
     layout( new QGridLayout(this) )
-{
-    QPushButton *button_1 = new QPushButton( "grid" );
-    QPushButton *button_2 = new QPushButton( "layout" );
+{    
+    // Set the info widget to wrap text
+    gameInformation->setWordWrap(true);
+    // Set the maximum size of the launch button
+    launchButton->setMinimumSize( 160, 40 );
+    // Set the minimum size of the game time widget
+    playTime->setMinimumSize( 160, 40 );
+    // Set the game time widget to central justify text
+    playTime->setAlignment(Qt::AlignCenter);
 
-    layout->addWidget(button_1, 0, 0, 1, 1);
-    layout->addWidget(button_2, 0, 1, 1, 1);
+    // Place the game information into the game description group box
+    vertLayout->addWidget( gameInformation, 0, Qt::AlignTop );
+    // Set the layout of the description box
+    gameDescriptionBox->setLayout( vertLayout );
+
+    // Place the play time into the play time group box
+    timeVertLayout->addWidget( playTime, 0, Qt::AlignHCenter );
+    // Set the layout of the play time box
+    playTimeBox->setLayout( timeVertLayout );
+
+    // Add all of the widgets
+    layout->addWidget( gameImage, 1, 1, 1, 1, Qt::AlignCenter | Qt::AlignTop );
+    layout->addWidget( launchButton, 0, 0, 1, 1, Qt::AlignCenter  );
+    layout->addWidget( gameDescriptionBox, 2, 0, 1, 3);
+    layout->addWidget( playTimeBox, 0, 2, 1, 1, Qt::AlignCenter );
 
     this->setLayout(layout);
 }
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      16/02/2020
+ *
+ *  \par       Description:
+ *             Member function for changing the image widget
+ */
+void gamePrettyWidget::changeGameIcon( GUI_game_information_st guiInformation )
+{
+    QPixmap picture( guiInformation.gameIconPath );
+
+    gameImage->setPixmap( picture );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      16/02/2020
+ *
+ *  \par       Description:
+ *             Member function for changing the game information
+ */
+void gamePrettyWidget::changeGameInfo( GUI_game_information_st guiInformation )
+{
+    gameInformation->setText( guiInformation.gameDescription );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      18/02/2020
+ *
+ *  \par       Description:
+ *             Member function for changing the play time.
+ */
+void gamePrettyWidget::changePlayTime( GUI_game_information_st guiInformation )
+{
+    playTime->setText( guiInformation.playTime );
+}
+
 
 /*!
  *  \author    Thomas Sutton
@@ -119,5 +223,13 @@ gamePrettyWidget::gamePrettyWidget( QWidget &parent ) :
  */
 gamePrettyWidget::~gamePrettyWidget( )
 {
-
+    delete layout;
+    delete gameImage;
+    delete launchButton;
+    delete gameInformation;
+    delete gameDescriptionBox;
+    delete vertLayout;
+    delete playTime;
+    delete playTimeBox;
+    delete timeVertLayout;
 }

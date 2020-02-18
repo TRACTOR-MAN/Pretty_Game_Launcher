@@ -159,7 +159,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		../../../Project/Game_Launcher.pro ../../Gui/Include/main_window.h \
 		../../Gui/Include/add_new_game_dialogue.h \
 		../../Control/Include/sqliteDbAccess.h \
-		../../Gui/Include/game_data_gui.h ../../Gui/main.cpp \
+		../../Gui/Include/game_data_gui.h \
+		../../Gui/Include/main.h ../../Gui/main.cpp \
 		../../Gui/main_window.cpp \
 		../../Gui/add_new_game_dialogue.cpp \
 		../../Control/sqliteDbAccess.cpp \
@@ -370,7 +371,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../Project/Style_Sheets/breeze.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../../Gui/Include/main_window.h ../../Gui/Include/add_new_game_dialogue.h ../../Control/Include/sqliteDbAccess.h ../../Gui/Include/game_data_gui.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../Gui/Include/main_window.h ../../Gui/Include/add_new_game_dialogue.h ../../Control/Include/sqliteDbAccess.h ../../Gui/Include/game_data_gui.h ../../Gui/Include/main.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../../Gui/main.cpp ../../Gui/main_window.cpp ../../Gui/add_new_game_dialogue.cpp ../../Control/sqliteDbAccess.cpp ../../Gui/game_data_gui.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../UI/mainwindow.ui ../../UI/add_new_game_dialogue.ui $(DISTDIR)/
 
@@ -538,7 +539,9 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 ####### Compile
 
 main.o: ../../Gui/main.cpp ../../Gui/Include/main_window.h \
-		../../Gui/Include/game_data_gui.h
+		../../Control/Include/sqliteDbAccess.h \
+		../../Gui/Include/game_data_gui.h \
+		../../Gui/Include/main.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../../Gui/main.cpp
 
 main_window.o: ../../Gui/main_window.cpp ../../Gui/Include/main_window.h \

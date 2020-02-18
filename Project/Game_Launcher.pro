@@ -35,7 +35,8 @@ HEADERS += \
         ../Gui/Include/main_window.h \
         ../Gui/Include/add_new_game_dialogue.h \
         ../Control/Include/sqliteDbAccess.h \
-        ../Gui/Include/game_data_gui.h
+        ../Gui/Include/game_data_gui.h \
+        ../Gui/Include/main.h
 
 INCLUDEPATH += \
         ../Gui/Include \
