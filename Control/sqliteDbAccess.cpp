@@ -11,8 +11,7 @@
  *             Constructor for the sqLiteDbInterface class
  */
 sqLiteDbInterface::sqLiteDbInterface( ) :
-    my_db( new( QSqlDatabase ) ),
-    displayData_vp( new( std::vector<GUI_game_information_st> ) )
+    my_db( new( QSqlDatabase ) )
 {
     // we are using the sqlite driver
     *my_db = QSqlDatabase::addDatabase( "QSQLITE" );
@@ -58,18 +57,18 @@ void sqLiteDbInterface::readGameGuiInformation( )
     }
     else
     {
-        GUI_game_information_st lcl_GUI_game_information_s;
-
         while( query.next( ) != false )
         {
 
-            // Store the information in a vector
-            lcl_GUI_game_information_s.gameName = query.value("gameName").toString();
-            lcl_GUI_game_information_s.gameIconPath = query.value("gameIconPath").toString();
-            lcl_GUI_game_information_s.gameDescription = query.value("gameDescription").toString();
-            lcl_GUI_game_information_s.playTime = query.value("playTime").toString();
+            GUI_game_information_st *lcl_GUI_game_information_ps = new( GUI_game_information_st );
 
-            displayData_vp->push_back( lcl_GUI_game_information_s );
+            // Store the information in a vector
+            lcl_GUI_game_information_ps->gameName = query.value("gameName").toString();
+            lcl_GUI_game_information_ps->gameIconPath = query.value("gameIconPath").toString();
+            lcl_GUI_game_information_ps->gameDescription = query.value("gameDescription").toString();
+            lcl_GUI_game_information_ps->playTime = query.value("playTime").toString();
+
+            displayData_vp.push_back( lcl_GUI_game_information_ps );
         }
     }
 }
@@ -84,16 +83,10 @@ void sqLiteDbInterface::readGameGuiInformation( )
  */
 sqLiteDbInterface::~sqLiteDbInterface( )
 {
-
-    #if(1)
-        GUI_game_information_st *lcl_GUI_game_information_p = &displayData_vp->operator[](0);
-
-        if( lcl_GUI_game_information_p != nullptr )
-        {   
-            qDebug( ) << lcl_GUI_game_information_p->gameName << endl;
-        }
-    #endif
+    for(uint16_t i = 0U; i < displayData_vp.size( ); i++)
+    {
+        delete displayData_vp[i];
+    }
 
     delete my_db;
-    delete displayData_vp;
 }    

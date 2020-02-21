@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.8.2, 2020-02-19T22:46:20. -->
+<!-- Written by QtCreator 4.8.2, 2020-02-20T23:18:42. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -64,8 +64,8 @@
    </valuelist>
    <valuelist type="QVariantList" key="ClangTools.SelectedFiles">
     <value type="QString">/mnt/General/QT_Projects/Game_Launcher/Gui/add_new_game_dialogue.cpp</value>
-    <value type="QString">/mnt/General/QT_Projects/Game_Launcher/Gui/main_window.cpp</value>
     <value type="QString">/mnt/General/QT_Projects/Game_Launcher/Gui/main.cpp</value>
+    <value type="QString">/mnt/General/QT_Projects/Game_Launcher/Gui/main_window.cpp</value>
    </valuelist>
    <valuelist type="QVariantList" key="ClangTools.SuppressedDiagnostics"/>
    <value type="bool" key="ClangTools.UseGlobalSettings">true</value>
@@ -77,11 +77,11 @@
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Desktop</value>
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Desktop</value>
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{1e317ec1-c1cb-44d6-a3fb-445e8fc75a69}</value>
-   <value type="int" key="ProjectExplorer.Target.ActiveBuildConfiguration">2</value>
+   <value type="int" key="ProjectExplorer.Target.ActiveBuildConfiguration">0</value>
    <value type="int" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
    <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">0</value>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.0">
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/mnt/General/QT_Projects/Game_Launcher/build-Game_Launcher-Desktop-Debug</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/mnt/General/QT_Projects/Game_Launcher/Build/Debug</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
@@ -318,7 +318,7 @@
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
     <value type="QString" key="RunConfiguration.WorkingDirectory"></value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/General/QT_Projects/Game_Launcher/Build/Obj</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/General/QT_Projects/Game_Launcher/Build/Debug</value>
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>

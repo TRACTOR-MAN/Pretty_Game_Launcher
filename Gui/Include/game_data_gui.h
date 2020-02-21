@@ -59,11 +59,11 @@ public:
     ~gamePrettyWidget( );
 
     // Function for changing the icon that is being displayed
-    void changeGameIcon( GUI_game_information_st guiInformation );
+    void changeGameIcon( GUI_game_information_st &guiInformation );
     // Function for changing the game information
-    void changeGameInfo( GUI_game_information_st guiInformation );
+    void changeGameInfo( GUI_game_information_st &guiInformation );
     // Function for changing the play time
-    void changePlayTime( GUI_game_information_st guiInformation );
+    void changePlayTime( GUI_game_information_st &guiInformation );
 
     // Layout objects
     QVBoxLayout *vertLayout;

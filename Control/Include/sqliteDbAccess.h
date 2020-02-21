@@ -36,7 +36,7 @@ class sqLiteDbInterface
         // Constant pointer to an sqlite database
         QSqlDatabase * const my_db;
         // Constant pointer to a vector containing the information to display in the GUI
-        std::vector<GUI_game_information_st> * const displayData_vp;
+        std::vector<GUI_game_information_st *> displayData_vp;
 
     private:
         // Copy constructor defined but not used, to protect against undefined 

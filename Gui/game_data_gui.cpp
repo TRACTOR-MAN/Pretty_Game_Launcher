@@ -21,20 +21,24 @@ gameDataGuiWidget::gameDataGuiWidget( QWidget &parent ) :
     prettyWidget( new gamePrettyWidget( *this )),
     myDatabase( new sqLiteDbInterface )
 {
-    // Itterate through the entire database, and add every game name
-    for( uint16_t i = 0U; i < myDatabase->displayData_vp->size(); i++ )
+    // Only access the game, data, if it is present
+    if( myDatabase->displayData_vp[0] != nullptr )
     {
-        gameNameWidget->addGameTitle( myDatabase->displayData_vp->operator[](i) );
+        // Itterate through the entire database, and add every game name
+        for( uint16_t i = 0U; i < myDatabase->displayData_vp.size(); i++ )
+        {
+            gameNameWidget->addGameTitle( *myDatabase->displayData_vp[i] );
+        }
+
+        // Set the initial image information for the pretty widget
+        prettyWidget->changeGameIcon( *myDatabase->displayData_vp[0] );
+
+        // Change the game information for the info widget
+        prettyWidget->changeGameInfo( *myDatabase->displayData_vp[0] );
+
+        // Change the play time
+        prettyWidget->changePlayTime( *myDatabase->displayData_vp[0] );
     }
-
-    // Set the initial image information for the pretty widget
-    prettyWidget->changeGameIcon( myDatabase->displayData_vp->operator[](0) );
-
-    // Change the game information for the info widget
-    prettyWidget->changeGameInfo( myDatabase->displayData_vp->operator[](0) );
-
-    // Change the play time
-    prettyWidget->changePlayTime( myDatabase->displayData_vp->operator[](0) );
 
     // Add the game name widget to the scroll area
     scrollArea->setMaximumWidth( scrollAreaMaxWidth );
@@ -179,11 +183,22 @@ gamePrettyWidget::gamePrettyWidget( QWidget &parent ) :
  *  \par       Description:
  *             Member function for changing the image widget
  */
-void gamePrettyWidget::changeGameIcon( GUI_game_information_st guiInformation )
+void gamePrettyWidget::changeGameIcon( GUI_game_information_st &guiInformation )
 {
-    QPixmap picture( guiInformation.gameIconPath );
 
-    gameImage->setPixmap( picture );
+    // Only Add the picture if there is one assigned
+    if( guiInformation.gameIconPath != "" )
+    {
+        QPixmap picture( guiInformation.gameIconPath );
+
+        gameImage->setPixmap( picture );
+    }
+    else
+    {
+        QPixmap picture( "" );
+
+        gameImage->setPixmap( picture );
+    }
 }
 
 /*!
@@ -194,9 +209,17 @@ void gamePrettyWidget::changeGameIcon( GUI_game_information_st guiInformation )
  *  \par       Description:
  *             Member function for changing the game information
  */
-void gamePrettyWidget::changeGameInfo( GUI_game_information_st guiInformation )
+void gamePrettyWidget::changeGameInfo( GUI_game_information_st &guiInformation )
 {
-    gameInformation->setText( guiInformation.gameDescription );
+    // Only set the text if there is some to show
+    if( guiInformation.gameDescription != "" )
+    {
+        gameInformation->setText( guiInformation.gameDescription );
+    }
+    else
+    {
+        gameInformation->setText( "" );
+    }
 }
 
 /*!
@@ -207,9 +230,17 @@ void gamePrettyWidget::changeGameInfo( GUI_game_information_st guiInformation )
  *  \par       Description:
  *             Member function for changing the play time.
  */
-void gamePrettyWidget::changePlayTime( GUI_game_information_st guiInformation )
+void gamePrettyWidget::changePlayTime( GUI_game_information_st &guiInformation )
 {
-    playTime->setText( guiInformation.playTime );
+    // Only set the text if there is some to show
+    if( guiInformation.playTime != "" )
+    {
+        playTime->setText( guiInformation.playTime );
+    }
+    else
+    {
+        playTime->setText( "" );
+    }
 }
 
 
@@ -224,12 +255,9 @@ void gamePrettyWidget::changePlayTime( GUI_game_information_st guiInformation )
 gamePrettyWidget::~gamePrettyWidget( )
 {
     delete layout;
-    delete gameImage;
-    delete launchButton;
-    delete gameInformation;
-    delete gameDescriptionBox;
-    delete vertLayout;
-    delete playTime;
     delete playTimeBox;
-    delete timeVertLayout;
+    delete vertLayout;
+    delete launchButton;
+    delete gameImage;
+    delete gameInformation;
 }
