@@ -33,6 +33,9 @@ sqLiteDbInterface::sqLiteDbInterface( ) :
 
     // Read GUI related information from the sqlite database
     readGameGuiInformation( );
+
+    // Read game launch information
+
 }
 
 /*!
@@ -48,7 +51,7 @@ void sqLiteDbInterface::readGameGuiInformation( )
 {
     // Query the database for the information to display
     QSqlQuery query;
-    query.prepare("SELECT gameName, gameIconPath, gameDescription, playTime FROM GameLaunchData");
+    query.prepare("SELECT gameName, gameIconPath, gameDescription, playTime, launchCommand, launchScript FROM GameLaunchData");
     
     // Excecute the query
     if( query.exec( ) == false )
@@ -67,6 +70,8 @@ void sqLiteDbInterface::readGameGuiInformation( )
             lcl_GUI_game_information_ps->gameIconPath = query.value("gameIconPath").toString();
             lcl_GUI_game_information_ps->gameDescription = query.value("gameDescription").toString();
             lcl_GUI_game_information_ps->playTime = query.value("playTime").toString();
+            lcl_GUI_game_information_ps->LaunchCommand = query.value("launchCommand").toString();
+            lcl_GUI_game_information_ps->LaunchScript = query.value("launchScript").toString();
 
             displayData_vp.push_back( lcl_GUI_game_information_ps );
         }

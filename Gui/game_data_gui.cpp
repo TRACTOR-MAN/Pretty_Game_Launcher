@@ -21,6 +21,8 @@ gameDataGuiWidget::gameDataGuiWidget( QWidget &parent ) :
     prettyWidget( new gamePrettyWidget( *this )),
     myDatabase( new sqLiteDbInterface )
 {
+    connect( gameNameWidget, SIGNAL(updatePrettyInformation( gameNameButtonWidget &)), this, SLOT(redrawPrettyInformation( gameNameButtonWidget &)) );
+
     // Only access the game, data, if it is present
     if( myDatabase->displayData_vp[0] != nullptr )
     {
@@ -29,15 +31,6 @@ gameDataGuiWidget::gameDataGuiWidget( QWidget &parent ) :
         {
             gameNameWidget->addGameTitle( *myDatabase->displayData_vp[i] );
         }
-
-        // Set the initial image information for the pretty widget
-        prettyWidget->changeGameIcon( *myDatabase->displayData_vp[0] );
-
-        // Change the game information for the info widget
-        prettyWidget->changeGameInfo( *myDatabase->displayData_vp[0] );
-
-        // Change the play time
-        prettyWidget->changePlayTime( *myDatabase->displayData_vp[0] );
     }
 
     // Add the game name widget to the scroll area
@@ -51,6 +44,24 @@ gameDataGuiWidget::gameDataGuiWidget( QWidget &parent ) :
     this->setLayout( horizLayout_p );
 
     this->show();
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      23/02/2020
+ *
+ *  \par       Description:
+ *             Slot for updating the game GUI information
+ */
+void gameDataGuiWidget::redrawPrettyInformation( gameNameButtonWidget &buttonInformation )
+{
+    prettyWidget->changeGameIcon( buttonInformation );
+    prettyWidget->changeGameInfo( buttonInformation );
+    prettyWidget->changePlayTime( buttonInformation );
+
+    prettyWidget->launchButton->launchCommand = buttonInformation.launchCommand;
+    prettyWidget->launchButton->launchScript = buttonInformation.launchScript;
 }
 
 /*!
@@ -99,13 +110,36 @@ gameTitleWidget::gameTitleWidget( QWidget &parent, int minimumWidth ) :
  */
 void gameTitleWidget::addGameTitle( GUI_game_information_st guiInformation )
 {
-    QPushButton * pushButton = new QPushButton( guiInformation.gameName );
+    gameNameButtonWidget * nameButton = new gameNameButtonWidget( guiInformation.gameName );
+
+    // Connect the signal to the slot for this button
+    connect( nameButton, SIGNAL(nameBtnclicked( gameNameButtonWidget & )), this, SLOT(updatePrettyGameInfo( gameNameButtonWidget & )) );
+
+    // Update the metadata with the metatata for this record
+    nameButton->gameDescription = guiInformation.gameDescription;
+    nameButton->playTime = guiInformation.playTime;
+    nameButton->gameIcon = guiInformation.gameIconPath;
+    nameButton->launchScript = guiInformation.LaunchScript;
+    nameButton->launchCommand = guiInformation.LaunchCommand;
 
     // Add the push button to the layout
-    layout->addWidget( pushButton );
+    layout->addWidget( nameButton );
 
     // Add the button pointer to the button pointer list
-    buttonPtrList.push_back( pushButton );
+    buttonPtrList.push_back( nameButton );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      23/02/2020
+ *
+ *  \par       Description:
+ *             Slot function for updating the pretty game information
+ */
+void gameTitleWidget::updatePrettyGameInfo( gameNameButtonWidget &buttonwidget )
+{
+    emit updatePrettyInformation( buttonwidget );
 }
 
 /*!
@@ -142,11 +176,11 @@ gamePrettyWidget::gamePrettyWidget( QWidget &parent ) :
     gameDescriptionBox( new QGroupBox( "Game Description" ) ),
     playTimeBox( new QGroupBox( "Game Play Time" ) ),
     gameImage( new QLabel ),
-    launchButton( new QPushButton("Launch Game") ),
+    launchButton( new LaunchButtonWidget("Launch Game") ),
     gameInformation( new QLabel ),
     playTime( new QLabel ),
     layout( new QGridLayout(this) )
-{    
+{
     // Set the info widget to wrap text
     gameInformation->setWordWrap(true);
     // Set the maximum size of the launch button
@@ -183,13 +217,12 @@ gamePrettyWidget::gamePrettyWidget( QWidget &parent ) :
  *  \par       Description:
  *             Member function for changing the image widget
  */
-void gamePrettyWidget::changeGameIcon( GUI_game_information_st &guiInformation )
+void gamePrettyWidget::changeGameIcon( gameNameButtonWidget &buttonInformation )
 {
-
     // Only Add the picture if there is one assigned
-    if( guiInformation.gameIconPath != "" )
+    if( buttonInformation.gameIcon != "" )
     {
-        QPixmap picture( guiInformation.gameIconPath );
+        QPixmap picture( buttonInformation.gameIcon );
 
         gameImage->setPixmap( picture );
     }
@@ -209,12 +242,12 @@ void gamePrettyWidget::changeGameIcon( GUI_game_information_st &guiInformation )
  *  \par       Description:
  *             Member function for changing the game information
  */
-void gamePrettyWidget::changeGameInfo( GUI_game_information_st &guiInformation )
+void gamePrettyWidget::changeGameInfo( gameNameButtonWidget &buttonInformation )
 {
     // Only set the text if there is some to show
-    if( guiInformation.gameDescription != "" )
+    if( buttonInformation.gameDescription != "" )
     {
-        gameInformation->setText( guiInformation.gameDescription );
+        gameInformation->setText( buttonInformation.gameDescription );
     }
     else
     {
@@ -230,19 +263,18 @@ void gamePrettyWidget::changeGameInfo( GUI_game_information_st &guiInformation )
  *  \par       Description:
  *             Member function for changing the play time.
  */
-void gamePrettyWidget::changePlayTime( GUI_game_information_st &guiInformation )
+void gamePrettyWidget::changePlayTime( gameNameButtonWidget &buttonInformation )
 {
     // Only set the text if there is some to show
-    if( guiInformation.playTime != "" )
+    if( buttonInformation.playTime != "" )
     {
-        playTime->setText( guiInformation.playTime );
+        playTime->setText( buttonInformation.playTime );
     }
     else
     {
         playTime->setText( "" );
     }
 }
-
 
 /*!
  *  \author    Thomas Sutton
@@ -260,4 +292,102 @@ gamePrettyWidget::~gamePrettyWidget( )
     delete launchButton;
     delete gameImage;
     delete gameInformation;
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      23/02/2020
+ *
+ *  \par       Description:
+ *             Constructor for the gameNameButtonWidget class
+ */
+gameNameButtonWidget::gameNameButtonWidget( const QString & text ) :
+    QPushButton( text )
+{
+    // Connect the signal to the slot for this button
+    connect( this, SIGNAL(clicked( )), this, SLOT(buttonClicked( )) );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      23/02/2020
+ *
+ *  \par       Description:
+ *             Slot function to emit button clicked information
+ */
+void gameNameButtonWidget::buttonClicked( )
+{
+    emit nameBtnclicked( *this );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      23/02/2020
+ *
+ *  \par       Description:
+ *             Destructor for the gameNameButtonWidget class
+ */
+gameNameButtonWidget::~gameNameButtonWidget( )
+{
+
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      23/02/2020
+ *
+ *  \par       Description:
+ *             Constructor for the launchButtonWidget class
+ */
+LaunchButtonWidget::LaunchButtonWidget( const QString & text ) :
+    QPushButton( text )
+{
+    // Connect the signal to the slot for this button
+    connect( this, SIGNAL(clicked( )), this, SLOT(launchGame( )) );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      23/02/2020
+ *
+ *  \par       Description:
+ *             Slot function launch the associated game
+ */
+void LaunchButtonWidget::launchGame( )
+{
+    if( launchCommand != "" )
+    {
+        proc_and_thread_data_st * proc_and_thread_data_ps = new proc_and_thread_data_st;
+        proc_and_thread_data_ps->thread = new QThread;
+        proc_and_thread_data_ps->process = new QProcess;
+
+        proc_and_thread_data_ps->process->moveToThread( proc_and_thread_data_ps->thread );
+
+        proc_and_thread_data_ps->process->start( launchCommand );
+
+        proc_and_thread_vp.push_back( proc_and_thread_data_ps );
+    }
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      23/02/2020
+ *
+ *  \par       Description:
+ *             Destructor for the launchButtonWidget class
+ */
+LaunchButtonWidget::~LaunchButtonWidget( )
+{
+    for( uint16_t i = 0U; i < proc_and_thread_vp.size( ); i++ )
+    {
+        delete proc_and_thread_vp[i]->thread;
+        delete proc_and_thread_vp[i]->process;
+        delete proc_and_thread_vp[i];
+    }
 }

@@ -12,6 +12,8 @@ struct GUI_game_information_st
     QString gameIconPath;
     QString gameDescription;
     QString playTime;
+    QString LaunchCommand;
+    QString LaunchScript;
 };
 
 /*! 
@@ -32,10 +34,12 @@ class sqLiteDbInterface
 
         // Read in the information that we need to display for each game
         void readGameGuiInformation( );
+        // Read in the information launch information for each game
+        void readGameLaunchInformation( );
         
         // Constant pointer to an sqlite database
         QSqlDatabase * const my_db;
-        // Constant pointer to a vector containing the information to display in the GUI
+        // Vector of pointers to the containing the information to display in the GUI
         std::vector<GUI_game_information_st *> displayData_vp;
 
     private:
