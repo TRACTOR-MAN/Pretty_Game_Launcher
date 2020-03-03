@@ -42,8 +42,6 @@ gameDataGuiWidget::gameDataGuiWidget( QWidget &parent ) :
     horizLayout_p->addWidget( prettyWidget );
 
     this->setLayout( horizLayout_p );
-
-    this->show();
 }
 
 /*!

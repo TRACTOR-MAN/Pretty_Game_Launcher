@@ -33,9 +33,6 @@ sqLiteDbInterface::sqLiteDbInterface( ) :
 
     // Read GUI related information from the sqlite database
     readGameGuiInformation( );
-
-    // Read game launch information
-
 }
 
 /*!
@@ -51,7 +48,7 @@ void sqLiteDbInterface::readGameGuiInformation( )
 {
     // Query the database for the information to display
     QSqlQuery query;
-    query.prepare("SELECT gameName, gameIconPath, gameDescription, playTime, launchCommand, launchScript FROM GameLaunchData");
+    query.prepare("SELECT gameName, gameIconPath, gameDescription, playTime, launchCommand, launchScript FROM GameLaunchData ORDER BY gameName ASC");
     
     // Excecute the query
     if( query.exec( ) == false )
