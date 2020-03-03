@@ -49,7 +49,13 @@ public:
     QHBoxLayout *horizontalLayout_5;
     QLabel *label_4;
     QSpacerItem *horizontalSpacer_3;
-    QPlainTextEdit *plainTextEdit;
+    QPlainTextEdit *launchCommand;
+    QWidget *widget_8;
+    QVBoxLayout *verticalLayout_3;
+    QHBoxLayout *horizontalLayout_6;
+    QLabel *label_5;
+    QSpacerItem *horizontalSpacer_2;
+    QPlainTextEdit *gameDescription;
     QWidget *widget;
     QHBoxLayout *horizontalLayout;
     QSpacerItem *horizontalSpacer;
@@ -59,7 +65,7 @@ public:
     {
         if (Add_New_Game_Dialogue->objectName().isEmpty())
             Add_New_Game_Dialogue->setObjectName(QString::fromUtf8("Add_New_Game_Dialogue"));
-        Add_New_Game_Dialogue->resize(462, 452);
+        Add_New_Game_Dialogue->resize(468, 453);
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -163,13 +169,39 @@ public:
 
         verticalLayout_2->addLayout(horizontalLayout_5);
 
+        launchCommand = new QPlainTextEdit(widget_5);
+        launchCommand->setObjectName(QString::fromUtf8("launchCommand"));
+
+        verticalLayout_2->addWidget(launchCommand);
+
 
         verticalLayout->addWidget(widget_5);
 
-        plainTextEdit = new QPlainTextEdit(Add_New_Game_Dialogue);
-        plainTextEdit->setObjectName(QString::fromUtf8("plainTextEdit"));
+        widget_8 = new QWidget(Add_New_Game_Dialogue);
+        widget_8->setObjectName(QString::fromUtf8("widget_8"));
+        verticalLayout_3 = new QVBoxLayout(widget_8);
+        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
+        horizontalLayout_6 = new QHBoxLayout();
+        horizontalLayout_6->setObjectName(QString::fromUtf8("horizontalLayout_6"));
+        label_5 = new QLabel(widget_8);
+        label_5->setObjectName(QString::fromUtf8("label_5"));
 
-        verticalLayout->addWidget(plainTextEdit);
+        horizontalLayout_6->addWidget(label_5);
+
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_6->addItem(horizontalSpacer_2);
+
+
+        verticalLayout_3->addLayout(horizontalLayout_6);
+
+        gameDescription = new QPlainTextEdit(widget_8);
+        gameDescription->setObjectName(QString::fromUtf8("gameDescription"));
+
+        verticalLayout_3->addWidget(gameDescription);
+
+
+        verticalLayout->addWidget(widget_8);
 
         widget = new QWidget(Add_New_Game_Dialogue);
         widget->setObjectName(QString::fromUtf8("widget"));
@@ -212,6 +244,7 @@ public:
         label_3->setText(QApplication::translate("Add_New_Game_Dialogue", "Launch Script", nullptr));
         toolButton->setText(QApplication::translate("Add_New_Game_Dialogue", "...", nullptr));
         label_4->setText(QApplication::translate("Add_New_Game_Dialogue", "Launch Command", nullptr));
+        label_5->setText(QApplication::translate("Add_New_Game_Dialogue", "Game Description", nullptr));
     } // retranslateUi
 
 };
