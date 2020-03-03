@@ -29,15 +29,19 @@ class Add_New_Game_Dialogue : public QDialog
         ~Add_New_Game_Dialogue( );
 
     private slots:
-        void searchForFile( );
-        void updateSelectedFile( const QString selectedFile );
+        void searchForLaunchScript( );
+        void searchForGameIcon( );
+        void updateLaunchScript( const QString selectedFile );
+        void updateGameIcon( const QString selectedFile );
     
     signals:
-        void textChanged( const QString newString );
+        void launchScriptTextChanged( const QString newString );
+        void gameIconTextChanged( const QString newString );
 
     private:
         Ui::Add_New_Game_Dialogue * ui;
-        QFileDialog * fileDialog;
+        QFileDialog *launchScriptFileDialog;
+        QFileDialog *gameIconFileDialog;
 
 };
 

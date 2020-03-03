@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>301</height>
+    <width>462</width>
+    <height>452</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -31,6 +31,16 @@
        </widget>
       </item>
       <item>
+       <widget class="QWidget" name="widget_7" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>10</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QLineEdit" name="lineEdit"/>
       </item>
      </layout>
@@ -47,12 +57,29 @@
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="comboBox">
+       <widget class="QWidget" name="widget_6" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>15</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_2">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>3</horstretch>
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="toolButton_2">
+        <property name="text">
+         <string>...</string>
         </property>
        </widget>
       </item>
@@ -81,6 +108,39 @@
       </item>
      </layout>
     </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="widget_5" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Launch Command</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPlainTextEdit" name="plainTextEdit"/>
    </item>
    <item>
     <widget class="QWidget" name="widget" native="true">
@@ -128,8 +188,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>443</x>
+     <y>433</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -144,8 +204,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>381</x>
-     <y>270</y>
+     <x>443</x>
+     <y>433</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -157,11 +217,11 @@
    <sender>toolButton</sender>
    <signal>clicked()</signal>
    <receiver>Add_New_Game_Dialogue</receiver>
-   <slot>searchForFile()</slot>
+   <slot>searchForLaunchScript()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>381</x>
-     <y>198</y>
+     <x>443</x>
+     <y>139</y>
     </hint>
     <hint type="destinationlabel">
      <x>377</x>
@@ -171,24 +231,58 @@
   </connection>
   <connection>
    <sender>Add_New_Game_Dialogue</sender>
-   <signal>textChanged(QString)</signal>
+   <signal>launchScriptTextChanged(QString)</signal>
    <receiver>selectedFile</receiver>
    <slot>setText(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>364</x>
-     <y>297</y>
+     <x>456</x>
+     <y>167</y>
     </hint>
     <hint type="destinationlabel">
-     <x>282</x>
-     <y>192</y>
+     <x>397</x>
+     <y>130</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Add_New_Game_Dialogue</receiver>
+   <slot>searchForGameIcon()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>436</x>
+     <y>82</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>454</x>
+     <y>94</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Add_New_Game_Dialogue</sender>
+   <signal>gameIconTextChanged(QString)</signal>
+   <receiver>lineEdit_2</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>458</x>
+     <y>163</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>341</x>
+     <y>89</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
-  <signal>textChanged(QString)</signal>
-  <slot>searchForFile()</slot>
+  <signal>launchScriptTextChanged(QString)</signal>
+  <signal>gameIconTextChanged(QString)</signal>
   <slot>updateSelectedFile()</slot>
+  <slot>searchForLaunchScript()</slot>
+  <slot>searchForGameIcon()</slot>
  </slots>
 </ui>
