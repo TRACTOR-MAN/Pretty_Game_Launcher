@@ -29,7 +29,7 @@ struct GUI_game_information_st
 class sqLiteDbInterface
 {
     public:
-        sqLiteDbInterface( );
+        sqLiteDbInterface( QWidget *parent );
         ~sqLiteDbInterface( );
 
         // Read in the information that we need to display for each game
@@ -40,7 +40,7 @@ class sqLiteDbInterface
         // Constant pointer to an sqlite database
         QSqlDatabase * const my_db;
         // Vector of pointers to the containing the information to display in the GUI
-        std::vector<GUI_game_information_st *> displayData_vp;
+        std::vector<GUI_game_information_st *> displayData_v;
 
     private:
         // Copy constructor defined but not used, to protect against undefined 

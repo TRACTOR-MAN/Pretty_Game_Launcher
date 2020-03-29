@@ -1,5 +1,7 @@
 #include <QtSql>
 #include <iostream>
+
+#include <QMessageBox>
 #include "sqliteDbAccess.h"
 
 /*!
@@ -10,29 +12,57 @@
  *  \par       Description:
  *             Constructor for the sqLiteDbInterface class
  */
-sqLiteDbInterface::sqLiteDbInterface( ) :
+sqLiteDbInterface::sqLiteDbInterface( QWidget *parent ) :
     my_db( new( QSqlDatabase ) )
 {
-    // we are using the sqlite driver
-    *my_db = QSqlDatabase::addDatabase( "QSQLITE" );
+    // The directory where the database is to be stored
+    const QString db_path("..//..//Config//game_data.db");
 
-    // point to our game database
-    my_db->setDatabaseName( "../../Config/game_data.db" );
-
-    bool connection_good_b = my_db->open( );
-
-    // Provide some debug on the connection.
-    if( connection_good_b == false )
+    // Before we do anything, check that the sqlite driver is available
+    if( QSqlDatabase::isDriverAvailable("QSQLITE") )
     {
-        std::cout << "connection to database bad" << std::endl;
+        // we are using the sqlite driver
+        *my_db = QSqlDatabase::addDatabase( "QSQLITE" );
+
+        // point to our game database
+        my_db->setDatabaseName( db_path );
+
+        // Check if the database connection is good
+        bool connection_good_b = my_db->open( );
+
+        // Provide some debug on the connection.
+        if( connection_good_b == false )
+        {
+            // It is likely that the pretty_game_launcher excecutable is in the incorrect location
+            qDebug() << "Connection to database bad, check that the executable is located"
+                     << db_path
+                     << " from game_data.db\n";
+
+            // Message pop up to the application
+            QMessageBox::warning( parent, "Pretty Game Launcher", "Bad Database Connection, run application from command line for more information");
+
+            // abort.... abort....
+            qWarning() << my_db->lastError() << "\n";
+        }
+        else
+        {
+            // Good connection!
+            std::cout << "Connection to database good" << std::endl;
+        }
+
+        // Call the create table command, this ensures that the database is created, if it doesn't already exist
+        QSqlQuery query;
+        query.exec( "CREATE TABLE \"GameLaunchData\" (\"gameName\" TEXT NOT NULL, \"gameIconPath\" TEXT, \"launchCommand\"	TEXT, \"launchScript\" TEXT, \"gameDescription\" TEXT NOT NULL, \"playTime\" TEXT)");
+
+        // Read GUI related information from the sqlite database
+        readGameGuiInformation( );
     }
+    // The sqlite driver is not available
     else
     {
-        std::cout << "connection to database good" << std::endl;
+        // The driver is not available
+        qFatal( "SQLITE driver not available, check .pro file, and SQL libraries are available" );
     }
-
-    // Read GUI related information from the sqlite database
-    readGameGuiInformation( );
 }
 
 /*!
@@ -59,7 +89,7 @@ void sqLiteDbInterface::readGameGuiInformation( )
     {
         while( query.next( ) != false )
         {
-
+            // Create a new pointer to lcl_GUI_game_information_ps data
             GUI_game_information_st *lcl_GUI_game_information_ps = new( GUI_game_information_st );
 
             // Store the information in a vector
@@ -70,7 +100,8 @@ void sqLiteDbInterface::readGameGuiInformation( )
             lcl_GUI_game_information_ps->LaunchCommand = query.value("launchCommand").toString();
             lcl_GUI_game_information_ps->LaunchScript = query.value("launchScript").toString();
 
-            displayData_vp.push_back( lcl_GUI_game_information_ps );
+            // Add the data pointer to the vector
+            displayData_v.push_back( lcl_GUI_game_information_ps );
         }
     }
 }
@@ -85,9 +116,9 @@ void sqLiteDbInterface::readGameGuiInformation( )
  */
 sqLiteDbInterface::~sqLiteDbInterface( )
 {
-    for(uint16_t i = 0U; i < displayData_vp.size( ); i++)
+    for(uint16_t i = 0U; i < displayData_v.size( ); i++)
     {
-        delete displayData_vp[i];
+        delete displayData_v[i];
     }
 
     delete my_db;

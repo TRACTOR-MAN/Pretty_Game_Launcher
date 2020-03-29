@@ -12,25 +12,29 @@
  *  \par       Description:
  *             Constructor for the gameDatauiWidget class
  */
-gameDataGuiWidget::gameDataGuiWidget( QWidget &parent ) :
+gameDataGuiWidget::gameDataGuiWidget( QWidget &parent, sqLiteDbInterface &psdDatabase  ) :
     QWidget(&parent),
     scrollAreaMaxWidth( 200 ),
     horizLayout_p( new QHBoxLayout ),
     scrollArea( new QScrollArea ),
     gameNameWidget( new gameTitleWidget( *this, (scrollAreaMaxWidth - 15) )),
     prettyWidget( new gamePrettyWidget( *this )),
-    myDatabase( new sqLiteDbInterface )
+    lclDatabase( psdDatabase )
 {
     connect( gameNameWidget, SIGNAL(updatePrettyInformation( gameNameButtonWidget &)), this, SLOT(redrawPrettyInformation( gameNameButtonWidget &)) );
 
-    // Only access the game, data, if it is present
-    if( myDatabase->displayData_vp[0] != nullptr )
+    // If there is data to process
+    if(  lclDatabase.displayData_v.empty( ) != false )
     {
         // Itterate through the entire database, and add every game name
-        for( uint16_t i = 0U; i < myDatabase->displayData_vp.size(); i++ )
+        for( uint16_t i = 0U; i < lclDatabase.displayData_v.size(); i++ )
         {
-            gameNameWidget->addGameTitle( *myDatabase->displayData_vp[i] );
+            gameNameWidget->addGameTitle( *lclDatabase.displayData_v[i] );
         }
+    }
+    else
+    {
+        // Do nothing
     }
 
     // Add the game name widget to the scroll area
@@ -76,7 +80,6 @@ gameDataGuiWidget::~gameDataGuiWidget( )
     delete gameNameWidget;
     delete prettyWidget;
     delete scrollArea;
-    delete myDatabase;
 }
 
 /*!

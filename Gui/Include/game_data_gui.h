@@ -177,7 +177,7 @@ class gameDataGuiWidget : public QWidget
     // Q object needed for the signals and slots mechanism
     Q_OBJECT
 public:
-    gameDataGuiWidget( QWidget &parent );
+    gameDataGuiWidget( QWidget &parent, sqLiteDbInterface &psdDatabase );
     ~gameDataGuiWidget( );
 
     // The max width of the scroll area
@@ -194,7 +194,7 @@ public:
     gamePrettyWidget *prettyWidget;
 
     // Objects to handle the interface to the sqlite database
-    sqLiteDbInterface *myDatabase;
+    sqLiteDbInterface &lclDatabase;
 
 private slots:
     void redrawPrettyInformation( gameNameButtonWidget &buttonInformation );

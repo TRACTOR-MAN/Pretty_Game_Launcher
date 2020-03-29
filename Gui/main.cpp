@@ -32,8 +32,11 @@ int main(int argc, char *argv[])
     // Create an instance of the MainWindow class
     MainWindow window;
 
+    // Create a handle and interface to the sqlite database
+    sqLiteDbInterface myDatabase( &window );
+
     // Create an instance of the game data GUI widget
-    gameDataGuiWidget gameDataWidget( window );
+    gameDataGuiWidget gameDataWidget( window, myDatabase );
 
     // Set the gameData widget as the central widget
     window.setCentralWidget(&gameDataWidget);
