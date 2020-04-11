@@ -5,6 +5,7 @@
 #include <QTextStream>
 
 #include "sqliteDbAccess.h"
+#include "add_new_game_dialogue.h"
 #include "game_data_gui.h"
 #include "main.h"
 
@@ -34,6 +35,12 @@ int main(int argc, char *argv[])
 
     // Create a handle and interface to the sqlite database
     sqLiteDbInterface myDatabase( &window );
+
+    // Initialise the lclDatabase element in Add_New_Game_Dialogue, it had to be achieved
+    // With a static member, as the Add_New_Game_Dialogue instance resides within MainWindow window
+    // and sqLiteDbInterface relies on a parent of type QWidget to be passed in, hence the assignment
+    // of lclDatabase needs to be done here.
+    Add_New_Game_Dialogue::setLclDatabase( &myDatabase );
 
     // Create an instance of the game data GUI widget
     gameDataGuiWidget gameDataWidget( window, myDatabase );

@@ -48,20 +48,23 @@ sqLiteDbInterface::sqLiteDbInterface( QWidget *parent ) :
         {
             // Good connection!
             std::cout << "Connection to database good" << std::endl;
+
+            // Call the create table command, this ensures that the database is created, if it doesn't already exist
+            QSqlQuery query;
+            query.exec( "CREATE TABLE \"GameLaunchData\" (\"gameName\" TEXT NOT NULL, \"gameIconPath\" TEXT, \"launchCommand\"	TEXT, \"launchScript\" TEXT, \"gameDescription\" TEXT NOT NULL, \"playTime\" TEXT)");
+
+            // Read GUI related information from the sqlite database
+            readGameGuiInformation( );
         }
-
-        // Call the create table command, this ensures that the database is created, if it doesn't already exist
-        QSqlQuery query;
-        query.exec( "CREATE TABLE \"GameLaunchData\" (\"gameName\" TEXT NOT NULL, \"gameIconPath\" TEXT, \"launchCommand\"	TEXT, \"launchScript\" TEXT, \"gameDescription\" TEXT NOT NULL, \"playTime\" TEXT)");
-
-        // Read GUI related information from the sqlite database
-        readGameGuiInformation( );
     }
     // The sqlite driver is not available
     else
     {
+        // Message pop up to the application
+        QMessageBox::warning( parent, "Pretty Game Launcher", "QSQLITE driver not available or not installed");
+
         // The driver is not available
-        qFatal( "SQLITE driver not available, check .pro file, and SQL libraries are available" );
+        qWarning( "SQLITE driver not available, check .pro file, and SQL libraries are available" );
     }
 }
 
@@ -103,6 +106,52 @@ void sqLiteDbInterface::readGameGuiInformation( )
             // Add the data pointer to the vector
             displayData_v.push_back( lcl_GUI_game_information_ps );
         }
+    }
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      05/02/2020
+ *
+ *  \par       Description:
+ *             Member function of the readGameGuiInformation class for reading GUI
+ *             information from the sqlite database.
+ */
+void sqLiteDbInterface::addNewGame(
+                                    QString gameTitle,
+                                    QString launchScript,
+                                    QString launchCommand,
+                                    QString gameDescription,
+                                    QString gameIcon,
+                                    QWidget *parent
+                                  )
+{
+    QSqlQuery query;
+
+    // prepare the query
+    query.prepare( "INSERT INTO GameLaunchData(gameName, gameIconPath, gameDescription, playTime, launchCommand, launchScript) values (:gameName, :gameIconPath, :gameDescription, :playTime, :launchCommand, :launchScript)" );
+
+    // Now bind the values
+    query.bindValue( ":gameName", gameTitle );
+    query.bindValue( ":gameIconPath", gameIcon );
+    query.bindValue( ":gameDescription", gameDescription );
+    query.bindValue( ":playTime", "00h:00m:00s" );
+    query.bindValue( ":launchCommand", launchCommand );
+    query.bindValue( ":launchScript", launchScript );
+
+    // Execute the query
+    if(query.exec() == false)
+    {
+        qDebug() << "addNewGameError error:  "
+                 << query.lastError();
+
+        // Message pop up to the application
+        QMessageBox::warning( parent, "Pretty Game Launcher", query.lastError().text() );
+    }
+    else
+    {
+        // Do nothing
     }
 }
 

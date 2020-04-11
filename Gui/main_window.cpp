@@ -2,7 +2,15 @@
 #include "main_window.h"
 #include "ui_mainwindow.h"
 #include "add_new_game_dialogue.h"
+#include "sqliteDbAccess.h"
 
+/****************************************************************************
+  __  __    _    ___  _  _  __      __ ___  _  _  ___    ___ __      __
+ |  \/  |  /_\  |_ _|| \| | \ \    / /|_ _|| \| ||   \  / _ \\ \    / /
+ | |\/| | / _ \  | | | .` |  \ \/\/ /  | | | .` || |) || (_) |\ \/\/ /
+ |_|  |_|/_/ \_\|___||_|\_|   \_/\_/  |___||_|\_||___/  \___/  \_/\_/
+
+ ***************************************************************************/
 MainWindow::MainWindow(QWidget *parent) :
     // For my own reference, the below line ensures that the QMainWindow
     // Constructor, with the &QWidget arguement is called :-) 

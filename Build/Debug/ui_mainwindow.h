@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.12.4
+** Created by: Qt User Interface Compiler version 5.14.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -36,9 +36,9 @@ public:
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
         MainWindow->setEnabled(true);
         MainWindow->resize(1057, 774);
-#ifndef QT_NO_TOOLTIP
+#if QT_CONFIG(tooltip)
         MainWindow->setToolTip(QString::fromUtf8(""));
-#endif // QT_NO_TOOLTIP
+#endif // QT_CONFIG(tooltip)
         MainWindow->setStyleSheet(QString::fromUtf8(""));
         MainWindow->setInputMethodHints(Qt::ImhNone);
         actionTest_1 = new QAction(MainWindow);
@@ -72,10 +72,10 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Pretty Game Launcher", nullptr));
-        actionTest_1->setText(QApplication::translate("MainWindow", "Test_1", nullptr));
-        actionAdd_New_Game->setText(QApplication::translate("MainWindow", "Add New Game", nullptr));
-        taskMenu->setTitle(QApplication::translate("MainWindow", "File", nullptr));
+        MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "Pretty Game Launcher", nullptr));
+        actionTest_1->setText(QCoreApplication::translate("MainWindow", "Test_1", nullptr));
+        actionAdd_New_Game->setText(QCoreApplication::translate("MainWindow", "Add New Game", nullptr));
+        taskMenu->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));
     } // retranslateUi
 
 };

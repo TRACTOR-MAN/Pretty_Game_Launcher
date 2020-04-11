@@ -24,7 +24,7 @@ gameDataGuiWidget::gameDataGuiWidget( QWidget &parent, sqLiteDbInterface &psdDat
     connect( gameNameWidget, SIGNAL(updatePrettyInformation( gameNameButtonWidget &)), this, SLOT(redrawPrettyInformation( gameNameButtonWidget &)) );
 
     // If there is data to process
-    if(  lclDatabase.displayData_v.empty( ) != false )
+    if(  lclDatabase.displayData_v.empty( ) == false )
     {
         // Itterate through the entire database, and add every game name
         for( uint16_t i = 0U; i < lclDatabase.displayData_v.size(); i++ )

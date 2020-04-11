@@ -1,6 +1,9 @@
 #ifndef SQ_LITE_DB_ACCESS_H
 #define SQ_LITE_DB_ACCESS_H
 
+#include <QString>
+#include <QWidget>
+
 // Forward decleration of the QSqlDatabase class
 class QSqlDatabase;
 
@@ -36,6 +39,14 @@ class sqLiteDbInterface
         void readGameGuiInformation( );
         // Read in the information launch information for each game
         void readGameLaunchInformation( );
+        // Add a new game to the sqlite database
+        void addNewGame( QString gameTitle,
+                         QString launchScript,
+                         QString launchCommand,
+                         QString gameDescription,
+                         QString gameIcon = "\0",
+                         QWidget *parent = nullptr
+                       );
         
         // Constant pointer to an sqlite database
         QSqlDatabase * const my_db;

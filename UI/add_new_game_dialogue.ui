@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>468</width>
-    <height>453</height>
+    <height>696</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,7 +21,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QWidget" name="widget_4" native="true">
+    <widget class="QWidget" name="gameTitleWidget" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QLabel" name="label">
@@ -41,13 +41,13 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit"/>
+       <widget class="QLineEdit" name="gameTitle"/>
       </item>
      </layout>
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="widget_3" native="true">
+    <widget class="QWidget" name="gameIconWidget" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
        <widget class="QLabel" name="label_2">
@@ -67,7 +67,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_2">
+       <widget class="QLineEdit" name="gameIcon">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -87,7 +87,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="widget_2" native="true">
+    <widget class="QWidget" name="launchScriptWidget" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
        <widget class="QLabel" name="label_3">
@@ -97,7 +97,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="selectedFile"/>
+       <widget class="QLineEdit" name="launchScript"/>
       </item>
       <item>
        <widget class="QToolButton" name="toolButton">
@@ -110,7 +110,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="widget_5" native="true">
+    <widget class="QWidget" name="launchCommandWidget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -143,7 +143,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="widget_8" native="true">
+    <widget class="QWidget" name="gameDescriptionWidget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -176,7 +176,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="widget" native="true">
+    <widget class="QWidget" name="okCancelWidget" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <spacer name="horizontalSpacer">
@@ -221,8 +221,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>443</x>
-     <y>433</y>
+     <x>449</x>
+     <y>677</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -237,8 +237,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>443</x>
-     <y>433</y>
+     <x>449</x>
+     <y>677</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -265,7 +265,7 @@
   <connection>
    <sender>Add_New_Game_Dialogue</sender>
    <signal>launchScriptTextChanged(QString)</signal>
-   <receiver>selectedFile</receiver>
+   <receiver>launchScript</receiver>
    <slot>setText(QString)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -297,7 +297,7 @@
   <connection>
    <sender>Add_New_Game_Dialogue</sender>
    <signal>gameIconTextChanged(QString)</signal>
-   <receiver>lineEdit_2</receiver>
+   <receiver>gameIcon</receiver>
    <slot>setText(QString)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -310,6 +310,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>Add_New_Game_Dialogue</receiver>
+   <slot>addNewGameToDbc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>410</x>
+     <y>671</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>421</x>
+     <y>691</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>Add_New_Game_Dialogue</receiver>
+   <slot>clearDialogueElements()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>358</x>
+     <y>667</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>364</x>
+     <y>688</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>launchScriptTextChanged(QString)</signal>
@@ -317,5 +349,7 @@
   <slot>updateSelectedFile()</slot>
   <slot>searchForLaunchScript()</slot>
   <slot>searchForGameIcon()</slot>
+  <slot>addNewGameToDbc()</slot>
+  <slot>clearDialogueElements()</slot>
  </slots>
 </ui>
