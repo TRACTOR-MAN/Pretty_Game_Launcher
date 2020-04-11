@@ -1093,6 +1093,8 @@ moc_add_new_game_dialogue.cpp: ../../Gui/Include/add_new_game_dialogue.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qdir.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qfileinfo.h \
 		../../Control/Include/sqliteDbAccess.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/QString \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/QWidget \
 		moc_predefs.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/bin/moc
 	/mnt/Media/Apps/Qt/5.14.2/gcc_64/bin/moc $(DEFINES) --include /mnt/General/QT_Projects/Pretty_Game_Launcher/Build/Debug/moc_predefs.h -I/mnt/Media/Apps/Qt/5.14.2/gcc_64/mkspecs/linux-g++ -I/mnt/General/QT_Projects/Pretty_Game_Launcher/Project -I/mnt/General/QT_Projects/Pretty_Game_Launcher/Gui/Include -I/mnt/General/QT_Projects/Pretty_Game_Launcher/Control/Include -I/mnt/Media/Apps/Qt/5.14.2/gcc_64/include -I/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets -I/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui -I/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtSql -I/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/9/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../../Gui/Include/add_new_game_dialogue.h -o moc_add_new_game_dialogue.cpp
@@ -1225,6 +1227,7 @@ moc_game_data_gui.cpp: ../../Gui/Include/game_data_gui.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/QProcess \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qprocess.h \
 		../../Control/Include/sqliteDbAccess.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/QString \
 		moc_predefs.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/bin/moc
 	/mnt/Media/Apps/Qt/5.14.2/gcc_64/bin/moc $(DEFINES) --include /mnt/General/QT_Projects/Pretty_Game_Launcher/Build/Debug/moc_predefs.h -I/mnt/Media/Apps/Qt/5.14.2/gcc_64/mkspecs/linux-g++ -I/mnt/General/QT_Projects/Pretty_Game_Launcher/Project -I/mnt/General/QT_Projects/Pretty_Game_Launcher/Gui/Include -I/mnt/General/QT_Projects/Pretty_Game_Launcher/Control/Include -I/mnt/Media/Apps/Qt/5.14.2/gcc_64/include -I/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets -I/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui -I/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtSql -I/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/9/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../../Gui/Include/game_data_gui.h -o moc_game_data_gui.cpp
@@ -1372,6 +1375,8 @@ main.o: ../../Gui/main.cpp ../../Gui/Include/main_window.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/QFile \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/QTextStream \
 		../../Control/Include/sqliteDbAccess.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/QString \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/QWidget \
 		../../Gui/Include/add_new_game_dialogue.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/QDialog \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/qdialog.h \
@@ -1380,7 +1385,6 @@ main.o: ../../Gui/main.cpp ../../Gui/Include/main_window.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qdir.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qfileinfo.h \
 		../../Gui/Include/game_data_gui.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/QWidget \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/QFormLayout \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/qformlayout.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/QLayout \
@@ -1539,14 +1543,12 @@ main_window.o: ../../Gui/main_window.cpp /mnt/Media/Apps/Qt/5.14.2/gcc_64/includ
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/qfiledialog.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qdir.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qfileinfo.h \
-		../../Control/Include/sqliteDbAccess.h
+		../../Control/Include/sqliteDbAccess.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/QString
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main_window.o ../../Gui/main_window.cpp
 
-add_new_game_dialogue.o: ../../Gui/add_new_game_dialogue.cpp ../../Gui/Include/add_new_game_dialogue.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/QDialog \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/qdialog.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qtguiglobal.h \
+add_new_game_dialogue.o: ../../Gui/add_new_game_dialogue.cpp /mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/QtCore \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/QtCoreDepends \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qglobal.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qconfig.h \
@@ -1568,15 +1570,11 @@ add_new_game_dialogue.o: ../../Gui/add_new_game_dialogue.cpp ../../Gui/Include/a
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qmutex.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qnumeric.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qversiontagging.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qtgui-config.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/qtwidgets-config.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/qwidget.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qwindowdefs.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qabstractanimation.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qobject.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qobjectdefs.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qnamespace.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qwindowdefs_win.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qobject.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qstring.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qchar.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qbytearray.h \
@@ -1604,10 +1602,159 @@ add_new_game_dialogue.o: ../../Gui/add_new_game_dialogue.cpp ../../Gui/Include/a
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qvarlengtharray.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qcontainerfwd.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qobject_impl.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qabstracteventdispatcher.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qeventloop.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qabstractitemmodel.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qvariant.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qmap.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qdebug.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qhash.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qtextstream.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qiodevice.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qlocale.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qshareddata.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qset.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qcontiguouscache.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qsharedpointer.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qabstractnativeeventfilter.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qabstractproxymodel.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qabstractstate.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qabstracttransition.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qanimationgroup.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qarraydataops.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qarraydatapointer.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qbasictimer.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qbitarray.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qbuffer.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qbytearraymatcher.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qcache.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qcalendar.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qcborarray.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qcborvalue.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qdatetime.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qcborcommon.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qregularexpression.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qurl.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qurlquery.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/quuid.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qcbormap.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qcborstream.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qfloat16.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qcollator.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qcommandlineoption.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qcommandlineparser.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qcoreapplication.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qconcatenatetablesproxymodel.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qcryptographichash.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qdatastream.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qdeadlinetimer.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qelapsedtimer.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qdir.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qfileinfo.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qfile.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qfiledevice.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qdiriterator.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qeasingcurve.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qendian.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qeventtransition.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qexception.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qfactoryinterface.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qfileselector.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/QObject \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/QStringList \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qfilesystemwatcher.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qfinalstate.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qfuture.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qfutureinterface.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qrunnable.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qresultstore.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qfuturesynchronizer.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qfuturewatcher.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qhistorystate.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qidentityproxymodel.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qisenum.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qitemselectionmodel.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qjsonarray.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qjsonvalue.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qjsondocument.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qjsonobject.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qlibrary.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qlibraryinfo.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qversionnumber.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qline.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qlinkedlist.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qlockfile.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qloggingcategory.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qmargins.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qpaintdevice.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qmath.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qmessageauthenticationcode.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qmetaobject.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qmimedata.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qmimedatabase.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qmimetype.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qobjectcleanuphandler.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qoperatingsystemversion.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qparallelanimationgroup.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qpauseanimation.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qplugin.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qpointer.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qpluginloader.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qprocess.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qpropertyanimation.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qvariantanimation.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qqueue.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qrandom.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qreadwritelock.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qrect.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qsize.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qresource.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qsavefile.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qscopedvaluerollback.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qscopeguard.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qsemaphore.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qsequentialanimationgroup.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qsettings.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qsharedmemory.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qsignalmapper.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qsignaltransition.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qsocketnotifier.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qsortfilterproxymodel.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qstack.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qstandardpaths.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qstate.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qstatemachine.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qstorageinfo.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qstringlistmodel.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qsystemsemaphore.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qtemporarydir.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qtemporaryfile.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qtextboundaryfinder.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qtextcodec.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qthread.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qthreadpool.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qthreadstorage.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qtimeline.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qtimer.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qtimezone.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qtranslator.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qtransposeproxymodel.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qtypetraits.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qwaitcondition.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qwineventnotifier.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qxmlstream.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qtcoreversion.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/QMessageBox \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/qmessagebox.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qtguiglobal.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qtgui-config.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/qdialog.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/qwidget.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qwindowdefs.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qpaintdevice.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qpalette.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qcolor.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qrgb.h \
@@ -1616,18 +1763,11 @@ add_new_game_dialogue.o: ../../Gui/add_new_game_dialogue.cpp ../../Gui/Include/a
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qmatrix.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qpolygon.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qregion.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qdatastream.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qiodevice.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qline.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qtransform.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qpainterpath.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qimage.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qpixelformat.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qpixmap.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qsharedpointer.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qshareddata.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qhash.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qfont.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qfontmetrics.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qfontinfo.h \
@@ -1635,30 +1775,19 @@ add_new_game_dialogue.o: ../../Gui/add_new_game_dialogue.cpp ../../Gui/Include/a
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qcursor.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qkeysequence.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qevent.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qvariant.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qmap.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qdebug.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qtextstream.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qlocale.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qset.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qcontiguouscache.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qurl.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qurlquery.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qfile.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qfiledevice.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qvector2d.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qtouchdevice.h \
+		../../Gui/Include/add_new_game_dialogue.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/QDialog \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/QFileDialog \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/qfiledialog.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qdir.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qfileinfo.h \
 		../../Control/Include/sqliteDbAccess.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/QString \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/QWidget \
 		ui_add_new_game_dialogue.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/QVariant \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/QApplication \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/qapplication.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qcoreapplication.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/qeventloop.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qguiapplication.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qinputmethod.h \
@@ -1693,8 +1822,7 @@ add_new_game_dialogue.o: ../../Gui/add_new_game_dialogue.cpp ../../Gui/Include/a
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/qtoolbutton.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/qabstractbutton.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtGui/qicon.h \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/QVBoxLayout \
-		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/QWidget
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/QVBoxLayout
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o add_new_game_dialogue.o ../../Gui/add_new_game_dialogue.cpp
 
 sqliteDbAccess.o: ../../Control/sqliteDbAccess.cpp /mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtSql/QtSql \
@@ -1962,7 +2090,9 @@ sqliteDbAccess.o: ../../Control/sqliteDbAccess.cpp /mnt/Media/Apps/Qt/5.14.2/gcc
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/QMessageBox \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/qmessagebox.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/qdialog.h \
-		../../Control/Include/sqliteDbAccess.h
+		../../Control/Include/sqliteDbAccess.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/QString \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o sqliteDbAccess.o ../../Control/sqliteDbAccess.cpp
 
 game_data_gui.o: ../../Gui/game_data_gui.cpp /mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/QtCore \
@@ -2215,7 +2345,8 @@ game_data_gui.o: ../../Gui/game_data_gui.cpp /mnt/Media/Apps/Qt/5.14.2/gcc_64/in
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/QGroupBox \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtWidgets/qgroupbox.h \
 		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/QProcess \
-		../../Control/Include/sqliteDbAccess.h
+		../../Control/Include/sqliteDbAccess.h \
+		/mnt/Media/Apps/Qt/5.14.2/gcc_64/include/QtCore/QString
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o game_data_gui.o ../../Gui/game_data_gui.cpp
 
 qrc_breeze.o: qrc_breeze.cpp 
