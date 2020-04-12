@@ -4,6 +4,46 @@
 #include <QMessageBox>
 #include "sqliteDbAccess.h"
 
+// If this is a windows build
+#ifdef Q_OS_WIN
+    #include <windows.h>
+// Must be linux
+#else
+    extern"C"
+    {
+    #include <stdlib.h>
+    #include <pwd.h>
+    #include <stdio.h>
+    #include <unistd.h>
+    }
+#endif
+
+/*******************************************************************************
+                      ___  ___  ___ __   __ _  _____  ___
+                     | _ \| _ \|_ _|\ \ / //_\|_   _|| __|
+                     |  _/|   / | |  \ V // _ \ | |  | _|
+                     |_|_ |_|_\|___|  \_//_/ \_\|_|_ |___|
+                     |   \ | __|| __||_ _|| \| || __|/ __|
+                     | |) || _| | _|  | | | .` || _| \__ \
+                     |___/ |___||_|  |___||_|\_||___||___/
+*******************************************************************************/
+#define MAX_USERNAME_LENGTH                                     255
+
+
+
+
+/*******************************************************************************
+                    ___   ___    _     ___  _____  ___
+                   / __| / _ \  | |   |_ _||_   _|| __|
+                   \__ \| (_) | | |__  | |   | |  | _|
+                ___|___/ \__\_\ |____||___|  |_|  |___|___
+               |   \  /_\|_   _|/_\  | _ )  /_\  / __|| __|
+               | |) |/ _ \ | | / _ \ | _ \ / _ \ \__ \| _|
+              _|___//_/ \_\|_|/_/_\_\|___//_/ \_\|___/|___|_
+             |_ _|| \| ||_   _|| __|| _ \| __|/_\  / __|| __|
+              | | | .` |  | |  | _| |   /| _|/ _ \| (__ | _|
+             |___||_|\_|  |_|  |___||_|_\|_|/_/ \_\\___||___|
+*******************************************************************************/
 /*!
  *  \author    Thomas Sutton
  *  \version   1.0
@@ -15,8 +55,61 @@
 sqLiteDbInterface::sqLiteDbInterface( QWidget *parent ) :
     my_db( new( QSqlDatabase ) )
 {
-    // The directory where the database is to be stored
-    const QString db_path("..//..//Config//game_data.db");
+    QString config_path_c;
+
+    // If this is a windws build
+    #ifdef Q_OS_WIN
+        char username[ MAX_USERNAME_LENGTH ];
+        DWORD len_username = sizeof( username );
+
+        if( GetUserNameA( username, &len_username ) != false )
+        {
+            // Define the path to the database
+            config_path_c = "c://users//" + QString::fromStdString( username ) + "//Application Data//Pretty_Game_Launcher//";
+        }
+        else
+        {
+            // Provide a warning, we can't find the user name
+            QMessageBox::warning( parent, "Pretty Game Launcher", "Cannot determine username, thus cannot connect to the games database" );
+        }
+
+    // Must be Linux
+    #else
+        uid_t uid = geteuid( );
+        struct passwd *passwd_ps = getpwuid( uid );
+
+        // If we are pointing to a valid passwd structure
+        if( passwd_ps != nullptr )
+        {
+            // Define the path to the database
+            config_path_c = "//home//" + QString::fromStdString( passwd_ps->pw_name ) + "//.config//Pretty_Game_Launcher//";
+        }
+        else
+        {
+            // Message pop up to the application
+            QString debug_c( "Cannot determine user name for UID: " );
+            debug_c = debug_c + QString::number( uid );
+
+            // Provide a warning, we can't find the user name
+            QMessageBox::warning( parent, "Pretty Game Launcher", debug_c );
+        }
+    #endif
+
+    // Directory type
+    QDir config_dir_c( config_path_c );
+
+    // Create the directory if it doesn't exist
+    if( QDir( config_path_c ).exists( ) == false )
+    {
+        config_dir_c.mkdir( config_path_c );
+    }
+    else
+    {
+        // Do nothing
+    }
+
+    // Now create the db path variable
+    const QString db_path_c = config_path_c + "game_data.db";
 
     // Before we do anything, check that the sqlite driver is available
     if( QSqlDatabase::isDriverAvailable("QSQLITE") )
@@ -25,7 +118,7 @@ sqLiteDbInterface::sqLiteDbInterface( QWidget *parent ) :
         *my_db = QSqlDatabase::addDatabase( "QSQLITE" );
 
         // point to our game database
-        my_db->setDatabaseName( db_path );
+        my_db->setDatabaseName( db_path_c );
 
         // Check if the database connection is good
         bool connection_good_b = my_db->open( );
@@ -34,9 +127,7 @@ sqLiteDbInterface::sqLiteDbInterface( QWidget *parent ) :
         if( connection_good_b == false )
         {
             // It is likely that the pretty_game_launcher excecutable is in the incorrect location
-            qDebug() << "Connection to database bad, check that the executable is located"
-                     << db_path
-                     << " from game_data.db\n";
+            qDebug() << "Connection to database bad \n";
 
             // Message pop up to the application
             QMessageBox::warning( parent, "Pretty Game Launcher", "Bad Database Connection, run application from command line for more information");
