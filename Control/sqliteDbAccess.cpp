@@ -242,8 +242,32 @@ void sqLiteDbInterface::addNewGame(
     }
     else
     {
-        // Do nothing
+        // Update the vector with the new data
+        updateDisplayDataVector( );
     }
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      05/02/2020
+ *
+ *  \par       Description:
+ *             Member function for updating the data stored in the data vector
+ */
+void sqLiteDbInterface::updateDisplayDataVector( )
+{
+    // Delete the old data
+    for(uint16_t i = 0U; i < displayData_v.size( ); i++)
+    {
+        delete displayData_v[i];
+    }
+
+    // Clear down the entire displayData_v vector
+    displayData_v.clear( );
+
+    // Read the new data
+    readGameGuiInformation( );
 }
 
 /*!

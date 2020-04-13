@@ -77,6 +77,55 @@ void gameDataGuiWidget::redrawPrettyInformation( gameNameButtonWidget &buttonInf
 /*!
  *  \author    Thomas Sutton
  *  \version   1.0
+ *  \date      23/02/2020
+ *
+ *  \par       Description:
+ *             Member function for adding a new game to the GUI and DB file.
+ */
+void gameDataGuiWidget::AddNewGameToGuiAndDbc(
+                                               QString gameTitle,
+                                               QString launchScript,
+                                               QString launchCommand,
+                                               QString gameDescription,
+                                               QString gameIcon,
+                                               QWidget *parent
+                                             )
+{
+    lclDatabase.addNewGame( gameTitle, launchScript, launchCommand, gameDescription, gameIcon, parent );
+
+    refreshAllGames( );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      23/02/2020
+ *
+ *  \par       Description:
+ *             Member function for refreshing all games being displayed
+ */
+void gameDataGuiWidget::refreshAllGames( )
+{    
+    gameNameWidget->deleteAllGameButtons( );
+
+    // If there is data to process
+    if(  lclDatabase.displayData_v.empty( ) == false )
+    {
+        // Itterate through the entire database, and add every game name
+        for( uint16_t i = 0U; i < lclDatabase.displayData_v.size(); i++ )
+        {
+            gameNameWidget->addGameTitle( *lclDatabase.displayData_v[i] );
+        }
+    }
+    else
+    {
+        // Do nothing
+    }
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
  *  \date      07/02/2020
  *
  *  \par       Description:
@@ -160,6 +209,26 @@ void gameTitleWidget::updatePrettyGameInfo( gameNameButtonWidget &buttonwidget )
 /*!
  *  \author    Thomas Sutton
  *  \version   1.0
+ *  \date      22/04/2020
+ *
+ *  \par       Description:
+ *             Function for deleting all game buttons
+ */
+void gameTitleWidget::deleteAllGameButtons(  )
+{
+    // Clean up all button objects
+    for ( uint16_t i = 0; i < buttonPtrList.size(); i++)
+    {
+        delete buttonPtrList[i];
+    }
+
+    // Clear down the entire buttonPtrList vector
+    buttonPtrList.clear( );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
  *  \date      07/02/2020
  *
  *  \par       Description:
@@ -169,11 +238,7 @@ gameTitleWidget::~gameTitleWidget( )
 {
     delete layout;
 
-    // Clean up all button objects
-    for ( uint16_t i = 0; i < buttonPtrList.size(); i++)
-    {
-        delete buttonPtrList[i];
-    }
+    deleteAllGameButtons( );
 }
 
 /*******************************************************************************

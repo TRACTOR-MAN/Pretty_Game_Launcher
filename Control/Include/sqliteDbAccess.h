@@ -7,7 +7,6 @@
 // Forward decleration of the QSqlDatabase class
 class QSqlDatabase;
 
-
 // Structure containing the information to display in the GUI
 struct GUI_game_information_st
 {
@@ -40,7 +39,8 @@ class sqLiteDbInterface
         // Read in the information launch information for each game
         void readGameLaunchInformation( );
         // Add a new game to the sqlite database
-        void addNewGame( QString gameTitle,
+        void addNewGame(
+                         QString gameTitle,
                          QString launchScript,
                          QString launchCommand,
                          QString gameDescription,
@@ -57,6 +57,8 @@ class sqLiteDbInterface
         // Copy constructor defined but not used, to protect against undefined 
         // side effects
         sqLiteDbInterface( const sqLiteDbInterface & obj );
+        // Member function for updating the display data vector
+        void updateDisplayDataVector( );
 };
 
 #endif

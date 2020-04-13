@@ -14,7 +14,7 @@
  | |) || _|| (__ | |__ | _|  / _ \ |   / / _ \ | |   | || (_) || .` |
  |___/ |___|\___||____||___|/_/ \_\|_|_\/_/ \_\|_|  |___|\___/ |_|\_|
  **************************************************************************/
-sqLiteDbInterface *Add_New_Game_Dialogue::lclDatabase = nullptr;
+gameDataGuiWidget *Add_New_Game_Dialogue::lclGui = nullptr;
 
 /***************************************************************************
      _    ___   ___    _  _  ___ __      __   ___    _    __  __  ___
@@ -47,9 +47,9 @@ Add_New_Game_Dialogue::Add_New_Game_Dialogue( QWidget *parent ) :
  *  \par       Description:
  *             Static function for setting the status of the lclDatabase variable
  */
-void Add_New_Game_Dialogue::setLclDatabase( sqLiteDbInterface * const psd_database )
+void Add_New_Game_Dialogue::setLclData( gameDataGuiWidget * const psd_gui_data )
 {
-    lclDatabase = psd_database;
+    lclGui = psd_gui_data;
 }
 
 /*!
@@ -171,14 +171,16 @@ void Add_New_Game_Dialogue::addNewGameToDbc( )
     // If it is OK to add the new game
     if( okToAddNewGame_b != false )
     {
-        lclDatabase->addNewGame(
-                                 ui->gameTitle->text(),
-                                 ui->launchScript->text(),
-                                 ui->launchCommand->toPlainText(),
-                                 ui->gameDescription->toPlainText(),
-                                 ui->gameIcon->text(),
-                                 parentWidget()
-                               );
+        lclGui->AddNewGameToGuiAndDbc(
+                                       ui->gameTitle->text(),
+                                       ui->launchScript->text(),
+                                       ui->launchCommand->toPlainText(),
+                                       ui->gameDescription->toPlainText(),
+                                       ui->gameIcon->text(),
+                                       parentWidget()
+                                     );
+
+        // Now update t
 
         // Clear dialogue elements
         clearDialogueElements( );

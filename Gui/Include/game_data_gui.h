@@ -102,6 +102,9 @@ public:
     // Member function for adding an element to the game title widget
     void addGameTitle ( GUI_game_information_st guiInformation );
 
+    // Function for deleting all current games
+    void deleteAllGameButtons( );
+
     // Layout object
     QVBoxLayout *layout;
 
@@ -180,6 +183,16 @@ public:
     gameDataGuiWidget( QWidget &parent, sqLiteDbInterface &psdDatabase );
     ~gameDataGuiWidget( );
 
+    // Member function for adding a new game to the database and GUI
+    void AddNewGameToGuiAndDbc(
+                                QString gameTitle,
+                                QString launchScript,
+                                QString launchCommand,
+                                QString gameDescription,
+                                QString gameIcon = "\0",
+                                QWidget *parent = nullptr
+                              );
+
     // The max width of the scroll area
     int scrollAreaMaxWidth;
 
@@ -198,6 +211,9 @@ public:
 
 private slots:
     void redrawPrettyInformation( gameNameButtonWidget &buttonInformation );
+
+protected:
+    void refreshAllGames( );
 };
 
 #endif // GAME_DATA_GUI_H

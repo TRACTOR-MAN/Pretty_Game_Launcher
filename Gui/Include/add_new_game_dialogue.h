@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include <QFileDialog>
-#include "sqliteDbAccess.h"
+#include "game_data_gui.h"
 
 namespace Ui 
 {
@@ -30,7 +30,7 @@ class Add_New_Game_Dialogue : public QDialog
         ~Add_New_Game_Dialogue( );
 
         // Static function for setting the lclDatabase variable
-        static void setLclDatabase( sqLiteDbInterface * const psd_database );
+        static void setLclData( gameDataGuiWidget * const psd_gui_data );
 
     private slots:
         void searchForLaunchScript( );
@@ -48,8 +48,8 @@ class Add_New_Game_Dialogue : public QDialog
         Ui::Add_New_Game_Dialogue * ui;
         QFileDialog *launchScriptFileDialog;
         QFileDialog *gameIconFileDialog;
-        // Database handle
-        static sqLiteDbInterface *lclDatabase;
+        // GUI widget handle
+        static gameDataGuiWidget *lclGui;
 };
 
 #endif // ADD_NEW_GAME_DIALOGUE_H
