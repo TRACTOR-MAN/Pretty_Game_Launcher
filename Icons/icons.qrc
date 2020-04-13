@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>stop.png</file>
+        <file>restart.png</file>
+        <file>refresh.png</file>
+        <file>play.png</file>
+        <file>pause.png</file>
+        <file>open.png</file>
+        <file>list.png</file>
+        <file>grid.png</file>
+        <file>fullscreen.png</file>
+        <file>exit_fullscreen.png</file>
+        <file>custom_config_2.png</file>
+        <file>controller.png</file>
+        <file>configure.png</file>
+        <file>paint.png</file>
+    </qresource>
+</RCC>

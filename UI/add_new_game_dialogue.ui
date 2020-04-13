@@ -60,7 +60,7 @@
        <widget class="QWidget" name="widget_6" native="true">
         <property name="minimumSize">
          <size>
-          <width>15</width>
+          <width>13</width>
           <height>0</height>
          </size>
         </property>

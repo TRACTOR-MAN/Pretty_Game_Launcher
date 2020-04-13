@@ -2,6 +2,7 @@
 #define MAIN_WINDOW_H
 
 #include <QMainWindow>
+#include "main.h"
 
 // Forward decleration of the MainWindow class created in the form,
 // confusingly, it has the same name as our MainWindow class.
@@ -33,7 +34,7 @@ class MainWindow : public QMainWindow
     public:
         // The explicit keyword here, prevents an object from being created
         // with the wrong type passed in, it prevents implicit type casting.
-        explicit MainWindow(QWidget *parent = nullptr);
+        explicit MainWindow(application_theme_c &psdTheme, QWidget *parent = nullptr);
         ~MainWindow();
 
     // This custom keyword allows the QT meta object compiler to 
@@ -43,9 +44,15 @@ class MainWindow : public QMainWindow
         // is pressed. 
         void on_actionAdd_New_Game_triggered( );
 
-    private:
+        void on_actionFullScr_triggered( );
+
+        void on_actionToggleTheme_triggered();
+
+private:
         Ui::MainWindow * ui;
         Add_New_Game_Dialogue * addNewGame;
+        application_theme_c &lclTheme;
+        bool last_windowed_state_b;
 };
 
 #endif // MAIN_WINDOW_H

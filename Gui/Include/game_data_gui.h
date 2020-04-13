@@ -102,6 +102,9 @@ public:
     // Member function for adding an element to the game title widget
     void addGameTitle ( GUI_game_information_st guiInformation );
 
+    // Function for adding the spacer to the layout
+    void addVerticalSpacer( );
+
     // Function for deleting all current games
     void deleteAllGameButtons( );
 
@@ -113,6 +116,7 @@ public:
 
 private:
     std::vector<QPushButton *> buttonPtrList;
+    QSpacerItem *VGameNameSpacer;
 
 
 private slots:

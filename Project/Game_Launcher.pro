@@ -48,4 +48,6 @@ FORMS += \
         ../UI/add_new_game_dialogue.ui
 
 RESOURCES += \
+             ../Icons/icons.qrc \
              ./Style_Sheets/breeze.qrc
+

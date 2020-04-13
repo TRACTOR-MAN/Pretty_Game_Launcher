@@ -39,6 +39,9 @@ gameDataGuiWidget::gameDataGuiWidget( QWidget &parent, sqLiteDbInterface &psdDat
         {
             gameNameWidget->addGameTitle( *lclDatabase.displayData_v[i] );
         }
+
+        // Add a vertical spacer to push items up
+        gameNameWidget->addVerticalSpacer( );
     }
     else
     {
@@ -48,6 +51,7 @@ gameDataGuiWidget::gameDataGuiWidget( QWidget &parent, sqLiteDbInterface &psdDat
     // Add the game name widget to the scroll area
     scrollArea->setMaximumWidth( scrollAreaMaxWidth );
     scrollArea->setWidget( gameNameWidget );
+    scrollArea->setWidgetResizable( true );
 
     // Add the widgets to the main view
     horizLayout_p->addWidget( scrollArea );
@@ -116,6 +120,9 @@ void gameDataGuiWidget::refreshAllGames( )
         {
             gameNameWidget->addGameTitle( *lclDatabase.displayData_v[i] );
         }
+
+        // Add a vertical spacer to push items up
+        gameNameWidget->addVerticalSpacer( );
     }
     else
     {
@@ -155,7 +162,8 @@ gameDataGuiWidget::~gameDataGuiWidget( )
  */
 gameTitleWidget::gameTitleWidget( QWidget &parent, int minimumWidth ) :
     QWidget( &parent ),
-    layout( new QVBoxLayout(this) )
+    layout( new QVBoxLayout(this) ),
+    VGameNameSpacer( new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding) )
 {    
     this->setMinimumWidth( minimumWidth );
 
@@ -212,6 +220,19 @@ void gameTitleWidget::updatePrettyGameInfo( gameNameButtonWidget &buttonwidget )
  *  \date      22/04/2020
  *
  *  \par       Description:
+ *             Function for adding a vertical spacer to the scroll area
+ */
+void gameTitleWidget::addVerticalSpacer(  )
+{
+    layout->addSpacerItem( VGameNameSpacer );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      22/04/2020
+ *
+ *  \par       Description:
  *             Function for deleting all game buttons
  */
 void gameTitleWidget::deleteAllGameButtons(  )
@@ -219,8 +240,11 @@ void gameTitleWidget::deleteAllGameButtons(  )
     // Clean up all button objects
     for ( uint16_t i = 0; i < buttonPtrList.size(); i++)
     {
+        layout->removeWidget( buttonPtrList[i] );
         delete buttonPtrList[i];
     }
+
+    layout->removeItem( VGameNameSpacer );
 
     // Clear down the entire buttonPtrList vector
     buttonPtrList.clear( );
@@ -238,7 +262,7 @@ gameTitleWidget::~gameTitleWidget( )
 {
     delete layout;
 
-    deleteAllGameButtons( );
+    // Note that deleting layout cleans up all objects contained in it
 }
 
 /*******************************************************************************
@@ -273,6 +297,8 @@ gamePrettyWidget::gamePrettyWidget( QWidget &parent ) :
     launchButton->setMinimumSize( 160, 40 );
     // Set the minimum size of the game time widget
     playTime->setMinimumSize( 160, 40 );
+    // Set the maximum size of the icon widget
+    gameImage->setMaximumSize( 350, 350 );
     // Set the game time widget to central justify text
     playTime->setAlignment(Qt::AlignCenter);
 
@@ -310,7 +336,7 @@ void gamePrettyWidget::changeGameIcon( gameNameButtonWidget &buttonInformation )
     {
         QPixmap picture( buttonInformation.gameIcon );
 
-        gameImage->setPixmap( picture );
+        gameImage->setPixmap( picture.scaled(300, 300, Qt::KeepAspectRatio) );
     }
     else
     {
