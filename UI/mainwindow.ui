@@ -16,6 +16,10 @@
   <property name="windowTitle">
    <string>Pretty Game Launcher</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../Icons/icons.qrc">
+    <normaloff>:/Application_Icon.ico</normaloff>:/Application_Icon.ico</iconset>
+  </property>
   <property name="toolTip">
    <string notr="true"/>
   </property>
@@ -67,6 +71,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionHomeScreen"/>
    <addaction name="actionFullScr"/>
    <addaction name="actionToggleTheme"/>
   </widget>
@@ -90,7 +95,7 @@
   </action>
   <action name="actionToggleTheme">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="../Icons/icons.qrc">
@@ -98,6 +103,15 @@
    </property>
    <property name="text">
     <string>ToggleTheme</string>
+   </property>
+  </action>
+  <action name="actionHomeScreen">
+   <property name="icon">
+    <iconset resource="../Icons/icons.qrc">
+     <normaloff>:/home.png</normaloff>:/home.png</iconset>
+   </property>
+   <property name="text">
+    <string>HomeScreen</string>
    </property>
   </action>
  </widget>

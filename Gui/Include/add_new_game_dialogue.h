@@ -33,20 +33,16 @@ class Add_New_Game_Dialogue : public QDialog
         static void setLclData( gameDataGuiWidget * const psd_gui_data );
 
     private slots:
-        void searchForLaunchScript( );
         void searchForGameIcon( );
-        void updateLaunchScript( const QString selectedFile );
         void updateGameIcon( const QString selectedFile );
         void addNewGameToDbc( );
         void clearDialogueElements( );
     
     signals:
-        void launchScriptTextChanged( const QString newString );
         void gameIconTextChanged( const QString newString );
 
     private:
         Ui::Add_New_Game_Dialogue * ui;
-        QFileDialog *launchScriptFileDialog;
         QFileDialog *gameIconFileDialog;
         // GUI widget handle
         static gameDataGuiWidget *lclGui;

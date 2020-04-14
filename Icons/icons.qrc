@@ -14,5 +14,7 @@
         <file>controller.png</file>
         <file>configure.png</file>
         <file>paint.png</file>
+        <file>home.png</file>
+        <file>Application_Icon.ico</file>
     </qresource>
 </RCC>

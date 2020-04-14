@@ -20,8 +20,8 @@
  *  \par       Description:
  *             Constructor for the gameDatauiWidget class
  */
-gameDataGuiWidget::gameDataGuiWidget( QWidget &parent, sqLiteDbInterface &psdDatabase  ) :
-    QWidget(&parent),
+gameDataGuiWidget::gameDataGuiWidget( sqLiteDbInterface &psdDatabase, QWidget *parent ) :
+    QWidget(parent),
     scrollAreaMaxWidth( 200 ),
     horizLayout_p( new QHBoxLayout ),
     scrollArea( new QScrollArea ),
@@ -29,7 +29,8 @@ gameDataGuiWidget::gameDataGuiWidget( QWidget &parent, sqLiteDbInterface &psdDat
     prettyWidget( new gamePrettyWidget( *this )),
     lclDatabase( psdDatabase )
 {
-    connect( gameNameWidget, SIGNAL(updatePrettyInformation( gameNameButtonWidget &)), this, SLOT(redrawPrettyInformation( gameNameButtonWidget &)) );
+    connect( gameNameWidget, SIGNAL( updatePrettyInformation( gameNameButtonWidget &) ), this, SLOT(redrawPrettyInformation( gameNameButtonWidget & ) ) );
+    connect( gameNameWidget, SIGNAL( gameTitleSigUpdateGameName( const QString, gameNameButtonWidget * const ) ), this, SLOT( changeGameName( const QString, gameNameButtonWidget * const ) ) );
 
     // If there is data to process
     if(  lclDatabase.displayData_v.empty( ) == false )
@@ -75,7 +76,24 @@ void gameDataGuiWidget::redrawPrettyInformation( gameNameButtonWidget &buttonInf
     prettyWidget->changePlayTime( buttonInformation );
 
     prettyWidget->launchButton->launchCommand = buttonInformation.launchCommand;
-    prettyWidget->launchButton->launchScript = buttonInformation.launchScript;
+    prettyWidget->launchButton->launchCommandArgs = buttonInformation.launchCommandArgs;
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      23/02/2020
+ *
+ *  \par       Description:
+ *             Slot for updating the game GUI information
+ */
+void gameDataGuiWidget::changeGameName( const QString string, gameNameButtonWidget * const thisNameButton )
+{
+    // First update the database with the new data
+    lclDatabase.changeGameName( thisNameButton->text(), string );
+
+    // Now update the game name in the game name button
+    thisNameButton->setText( string );
 }
 
 /*!
@@ -88,14 +106,14 @@ void gameDataGuiWidget::redrawPrettyInformation( gameNameButtonWidget &buttonInf
  */
 void gameDataGuiWidget::AddNewGameToGuiAndDbc(
                                                QString gameTitle,
-                                               QString launchScript,
                                                QString launchCommand,
+                                               QString launchCommandArgs,
                                                QString gameDescription,
                                                QString gameIcon,
                                                QWidget *parent
                                              )
 {
-    lclDatabase.addNewGame( gameTitle, launchScript, launchCommand, gameDescription, gameIcon, parent );
+    lclDatabase.addNewGame( gameTitle, launchCommand, launchCommandArgs, gameDescription, gameIcon, parent );
 
     refreshAllGames( );
 }
@@ -186,12 +204,13 @@ void gameTitleWidget::addGameTitle( GUI_game_information_st guiInformation )
 
     // Connect the signal to the slot for this button
     connect( nameButton, SIGNAL(nameBtnclicked( gameNameButtonWidget & )), this, SLOT(updatePrettyGameInfo( gameNameButtonWidget & )) );
+    connect( nameButton, SIGNAL(gameNameSignalUpdateGameName( const QString, gameNameButtonWidget * const )), this, SLOT( gameTitleSlotUpdateGameName( const QString, gameNameButtonWidget * const ) ) );
 
     // Update the metadata with the metatata for this record
     nameButton->gameDescription = guiInformation.gameDescription;
     nameButton->playTime = guiInformation.playTime;
     nameButton->gameIcon = guiInformation.gameIconPath;
-    nameButton->launchScript = guiInformation.LaunchScript;
+    nameButton->launchCommandArgs = guiInformation.LaunchCommandArgs;
     nameButton->launchCommand = guiInformation.LaunchCommand;
 
     // Add the push button to the layout
@@ -212,6 +231,20 @@ void gameTitleWidget::addGameTitle( GUI_game_information_st guiInformation )
 void gameTitleWidget::updatePrettyGameInfo( gameNameButtonWidget &buttonwidget )
 {
     emit updatePrettyInformation( buttonwidget );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      23/02/2020
+ *
+ *  \par       Description:
+ *             Slot function for updating the pretty game information
+ */
+void gameTitleWidget::gameTitleSlotUpdateGameName( const QString text, gameNameButtonWidget * const thisNameButton )
+{
+    // Pass this up to the pretty widget, then update the game name
+    emit gameTitleSigUpdateGameName( text, thisNameButton );
 }
 
 /*!
@@ -336,7 +369,7 @@ void gamePrettyWidget::changeGameIcon( gameNameButtonWidget &buttonInformation )
     {
         QPixmap picture( buttonInformation.gameIcon );
 
-        gameImage->setPixmap( picture.scaled(300, 300, Qt::KeepAspectRatio) );
+        gameImage->setPixmap( picture.scaled(350, 350, Qt::KeepAspectRatio) );
     }
     else
     {
@@ -424,23 +457,50 @@ gamePrettyWidget::~gamePrettyWidget( )
  *             Constructor for the gameNameButtonWidget class
  */
 gameNameButtonWidget::gameNameButtonWidget( const QString & text ) :
-    QPushButton( text )
+    QPushButton( text ),
+    contextMenu( new gameNameContextMenu( this ) )
 {
-    // Connect the signal to the slot for this button
-    connect( this, SIGNAL(clicked( )), this, SLOT(buttonClicked( )) );
+    connect( contextMenu, SIGNAL( gameContextupdateGameName( const QString ) ), this, SLOT( gameNameSlotUpdateGameName( const QString ) ) );
 }
 
 /*!
  *  \author    Thomas Sutton
  *  \version   1.0
- *  \date      23/02/2020
+ *  \date      13/04/2020
  *
  *  \par       Description:
- *             Slot function to emit button clicked information
+ *             Function for logging mouse events
  */
-void gameNameButtonWidget::buttonClicked( )
+void gameNameButtonWidget::mousePressEvent(QMouseEvent *e)
 {
-    emit nameBtnclicked( *this );
+    if(e->button()==Qt::LeftButton)
+    {
+        // Action the left click event
+        emit nameBtnclicked( *this );
+    }
+    else
+    if( e->button()==Qt::RightButton )
+    {
+        // Show the context menu
+        contextMenu->exec( QCursor::pos() );
+    }
+    else
+    {
+        // Do nothing
+    }
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      14/04/2020
+ *
+ *  \par       Description:
+ *             Slot function for updating the game name
+ */
+void gameNameButtonWidget::gameNameSlotUpdateGameName( const QString string )
+{
+    emit gameNameSignalUpdateGameName( string, this );
 }
 
 /*!
@@ -453,7 +513,7 @@ void gameNameButtonWidget::buttonClicked( )
  */
 gameNameButtonWidget::~gameNameButtonWidget( )
 {
-
+    delete contextMenu;
 }
 
 /*******************************************************************************
@@ -495,7 +555,7 @@ void LaunchButtonWidget::launchGame( )
 
         proc_and_thread_data_ps->process->moveToThread( proc_and_thread_data_ps->thread );
 
-        proc_and_thread_data_ps->process->start( launchCommand );
+        proc_and_thread_data_ps->process->start( launchCommand + " " + launchCommandArgs );
 
         proc_and_thread_vp.push_back( proc_and_thread_data_ps );
     }
@@ -517,4 +577,134 @@ LaunchButtonWidget::~LaunchButtonWidget( )
         delete proc_and_thread_vp[i]->process;
         delete proc_and_thread_vp[i];
     }
+}
+
+/*******************************************************************************
+       ___    _    __  __  ___    ___  ___   _  _  _____  ___ __  __ _____
+      / __|  /_\  |  \/  || __|  / __|/ _ \ | \| ||_   _|| __|\ \/ /|_   _|
+     | (_ | / _ \ | |\/| || _|  | (__| (_) || .` |  | |  | _|  >  <   | |
+      \___|/_/ \_\|_|  |_||___| _\___|\___/_|_|\_|  |_|  |___|/_/\_\  |_|
+                       |  \/  || __|| \| || | | |
+                       | |\/| || _| | .` || |_| |
+                       |_|  |_||___||_|\_| \___/
+*******************************************************************************/
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      14/04/2020
+ *
+ *  \par       Description:
+ *             Constructor for the gameNameContextMenu class
+ */
+gameNameContextMenu::gameNameContextMenu( gameNameButtonWidget *parent ) :
+    QMenu( "Game Options", parent ),
+    titleEdit( nullptr ),
+    launchGame( new QAction( "Launch", parent ) ),
+    removeGame( new QAction( "Remove Game", parent ) ),
+    editGameLaunchParams( new QMenu( "Edit Game Launch Params", parent ) ),
+    editGameName( new QAction( "Game Name", parent ) ),
+    editGameIcon( new QAction( "Game Icon", parent ) ),
+    editLaunchCommand( new QAction( "Launch Command", parent ) ),
+    editCommandLineArgs( new QAction( "Command Line Args", parent ) ),
+    editGameDescription( new QAction( "Game Description", parent ) ),
+    lclParent( parent ),
+    lastGameName( new QString )
+{
+    // Set-up the context menu
+    setContextMenuPolicy( Qt::CustomContextMenu );
+
+    // Connect all of the actions
+    connect( editGameName, SIGNAL(triggered( )), this, SLOT( gameTitleChangeEvent( ) ) );
+
+    // First configure the sub menu
+    editGameLaunchParams->addAction( editGameName );
+    editGameLaunchParams->addAction( editGameIcon );
+    editGameLaunchParams->addAction( editLaunchCommand );
+    editGameLaunchParams->addAction( editCommandLineArgs );
+    editGameLaunchParams->addAction( editGameDescription );
+
+    // Add the actions
+    addAction( launchGame );
+    // Add the sub menu
+    addMenu( editGameLaunchParams );
+    // Add more actions
+    addAction( removeGame );
+
+    // Start up hidden
+    hide( );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      14/04/2020
+ *
+ *  \par       Description:
+ *             Slot function for openning a game title edit window.
+ */
+void gameNameContextMenu::gameTitleChangeEvent( )
+{
+    if( titleEdit == nullptr )
+    {
+        titleEdit = new game_title_edit;
+        connect( titleEdit, SIGNAL( gameTitleAccepted( const QString ) ), this, SLOT( newGameTitleAccepted( const QString ) ));
+    }
+    else
+    {
+        // Do nothing
+    }
+
+    // Set the current game name in the lineedit box
+    *lastGameName = lclParent->text( );
+    titleEdit->setGameNameText( *lastGameName );
+
+    titleEdit->show( );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      14/04/2020
+ *
+ *  \par       Description:
+ *             Slot function for openning acking an accepted game name change.
+ */
+void gameNameContextMenu::newGameTitleAccepted( const QString string )
+{
+    // If the user has changed the string, make a note of this
+    if( string != *lastGameName )
+    {
+        // Update the game name in the database
+        emit( gameContextupdateGameName( string ) );
+    }
+    else
+    {
+        // Do nothing
+    }
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      14/04/2020
+ *
+ *  \par       Description:
+ *             Destructor for the gameNameContextMenu class
+ */
+gameNameContextMenu::~gameNameContextMenu( )
+{
+    delete launchGame;
+    delete editGameLaunchParams;
+    delete removeGame;
+
+    if( titleEdit != nullptr )
+    {
+        delete titleEdit;
+    }
+    else
+    {
+        // Do nothing
+    }
+
+    delete lastGameName;
 }

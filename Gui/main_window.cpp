@@ -27,7 +27,8 @@ MainWindow::MainWindow(application_theme_c &psdTheme, QWidget *parent) :
     ui(new Ui::MainWindow),
     addNewGame(nullptr),
     lclTheme(psdTheme),
-    last_windowed_state_b(false)
+    last_windowed_state_b(false),
+    lclGuiWidget(nullptr)
 {
     // Set up the main window based upon the form.
     ui->setupUi( this );
@@ -36,6 +37,19 @@ MainWindow::MainWindow(application_theme_c &psdTheme, QWidget *parent) :
     showNormal( );
 
     // Need to ensure this opens up in screen one
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      13/04/2020
+ *
+ *  \par       Description:
+ *             Member function for setting the reference to the game data gui widget
+ */
+void MainWindow::setLclGuiWidget( gameDataGuiWidget &psdGuiWidget )
+{
+    lclGuiWidget = &psdGuiWidget;
 }
 
 /*!

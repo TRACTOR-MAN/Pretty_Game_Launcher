@@ -29,9 +29,6 @@
 *******************************************************************************/
 #define MAX_USERNAME_LENGTH                                     255
 
-
-
-
 /*******************************************************************************
                     ___   ___    _     ___  _____  ___
                    / __| / _ \  | |   |_ _||_   _|| __|
@@ -53,7 +50,8 @@
  *             Constructor for the sqLiteDbInterface class
  */
 sqLiteDbInterface::sqLiteDbInterface( QWidget *parent ) :
-    my_db( new( QSqlDatabase ) )
+    my_db( new( QSqlDatabase ) ),
+    lclParent( parent )
 {
     QString config_path_c;
 
@@ -70,7 +68,14 @@ sqLiteDbInterface::sqLiteDbInterface( QWidget *parent ) :
         else
         {
             // Provide a warning, we can't find the user name
-            QMessageBox::warning( parent, "Pretty Game Launcher", "Cannot determine username, thus cannot connect to the games database" );
+            if( lclParent != nullptr )
+            {
+                QMessageBox::warning( lclParent, "Pretty Game Launcher", "Cannot determine username, thus cannot connect to the games database" );
+            }
+            else
+            {
+                // Do nothing
+            }
         }
 
     // Must be Linux
@@ -91,7 +96,14 @@ sqLiteDbInterface::sqLiteDbInterface( QWidget *parent ) :
             debug_c = debug_c + QString::number( uid );
 
             // Provide a warning, we can't find the user name
-            QMessageBox::warning( parent, "Pretty Game Launcher", debug_c );
+            if( lclParent != nullptr )
+            {
+                QMessageBox::warning( lclParent, "Pretty Game Launcher", debug_c );
+            }
+            else
+            {
+                // Do nothing
+            }
         }
     #endif
 
@@ -130,8 +142,14 @@ sqLiteDbInterface::sqLiteDbInterface( QWidget *parent ) :
             qDebug() << "Connection to database bad \n";
 
             // Message pop up to the application
-            QMessageBox::warning( parent, "Pretty Game Launcher", "Bad Database Connection, run application from command line for more information");
-
+            if( lclParent != nullptr )
+            {
+                QMessageBox::warning( lclParent, "Pretty Game Launcher", "Bad Database Connection, run application from command line for more information");
+            }
+            else
+            {
+                // Do nothing
+            }
             // abort.... abort....
             qWarning() << my_db->lastError() << "\n";
         }
@@ -142,7 +160,7 @@ sqLiteDbInterface::sqLiteDbInterface( QWidget *parent ) :
 
             // Call the create table command, this ensures that the database is created, if it doesn't already exist
             QSqlQuery query;
-            query.exec( "CREATE TABLE \"GameLaunchData\" (\"gameName\" TEXT NOT NULL, \"gameIconPath\" TEXT, \"launchCommand\"	TEXT, \"launchScript\" TEXT, \"gameDescription\" TEXT NOT NULL, \"playTime\" TEXT)");
+            query.exec( "CREATE TABLE \"GameLauncherData\" (\"gameName\" TEXT NOT NULL, \"gameIconPath\" TEXT, \"launchCommand\"	TEXT NOT NULL, \"launchCommandArgs\" TEXT, \"gameDescription\" TEXT NOT NULL, \"playTime\" TEXT)");
 
             // Read GUI related information from the sqlite database
             readGameGuiInformation( );
@@ -152,8 +170,14 @@ sqLiteDbInterface::sqLiteDbInterface( QWidget *parent ) :
     else
     {
         // Message pop up to the application
-        QMessageBox::warning( parent, "Pretty Game Launcher", "QSQLITE driver not available or not installed");
-
+        if( lclParent != nullptr )
+        {
+            QMessageBox::warning( lclParent, "Pretty Game Launcher", "QSQLITE driver not available or not installed");
+        }
+        else
+        {
+            // Do nothing
+        }
         // The driver is not available
         qWarning( "SQLITE driver not available, check .pro file, and SQL libraries are available" );
     }
@@ -172,12 +196,22 @@ void sqLiteDbInterface::readGameGuiInformation( )
 {
     // Query the database for the information to display
     QSqlQuery query;
-    query.prepare("SELECT gameName, gameIconPath, gameDescription, playTime, launchCommand, launchScript FROM GameLaunchData ORDER BY gameName ASC");
+    query.prepare("SELECT gameName, gameIconPath, gameDescription, playTime, launchCommand, launchCommandArgs FROM GameLauncherData ORDER BY gameName COLLATE NOCASE ASC");
     
     // Excecute the query
     if( query.exec( ) == false )
     {
         qDebug() << "Can't excecute query";
+
+        // Message pop up to the application
+        if( lclParent != nullptr )
+        {
+            QMessageBox::warning( lclParent, "Pretty Game Launcher", query.lastError().text() );
+        }
+        else
+        {
+            // Do nothing
+        }
     }
     else
     {
@@ -192,7 +226,7 @@ void sqLiteDbInterface::readGameGuiInformation( )
             lcl_GUI_game_information_ps->gameDescription = query.value("gameDescription").toString();
             lcl_GUI_game_information_ps->playTime = query.value("playTime").toString();
             lcl_GUI_game_information_ps->LaunchCommand = query.value("launchCommand").toString();
-            lcl_GUI_game_information_ps->LaunchScript = query.value("launchScript").toString();
+            lcl_GUI_game_information_ps->LaunchCommandArgs = query.value("launchCommandArgs").toString();
 
             // Add the data pointer to the vector
             displayData_v.push_back( lcl_GUI_game_information_ps );
@@ -211,17 +245,17 @@ void sqLiteDbInterface::readGameGuiInformation( )
  */
 void sqLiteDbInterface::addNewGame(
                                     QString gameTitle,
-                                    QString launchScript,
                                     QString launchCommand,
+                                    QString launchCommandArgs,
                                     QString gameDescription,
                                     QString gameIcon,
-                                    QWidget *parent
+                                    QWidget *new_dialogue_parent
                                   )
 {
     QSqlQuery query;
 
     // prepare the query
-    query.prepare( "INSERT INTO GameLaunchData(gameName, gameIconPath, gameDescription, playTime, launchCommand, launchScript) values (:gameName, :gameIconPath, :gameDescription, :playTime, :launchCommand, :launchScript)" );
+    query.prepare( "INSERT INTO GameLauncherData(gameName, gameIconPath, gameDescription, playTime, launchCommand, launchCommandArgs) values (:gameName, :gameIconPath, :gameDescription, :playTime, :launchCommand, :launchCommandArgs)" );
 
     // Now bind the values
     query.bindValue( ":gameName", gameTitle );
@@ -229,7 +263,7 @@ void sqLiteDbInterface::addNewGame(
     query.bindValue( ":gameDescription", gameDescription );
     query.bindValue( ":playTime", "00h:00m:00s" );
     query.bindValue( ":launchCommand", launchCommand );
-    query.bindValue( ":launchScript", launchScript );
+    query.bindValue( ":launchCommandArgs", launchCommandArgs );
 
     // Execute the query
     if(query.exec() == false)
@@ -238,12 +272,48 @@ void sqLiteDbInterface::addNewGame(
                  << query.lastError();
 
         // Message pop up to the application
-        QMessageBox::warning( parent, "Pretty Game Launcher", query.lastError().text() );
+        if( new_dialogue_parent != nullptr )
+        {
+            QMessageBox::warning( new_dialogue_parent, "Pretty Game Launcher", query.lastError().text() );
+        }
+        else
+        {
+            // Do nothing
+        }
     }
     else
     {
         // Update the vector with the new data
         updateDisplayDataVector( );
+    }
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      14/04/2020
+ *
+ *  \par       Description:
+ *             Member function for changing a records game name
+ */
+void sqLiteDbInterface::changeGameName( const QString oldName, const QString newName )
+{
+    QSqlQuery query;
+
+    query.prepare( "UPDATE gameLauncherData SET gameName=\"" + newName + "\" WHERE gameName=\"" + oldName + "\"");
+
+    // Execute the query
+    if(query.exec() == false)
+    {
+        // Message pop up to the application
+        if( lclParent != nullptr )
+        {
+            QMessageBox::warning( lclParent, "Pretty Game Launcher", query.lastError().text() );
+        }
+        else
+        {
+            // Do nothing
+        }
     }
 }
 

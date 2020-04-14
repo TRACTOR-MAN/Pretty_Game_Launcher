@@ -33,7 +33,6 @@ gameDataGuiWidget *Add_New_Game_Dialogue::lclGui = nullptr;
 Add_New_Game_Dialogue::Add_New_Game_Dialogue( QWidget *parent ) :
     QDialog(parent),
     ui(new Ui::Add_New_Game_Dialogue),
-    launchScriptFileDialog(nullptr),
     gameIconFileDialog(nullptr)
 {
     ui->setupUi(this);
@@ -50,41 +49,6 @@ Add_New_Game_Dialogue::Add_New_Game_Dialogue( QWidget *parent ) :
 void Add_New_Game_Dialogue::setLclData( gameDataGuiWidget * const psd_gui_data )
 {
     lclGui = psd_gui_data;
-}
-
-/*!
- *  \author    Thomas Sutton
- *  \version   1.0
- *  \date      03/03/2020
- *
- *  \par       Description:
- *             Member functrion for searching for a launch script.
- */
-void Add_New_Game_Dialogue::searchForLaunchScript( )
-{
-    if( launchScriptFileDialog == nullptr )
-    {
-        launchScriptFileDialog = new( QFileDialog );
-        // Ensure that file open events are connected to a callback function
-        connect( launchScriptFileDialog, SIGNAL(fileSelected( QString )), this, SLOT(updateLaunchScript( QString )) );
-    }
-
-    // Show the file dialog
-    launchScriptFileDialog->show( );
-}
-
-/*!
- *  \author    Thomas Sutton
- *  \version   1.0
- *  \date      03/03/2020
- *
- *  \par       Description:
- *             Member functrion for updating the launch script.
- */
-void Add_New_Game_Dialogue::updateLaunchScript( const QString selectedFile )
-{
-    // Emit the textChanged signal, passing in the selected file.
-    emit launchScriptTextChanged( selectedFile );
 }
 
 /*!
@@ -144,12 +108,8 @@ void Add_New_Game_Dialogue::addNewGameToDbc( )
         // Do nothing
     }
 
-    // Check whether a launch script or launch command has been entered
-    if(
-        ( ui->launchScript->text() == "\0" )
-        &&
-        ( ui->launchCommand->toPlainText() == "\0" )
-      )
+    // Check whether a launch command has been entered
+    if( ui->launchCommand->text() == "\0" )
     {
         okToAddNewGame_b = false;
     }
@@ -173,8 +133,8 @@ void Add_New_Game_Dialogue::addNewGameToDbc( )
     {
         lclGui->AddNewGameToGuiAndDbc(
                                        ui->gameTitle->text(),
-                                       ui->launchScript->text(),
-                                       ui->launchCommand->toPlainText(),
+                                       ui->launchCommand->text(),
+                                       ui->commandLineArgs->toPlainText(),
                                        ui->gameDescription->toPlainText(),
                                        ui->gameIcon->text(),
                                        parentWidget()
@@ -188,7 +148,7 @@ void Add_New_Game_Dialogue::addNewGameToDbc( )
     else
     {
         // Message pop up to the application
-        QMessageBox::warning( parentWidget(), "Pretty Game Launcher", "All inputs not populated, ensure that Game Title, a Launch Script or command, and the Game description are populated" );
+        QMessageBox::warning( parentWidget(), "Pretty Game Launcher", "All inputs not populated, ensure that Game Title, a Launch Command, and the Game description are populated" );
     }
 }
 
@@ -204,8 +164,8 @@ void Add_New_Game_Dialogue::clearDialogueElements( )
 {
     ui->gameTitle->setText("\0");
     ui->gameIcon->setText("\0");
-    ui->launchScript->setText("\0");
-    ui->launchCommand->setPlainText("\0");
+    ui->launchCommand->setText("\0");
+    ui->commandLineArgs->setPlainText("\0");
     ui->gameDescription->setPlainText("\0");
 }
 
@@ -220,11 +180,6 @@ void Add_New_Game_Dialogue::clearDialogueElements( )
 Add_New_Game_Dialogue::~Add_New_Game_Dialogue( )
 {
     delete ui;
-
-    if( launchScriptFileDialog != nullptr )
-    {
-        delete launchScriptFileDialog;
-    }
 
     if( gameIconFileDialog != nullptr )
     {

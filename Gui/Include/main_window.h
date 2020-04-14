@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "main.h"
+#include "game_data_gui.h"
 
 // Forward decleration of the MainWindow class created in the form,
 // confusingly, it has the same name as our MainWindow class.
@@ -37,6 +38,9 @@ class MainWindow : public QMainWindow
         explicit MainWindow(application_theme_c &psdTheme, QWidget *parent = nullptr);
         ~MainWindow();
 
+        // function for setting the reference to the gui widget
+        void setLclGuiWidget( gameDataGuiWidget &psdGuiWidget );
+
     // This custom keyword allows the QT meta object compiler to 
     // be aware of the slots
     private slots:
@@ -53,6 +57,7 @@ private:
         Add_New_Game_Dialogue * addNewGame;
         application_theme_c &lclTheme;
         bool last_windowed_state_b;
+        gameDataGuiWidget *lclGuiWidget;
 };
 
 #endif // MAIN_WINDOW_H

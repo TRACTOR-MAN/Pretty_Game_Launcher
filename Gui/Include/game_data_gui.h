@@ -9,13 +9,68 @@
 #include <QLabel>
 #include <QGroupBox>
 #include <QProcess>
+#include <QMouseEvent>
+#include <QMenu>
 
 #include "sqliteDbAccess.h"
+#include "game_title_edit.h"
 
 struct proc_and_thread_data_st
 {
     QProcess *process;
     QThread *thread;
+};
+
+// Forward decleration of the gameNameButtonWidget, defined later in this file
+class gameNameButtonWidget;
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      23/02/2020
+ *
+ *  \par       Description:
+ *             This class defines the context menu for each game name
+ *             button widget.
+ */
+class gameNameContextMenu : public QMenu
+{
+    // Q object needed for the signals and slots mechanism
+    Q_OBJECT
+
+public:
+    gameNameContextMenu( gameNameButtonWidget *parent );
+    ~gameNameContextMenu( );
+
+    // Game title edit dialog
+    game_title_edit *titleEdit;
+
+private:
+    // Top level actions
+    QAction *launchGame;
+    QAction *removeGame;
+
+    // Sub menu
+    QMenu   *editGameLaunchParams;
+    // Sub menu actions
+    QAction *editGameName;
+    QAction *editGameIcon;
+    QAction *editLaunchCommand;
+    QAction *editCommandLineArgs;
+    QAction *editGameDescription;
+
+    // Pointer to the local parent
+    gameNameButtonWidget *lclParent;
+
+    // The last game name
+    QString *lastGameName;
+
+private slots:
+    void gameTitleChangeEvent( );
+    void newGameTitleAccepted( const QString string );
+
+signals:
+    void gameContextupdateGameName( const QString string );
 };
 
 /*!
@@ -32,22 +87,29 @@ class gameNameButtonWidget : public QPushButton
     Q_OBJECT
 public:
     gameNameButtonWidget( const QString &text );
-    ~gameNameButtonWidget( );
+    ~gameNameButtonWidget( ) override;
 
     // String variables storing the metadata for the launch object
     QString gameDescription;
     QString playTime;
     QString gameIcon;
     QString launchCommand;
-    QString launchScript;
+    QString launchCommandArgs;
+
+private:
+    gameNameContextMenu *contextMenu;
 
 private slots:
     // Callback function for when the button is clicked
-    void buttonClicked( );
+    void mousePressEvent(QMouseEvent *e) override;
+    // Callback function to update the game name
+    void gameNameSlotUpdateGameName( const QString string );
 
 signals:
     // Signal to pass up the Qt parent list to note that the button has been clicked, with the required args
     void nameBtnclicked( gameNameButtonWidget &buttonWidget);
+    // Signal to update the game name
+    void gameNameSignalUpdateGameName( const QString string, gameNameButtonWidget * const thisGameName );
 };
 
 /*!
@@ -69,7 +131,7 @@ public:
     // String variables storing the metadata for the launch object
     QString launchCommand;
     // String variables storing the metadata for the launch object
-    QString launchScript;
+    QString launchCommandArgs;
 
     // vector containing all of the active processes and threads
     std::vector<proc_and_thread_data_st *> proc_and_thread_vp;
@@ -122,10 +184,13 @@ private:
 private slots:
     // Slot function to update the pretty game information
     void updatePrettyGameInfo( gameNameButtonWidget &buttonwidget );
+    // Slot function for updating the game name only
+    void gameTitleSlotUpdateGameName( const QString text, gameNameButtonWidget * const thisNameButton  );
 
 signals:
     // Signal to pass up the Qt stack to update the pretty information in the parent
     void updatePrettyInformation( gameNameButtonWidget &buttonwidget );
+    void gameTitleSigUpdateGameName( const QString text, gameNameButtonWidget * const thisNameButton );
 };
 
 /*!
@@ -184,14 +249,14 @@ class gameDataGuiWidget : public QWidget
     // Q object needed for the signals and slots mechanism
     Q_OBJECT
 public:
-    gameDataGuiWidget( QWidget &parent, sqLiteDbInterface &psdDatabase );
+    gameDataGuiWidget( sqLiteDbInterface &psdDatabase, QWidget *parent = nullptr);
     ~gameDataGuiWidget( );
 
     // Member function for adding a new game to the database and GUI
     void AddNewGameToGuiAndDbc(
                                 QString gameTitle,
-                                QString launchScript,
                                 QString launchCommand,
+                                QString launchCommandArgs,
                                 QString gameDescription,
                                 QString gameIcon = "\0",
                                 QWidget *parent = nullptr
@@ -215,6 +280,7 @@ public:
 
 private slots:
     void redrawPrettyInformation( gameNameButtonWidget &buttonInformation );
+    void changeGameName( const QString string, gameNameButtonWidget * const thisNameButton );
 
 protected:
     void refreshAllGames( );

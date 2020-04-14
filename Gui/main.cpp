@@ -47,7 +47,10 @@ int main(int argc, char *argv[])
     sqLiteDbInterface myDatabase( &window );
 
     // Create an instance of the game data GUI widget
-    gameDataGuiWidget gameDataWidget( window, myDatabase );
+    gameDataGuiWidget gameDataWidget( myDatabase );
+
+    // Set the reference to the game data gui widget
+    window.setLclGuiWidget( gameDataWidget );
 
     // Initialise the lclGui element in Add_New_Game_Dialogue
     Add_New_Game_Dialogue::setLclData( &gameDataWidget );
