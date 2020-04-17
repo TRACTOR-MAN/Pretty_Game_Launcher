@@ -378,6 +378,64 @@ void sqLiteDbInterface::changeLaunchScript( const QString &gameName, const QStri
 /*!
  *  \author    Thomas Sutton
  *  \version   1.0
+ *  \date      17/04/2020
+ *
+ *  \par       Description:
+ *             Member function for changing a records cmd args
+ */
+void sqLiteDbInterface::changeCmdArgs( const QString &gameName, const QString &newArgs )
+{
+    QSqlQuery query;
+
+    query.prepare( "UPDATE gameLauncherData SET launchCommandArgs=\"" + newArgs + "\" WHERE gameName=\"" + gameName + "\"");
+
+    // Execute the query
+    if(query.exec() == false)
+    {
+        // Message pop up to the application
+        if( lclParent != nullptr )
+        {
+            QMessageBox::warning( lclParent, "Pretty Game Launcher", query.lastError().text() );
+        }
+        else
+        {
+            // Do nothing
+        }
+    }
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      17/04/2020
+ *
+ *  \par       Description:
+ *             Member function for changing a records game description
+ */
+void sqLiteDbInterface::changeGameDesc( const QString &gameName, const QString &newDesc )
+{
+    QSqlQuery query;
+
+    query.prepare( "UPDATE gameLauncherData SET gameDescription=\"" + newDesc + "\" WHERE gameName=\"" + gameName + "\"");
+
+    // Execute the query
+    if(query.exec() == false)
+    {
+        // Message pop up to the application
+        if( lclParent != nullptr )
+        {
+            QMessageBox::warning( lclParent, "Pretty Game Launcher", query.lastError().text() );
+        }
+        else
+        {
+            // Do nothing
+        }
+    }
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
  *  \date      05/02/2020
  *
  *  \par       Description:

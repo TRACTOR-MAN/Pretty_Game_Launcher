@@ -16,6 +16,8 @@
 #include "game_title_edit.h"
 #include "game_icon_edit.h"
 #include "launch_command_edit.h"
+#include "cmd_line_args_edit.h"
+#include "game_description_edit.h"
 
 struct proc_and_thread_data_st
 {
@@ -50,6 +52,10 @@ public:
     game_icon_edit *iconEdit;
     // Launch command edit dialog
     launch_command_edit *launchEdit;
+    // Command line args edit dialog
+    cmd_line_args_edit *cmdArgsEdit;
+    // Game description edit dialog
+    game_description_edit *gameDescEdit;
 
 private:
     // Top level actions
@@ -72,6 +78,8 @@ private:
     QString *lastGameName;
     QString *lastGameIcon;
     QString *lastLaunchCommand;
+    QString *lastCmdLineArgs;
+    QString *lastGameDescription;
 
 private slots:
     void gameTitleChangeEvent( );
@@ -80,11 +88,17 @@ private slots:
     void newGameIconAccepted( const QString &string );
     void launchCommandChangeEvent( );
     void newLaunchCommandAccepted( const QString &string );
+    void cmdLineArgsChangeEvent( );
+    void newCmdLineArgsAccepted( const QString &string );
+    void gameDescChangeEvent( );
+    void newGameDescAccepted( const QString &string );
 
 signals:
     void gameContextUpdateGameName( const QString string );
     void gameContextUpdateGameIcon( const QString &string );
     void gameContextUpdateLaunchScript( const QString &string );
+    void gameContextUpdateCmdLineArgs( const QString &string );
+    void gameContextUpdateGameDesc( const QString &string );
 };
 
 /*!
@@ -122,6 +136,10 @@ private slots:
     void gameNameSlotUpdateGameIcon( const QString &string );
     // Callback function to update the Launch Script
     void gameNameSlotUpdateLaunchScript( const QString &string );
+    // Callback function to update the command line args
+    void gameNameSlotUpdateCmdLineArgs( const QString &string );
+    // Callback function to update the game description
+    void gameNameSlotUpdateGameDescription( const QString &string );
 
 signals:
     // Signal to pass up the Qt parent list to note that the button has been clicked, with the required args
@@ -132,6 +150,10 @@ signals:
     void gameNameSignalUpdateGameIcon( const QString &string, gameNameButtonWidget * const thisGameName );
     // Signal to update the Launch Script
     void gameNameSignalUpdateLaunchScript( const QString &string, gameNameButtonWidget * const thisGameName );
+    // Signal to update the command line args
+    void gameNameSignalUpdateCmdArgs( const QString &string, gameNameButtonWidget * const thisGameName );
+    // Signal to update the game description
+    void gameNameSignalUpdateGameDesc( const QString &string, gameNameButtonWidget * const thisGameName );
 };
 
 /*!
@@ -212,6 +234,10 @@ private slots:
     void gameTitleSlotUpdateGameIcon( const QString &text, gameNameButtonWidget * const thisNameButton  );
     // Slot function for updating the game launch script only
     void gameTitleSlotUpdateLaunchScript( const QString &text, gameNameButtonWidget * const thisNameButton  );
+    // Slot function for updating the command line args only
+    void gameTitleSlotUpdateCmdArgs( const QString &text, gameNameButtonWidget * const thisNameButton  );
+    // Slot function for updating the game description only
+    void gameTitleSlotUpdateGameDesc( const QString &text, gameNameButtonWidget * const thisNameButton  );
 
 signals:
     // Signal to pass up the Qt stack to update the pretty information in the parent
@@ -222,6 +248,10 @@ signals:
     void gameTitleSigUpdateGameIcon( const QString &text, gameNameButtonWidget * const thisNameButton );
     // Signal to pass up the Qt stack to update the Launch Script of a specific button
     void gameTitleSigUpdateLaunchScript( const QString &text, gameNameButtonWidget * const thisNameButton );
+    // Signal to pass up the Qt stack to update the command line args of a specific button
+    void gameTitleSigUpdateCmdArgs( const QString &text, gameNameButtonWidget * const thisNameButton );
+    // Signal to pass up the Qt stack to update the game description
+    void gameTitleSigUpdateGameDesc( const QString &text, gameNameButtonWidget * const thisNameButton );
 };
 
 /*!
@@ -317,6 +347,8 @@ private slots:
     void changeGameName( const QString string, gameNameButtonWidget * const thisNameButton );
     void changeGameIcon( const QString &string, gameNameButtonWidget * const thisNameButton );
     void changeLaunchScript( const QString &string, gameNameButtonWidget * const thisNameButton );
+    void changeCmdArgs( const QString &string, gameNameButtonWidget * const thisNameButton );
+    void changeGameDesc( const QString &string, gameNameButtonWidget * const thisNameButton );
 
 protected:
     void refreshAllGames( );

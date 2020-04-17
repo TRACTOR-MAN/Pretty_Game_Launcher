@@ -33,6 +33,8 @@ gameDataGuiWidget::gameDataGuiWidget( sqLiteDbInterface &psdDatabase, QWidget *p
     connect( gameNameWidget, SIGNAL( gameTitleSigUpdateGameName( const QString, gameNameButtonWidget * const ) ), this, SLOT( changeGameName( const QString, gameNameButtonWidget * const ) ) );
     connect( gameNameWidget, SIGNAL( gameTitleSigUpdateGameIcon( const QString&, gameNameButtonWidget * const ) ), this, SLOT( changeGameIcon( const QString&, gameNameButtonWidget * const ) ) );
     connect( gameNameWidget, SIGNAL( gameTitleSigUpdateLaunchScript( const QString&, gameNameButtonWidget * const ) ), this, SLOT( changeLaunchScript( const QString&, gameNameButtonWidget * const ) ) );
+    connect( gameNameWidget, SIGNAL( gameTitleSigUpdateCmdArgs( const QString&, gameNameButtonWidget * const ) ), this, SLOT( changeCmdArgs( const QString&, gameNameButtonWidget * const ) ) );
+    connect( gameNameWidget, SIGNAL( gameTitleSigUpdateGameDesc( const QString&, gameNameButtonWidget * const ) ), this, SLOT( changeGameDesc( const QString&, gameNameButtonWidget * const ) ) );
 
     // If there is data to process
     if(  lclDatabase.displayData_v.empty( ) == false )
@@ -84,7 +86,7 @@ void gameDataGuiWidget::redrawPrettyInformation( gameNameButtonWidget &buttonInf
 /*!
  *  \author    Thomas Sutton
  *  \version   1.0
- *  \date      23/02/2020
+ *  \date      14/04/2020
  *
  *  \par       Description:
  *             Slot for updating the game name for a specific game.
@@ -101,7 +103,7 @@ void gameDataGuiWidget::changeGameName( const QString string, gameNameButtonWidg
 /*!
  *  \author    Thomas Sutton
  *  \version   1.0
- *  \date      23/02/2020
+ *  \date      14/04/2020
  *
  *  \par       Description:
  *             Slot for updating the game icon for a specific game
@@ -141,7 +143,7 @@ void gameDataGuiWidget::changeGameIcon( const QString &string, gameNameButtonWid
 /*!
  *  \author    Thomas Sutton
  *  \version   1.0
- *  \date      23/02/2020
+ *  \date      15/04/2020
  *
  *  \par       Description:
  *             Slot for updating the launch script for a specific game
@@ -166,6 +168,86 @@ void gameDataGuiWidget::changeLaunchScript( const QString &string, gameNameButto
 
     // Now update the launch command button
     thisNameButton->launchCommand = string;
+
+    // If we need to redraw the pretty info
+    if( update_pretty_info_b != false )
+    {
+        redrawPrettyInformation( *thisNameButton );
+    }
+    else
+    {
+        // Do nothing
+    }
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      17/04/2020
+ *
+ *  \par       Description:
+ *             Slot for updating the command line args for a specific game
+ */
+void gameDataGuiWidget::changeCmdArgs( const QString &string, gameNameButtonWidget * const thisNameButton )
+{
+    // First update the database with the new data
+    lclDatabase.changeCmdArgs( thisNameButton->text(), string );
+
+    // Flag which notes whether or not to update the pretty information
+    bool update_pretty_info_b = false;
+
+    if( prettyWidget->launchButton->launchCommandArgs == thisNameButton->launchCommandArgs )
+    {
+        update_pretty_info_b = true;
+    }
+    else
+    {
+        // Launch script not the same
+    }
+
+
+    // Now update the launch command button
+    thisNameButton->launchCommandArgs = string;
+
+    // If we need to redraw the pretty info
+    if( update_pretty_info_b != false )
+    {
+        redrawPrettyInformation( *thisNameButton );
+    }
+    else
+    {
+        // Do nothing
+    }
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      17/04/2020
+ *
+ *  \par       Description:
+ *             Slot for updating the game description for a specific game
+ */
+void gameDataGuiWidget::changeGameDesc( const QString &string, gameNameButtonWidget * const thisNameButton )
+{
+    // First update the database with the new data
+    lclDatabase.changeGameDesc( thisNameButton->text(), string );
+
+    // Flag which notes whether or not to update the pretty information
+    bool update_pretty_info_b = false;
+
+    if( prettyWidget->gameInformation->text() == thisNameButton->gameDescription )
+    {
+        update_pretty_info_b = true;
+    }
+    else
+    {
+        // Launch script not the same
+    }
+
+
+    // Now update the launch command button
+    thisNameButton->gameDescription = string;
 
     // If we need to redraw the pretty info
     if( update_pretty_info_b != false )
@@ -289,6 +371,8 @@ void gameTitleWidget::addGameTitle( GUI_game_information_st guiInformation )
     connect( nameButton, SIGNAL(gameNameSignalUpdateGameName( const QString, gameNameButtonWidget * const )), this, SLOT( gameTitleSlotUpdateGameName( const QString, gameNameButtonWidget * const ) ) );
     connect( nameButton, SIGNAL(gameNameSignalUpdateGameIcon( const QString&, gameNameButtonWidget * const )), this, SLOT( gameTitleSlotUpdateGameIcon( const QString&, gameNameButtonWidget * const ) ) );
     connect( nameButton, SIGNAL(gameNameSignalUpdateLaunchScript( const QString&, gameNameButtonWidget * const )), this, SLOT( gameTitleSlotUpdateLaunchScript( const QString&, gameNameButtonWidget * const ) ) );
+    connect( nameButton, SIGNAL(gameNameSignalUpdateCmdArgs( const QString&, gameNameButtonWidget * const )), this, SLOT( gameTitleSlotUpdateCmdArgs( const QString&, gameNameButtonWidget * const ) ) );
+    connect( nameButton, SIGNAL(gameNameSignalUpdateGameDesc( const QString&, gameNameButtonWidget * const )), this, SLOT( gameTitleSlotUpdateGameDesc( const QString&, gameNameButtonWidget * const ) ) );
 
     // Update the metadata with the metatata for this record
     nameButton->gameDescription = guiInformation.gameDescription;
@@ -357,6 +441,34 @@ void gameTitleWidget::gameTitleSlotUpdateLaunchScript( const QString &text, game
 {
     // Pass this up to the pretty widget, then update the launch script
     emit gameTitleSigUpdateLaunchScript( text, thisNameButton );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      17/04/2020
+ *
+ *  \par       Description:
+ *             Slot function for updating the command line args
+ */
+void gameTitleWidget::gameTitleSlotUpdateCmdArgs( const QString &text, gameNameButtonWidget * const thisNameButton )
+{
+    // Pass this up to the pretty widget, then update the launch script
+    emit gameTitleSigUpdateCmdArgs( text, thisNameButton );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      17/04/2020
+ *
+ *  \par       Description:
+ *             Slot function for updating the game description.
+ */
+void gameTitleWidget::gameTitleSlotUpdateGameDesc( const QString &text, gameNameButtonWidget * const thisNameButton )
+{
+    // Pass this up to the pretty widget, then update the launch script
+    emit gameTitleSigUpdateGameDesc( text, thisNameButton );
 }
 
 /*!
@@ -578,7 +690,9 @@ gameNameButtonWidget::gameNameButtonWidget( const QString & text ) :
 {
     connect( contextMenu, SIGNAL( gameContextUpdateGameName( const QString ) ), this, SLOT( gameNameSlotUpdateGameName( const QString ) ) );
     connect( contextMenu, SIGNAL( gameContextUpdateGameIcon( const QString&) ), this, SLOT( gameNameSlotUpdateGameIcon( const QString& ) ) );
-    connect( contextMenu, SIGNAL( gameContextUpdateLaunchScript( const QString&) ), this, SLOT( gameNameSlotUpdateLaunchScript( const QString& ) ) );
+    connect( contextMenu, SIGNAL( gameContextUpdateLaunchScript( const QString&) ), this, SLOT( gameNameSlotUpdateLaunchScript( const QString& ) ) );  
+    connect( contextMenu, SIGNAL( gameContextUpdateCmdLineArgs( const QString&) ), this, SLOT( gameNameSlotUpdateCmdLineArgs( const QString& ) ) );
+    connect( contextMenu, SIGNAL( gameContextUpdateGameDesc( const QString&) ), this, SLOT( gameNameSlotUpdateGameDescription( const QString& ) ) );
 }
 
 /*!
@@ -645,6 +759,32 @@ void gameNameButtonWidget::gameNameSlotUpdateGameIcon( const QString &string )
 void gameNameButtonWidget::gameNameSlotUpdateLaunchScript( const QString &string )
 {
     emit gameNameSignalUpdateLaunchScript( string, this );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      17/04/2020
+ *
+ *  \par       Description:
+ *             Slot function for updating the game command line args
+ */
+void gameNameButtonWidget::gameNameSlotUpdateCmdLineArgs( const QString &string )
+{
+    emit gameNameSignalUpdateCmdArgs( string, this );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      17/04/2020
+ *
+ *  \par       Description:
+ *             Slot function for updating the game description
+ */
+void gameNameButtonWidget::gameNameSlotUpdateGameDescription( const QString &string )
+{
+    emit gameNameSignalUpdateGameDesc( string, this );
 }
 
 /*!
@@ -745,6 +885,8 @@ gameNameContextMenu::gameNameContextMenu( gameNameButtonWidget *parent ) :
     titleEdit( nullptr ),
     iconEdit( nullptr ),
     launchEdit( nullptr ),
+    cmdArgsEdit( nullptr ),
+    gameDescEdit( nullptr ),
     launchGame( new QAction( "Launch", parent ) ),
     removeGame( new QAction( "Remove Game", parent ) ),
     editGameLaunchParams( new QMenu( "Edit Game Launch Params", parent ) ),
@@ -756,7 +898,9 @@ gameNameContextMenu::gameNameContextMenu( gameNameButtonWidget *parent ) :
     lclParent( parent ),
     lastGameName( new QString ),
     lastGameIcon( new QString ),
-    lastLaunchCommand( new QString )
+    lastLaunchCommand( new QString ),
+    lastCmdLineArgs( new QString ),
+    lastGameDescription( new QString )
 {
     // Set-up the context menu
     setContextMenuPolicy( Qt::CustomContextMenu );
@@ -765,6 +909,8 @@ gameNameContextMenu::gameNameContextMenu( gameNameButtonWidget *parent ) :
     connect( editGameName, SIGNAL(triggered( )), this, SLOT( gameTitleChangeEvent( ) ) );
     connect( editGameIcon, SIGNAL(triggered( )), this, SLOT( gameIconChangeEvent( ) ) );
     connect( editLaunchCommand, SIGNAL(triggered( )), this, SLOT( launchCommandChangeEvent( ) ) );
+    connect( editCommandLineArgs, SIGNAL(triggered( )), this, SLOT( cmdLineArgsChangeEvent( ) ) );
+    connect( editGameDescription, SIGNAL(triggered( )), this, SLOT( gameDescChangeEvent( ) ) );
 
 
     // First configure the sub menu
@@ -859,11 +1005,65 @@ void gameNameContextMenu::launchCommandChangeEvent( )
         // Do nothing
     }
 
-    // Set the current game icon in the lineedit box
+    // Set the current launch command in the lineedit box
     *lastLaunchCommand = lclParent->launchCommand;
     launchEdit->updateDispLaunchCommand( *lastLaunchCommand );
 
     launchEdit->show( );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      17/04/2020
+ *
+ *  \par       Description:
+ *             Slot function for openning a command line args edit window.
+ */
+void gameNameContextMenu::cmdLineArgsChangeEvent( )
+{
+    if( cmdArgsEdit == nullptr )
+    {
+        cmdArgsEdit = new cmd_line_args_edit;
+        connect( cmdArgsEdit, SIGNAL( updateCmdLineArgs( const QString& ) ), this, SLOT( newCmdLineArgsAccepted( const QString& ) ));
+    }
+    else
+    {
+        // Do nothing
+    }
+
+    // Set the current command line args in the lineedit box
+    *lastCmdLineArgs = lclParent->launchCommandArgs;
+    cmdArgsEdit->setCmdLineArgsText( *lastCmdLineArgs );
+
+    cmdArgsEdit->show( );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      17/04/2020
+ *
+ *  \par       Description:
+ *             Slot function for openning a game description dialogue box.
+ */
+void gameNameContextMenu::gameDescChangeEvent( )
+{
+    if( gameDescEdit == nullptr )
+    {
+        gameDescEdit = new game_description_edit;
+        connect( gameDescEdit, SIGNAL( updateGameDescription( const QString& ) ), this, SLOT( newGameDescAccepted( const QString& ) ));
+    }
+    else
+    {
+        // Do nothing
+    }
+
+    // Set the current game description in the lineedit box
+    *lastGameDescription = lclParent->gameDescription;
+    gameDescEdit->updateDispGameDescription( *lastGameDescription );
+
+    gameDescEdit->show( );
 }
 
 /*!
@@ -935,6 +1135,50 @@ void gameNameContextMenu::newLaunchCommandAccepted( const QString &string )
 /*!
  *  \author    Thomas Sutton
  *  \version   1.0
+ *  \date      17/04/2020
+ *
+ *  \par       Description:
+ *             Slot function for openning acking an accepted change to cmd line args.
+ */
+void gameNameContextMenu::newCmdLineArgsAccepted( const QString &string )
+{
+    // If the user has changed the string, make a note of this
+    if( string != *lastCmdLineArgs )
+    {
+        // Update the game launch script command line args in the database
+        emit( gameContextUpdateCmdLineArgs( string ) );
+    }
+    else
+    {
+        // Do nothing
+    }
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      17/04/2020
+ *
+ *  \par       Description:
+ *             Slot function for openning acking an accepted game description.
+ */
+void gameNameContextMenu::newGameDescAccepted( const QString &string )
+{
+    // If the user has changed the string, make a note of this
+    if( string != *lastGameDescription )
+    {
+        // Update the game game desc in the database
+        emit( gameContextUpdateGameDesc( string ) );
+    }
+    else
+    {
+        // Do nothing
+    }
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
  *  \date      14/04/2020
  *
  *  \par       Description:
@@ -970,8 +1214,26 @@ gameNameContextMenu::~gameNameContextMenu( )
     {
         // Do nothing
     }
+    if( editCommandLineArgs != nullptr )
+    {
+        delete editCommandLineArgs;
+    }
+    else
+    {
+        // Do nothing
+    }
+    if( editGameDescription != nullptr )
+    {
+        delete editGameDescription;
+    }
+    else
+    {
+        // Do nothing
+    }
 
     delete lastGameName;
     delete lastGameIcon;
     delete lastLaunchCommand;
+    delete lastCmdLineArgs;
+    delete lastGameDescription;
 }
