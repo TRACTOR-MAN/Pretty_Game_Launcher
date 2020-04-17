@@ -31,16 +31,6 @@
        </widget>
       </item>
       <item>
-       <widget class="QWidget" name="widget_7" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>40</width>
-          <height>0</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QLineEdit" name="gameTitle"/>
       </item>
      </layout>
@@ -52,17 +42,7 @@
       <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Game Icon</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QWidget" name="widget_6" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>43</width>
-          <height>0</height>
-         </size>
+         <string>Game Icon </string>
         </property>
        </widget>
       </item>
@@ -87,22 +67,6 @@
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="launchScriptWidget" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout_4">
-      <item>
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Launch Command</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="launchCommand"/>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
     <widget class="QWidget" name="launchCommandWidget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -110,7 +74,7 @@
         <item>
          <widget class="QLabel" name="label_4">
           <property name="text">
-           <string>Command Line Arguments</string>
+           <string>Launch Command</string>
           </property>
          </widget>
         </item>
@@ -130,7 +94,23 @@
        </layout>
       </item>
       <item>
-       <widget class="QPlainTextEdit" name="commandLineArgs"/>
+       <widget class="QPlainTextEdit" name="launchCommand"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="launchScriptWidget" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Command Line Args</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="commandLineArgs"/>
       </item>
      </layout>
     </widget>

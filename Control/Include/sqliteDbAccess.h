@@ -49,6 +49,10 @@ public:
                    );
     // Function for changing a games name
     void changeGameName( const QString oldName, const QString newName );
+    // Function for changing a games icon
+    void changeGameIcon( const QString &gameName, const QString &newIcon );
+    // Function for changing a games launch script
+    void changeLaunchScript( const QString &gameName, const QString &newCommand );
 
     // Constant pointer to an sqlite database
     QSqlDatabase * const my_db;

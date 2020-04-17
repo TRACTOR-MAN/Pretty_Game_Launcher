@@ -31,7 +31,9 @@ SOURCES += \
         ../Gui/add_new_game_dialogue.cpp \
         ../Control/sqliteDbAccess.cpp \
         ../Gui/game_data_gui.cpp \
-        ../Gui/game_title_edit.cpp
+        ../Gui/game_title_edit.cpp \
+        ../Gui/game_icon_edit.cpp \
+        ../Gui/launch_command_edit.cpp
 
 HEADERS += \
         ../Gui/Include/main_window.h \
@@ -39,13 +41,17 @@ HEADERS += \
         ../Control/Include/sqliteDbAccess.h \
         ../Gui/Include/game_data_gui.h \
         ../Gui/Include/main.h \
-        ../Gui/Include/game_title_edit.h
+        ../Gui/Include/game_title_edit.h \
+        ../Gui/Include/game_icon_edit.h \
+        ../Gui/Include/launch_command_edit.h
 
 INCLUDEPATH += \
         ../Gui/Include \
         ../Control/Include 
 
 FORMS += \
+        ../UI/game_icon_edit.ui \
+        ../UI/launch_command_edit.ui \
         ../UI/mainwindow.ui \
         ../UI/add_new_game_dialogue.ui \
         ../UI/game_title_edit.ui

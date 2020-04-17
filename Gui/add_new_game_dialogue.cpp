@@ -109,7 +109,7 @@ void Add_New_Game_Dialogue::addNewGameToDbc( )
     }
 
     // Check whether a launch command has been entered
-    if( ui->launchCommand->text() == "\0" )
+    if( ui->launchCommand->toPlainText() == "\0" )
     {
         okToAddNewGame_b = false;
     }
@@ -133,8 +133,8 @@ void Add_New_Game_Dialogue::addNewGameToDbc( )
     {
         lclGui->AddNewGameToGuiAndDbc(
                                        ui->gameTitle->text(),
-                                       ui->launchCommand->text(),
-                                       ui->commandLineArgs->toPlainText(),
+                                       ui->launchCommand->toPlainText(),
+                                       ui->commandLineArgs->text(),
                                        ui->gameDescription->toPlainText(),
                                        ui->gameIcon->text(),
                                        parentWidget()
@@ -164,8 +164,8 @@ void Add_New_Game_Dialogue::clearDialogueElements( )
 {
     ui->gameTitle->setText("\0");
     ui->gameIcon->setText("\0");
-    ui->launchCommand->setText("\0");
-    ui->commandLineArgs->setPlainText("\0");
+    ui->launchCommand->setPlainText("\0");
+    ui->commandLineArgs->setText("\0");
     ui->gameDescription->setPlainText("\0");
 }
 

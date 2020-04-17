@@ -14,6 +14,8 @@
 
 #include "sqliteDbAccess.h"
 #include "game_title_edit.h"
+#include "game_icon_edit.h"
+#include "launch_command_edit.h"
 
 struct proc_and_thread_data_st
 {
@@ -44,6 +46,10 @@ public:
 
     // Game title edit dialog
     game_title_edit *titleEdit;
+    // Game icon edit dialog
+    game_icon_edit *iconEdit;
+    // Launch command edit dialog
+    launch_command_edit *launchEdit;
 
 private:
     // Top level actions
@@ -62,15 +68,23 @@ private:
     // Pointer to the local parent
     gameNameButtonWidget *lclParent;
 
-    // The last game name
+    // last variables
     QString *lastGameName;
+    QString *lastGameIcon;
+    QString *lastLaunchCommand;
 
 private slots:
     void gameTitleChangeEvent( );
     void newGameTitleAccepted( const QString string );
+    void gameIconChangeEvent( );
+    void newGameIconAccepted( const QString &string );
+    void launchCommandChangeEvent( );
+    void newLaunchCommandAccepted( const QString &string );
 
 signals:
-    void gameContextupdateGameName( const QString string );
+    void gameContextUpdateGameName( const QString string );
+    void gameContextUpdateGameIcon( const QString &string );
+    void gameContextUpdateLaunchScript( const QString &string );
 };
 
 /*!
@@ -104,12 +118,20 @@ private slots:
     void mousePressEvent(QMouseEvent *e) override;
     // Callback function to update the game name
     void gameNameSlotUpdateGameName( const QString string );
+    // Callback function to update the game icon
+    void gameNameSlotUpdateGameIcon( const QString &string );
+    // Callback function to update the Launch Script
+    void gameNameSlotUpdateLaunchScript( const QString &string );
 
 signals:
     // Signal to pass up the Qt parent list to note that the button has been clicked, with the required args
     void nameBtnclicked( gameNameButtonWidget &buttonWidget);
     // Signal to update the game name
     void gameNameSignalUpdateGameName( const QString string, gameNameButtonWidget * const thisGameName );
+    // Signal to update the game icon
+    void gameNameSignalUpdateGameIcon( const QString &string, gameNameButtonWidget * const thisGameName );
+    // Signal to update the Launch Script
+    void gameNameSignalUpdateLaunchScript( const QString &string, gameNameButtonWidget * const thisGameName );
 };
 
 /*!
@@ -186,11 +208,20 @@ private slots:
     void updatePrettyGameInfo( gameNameButtonWidget &buttonwidget );
     // Slot function for updating the game name only
     void gameTitleSlotUpdateGameName( const QString text, gameNameButtonWidget * const thisNameButton  );
+    // Slot function for updating the game icon only
+    void gameTitleSlotUpdateGameIcon( const QString &text, gameNameButtonWidget * const thisNameButton  );
+    // Slot function for updating the game launch script only
+    void gameTitleSlotUpdateLaunchScript( const QString &text, gameNameButtonWidget * const thisNameButton  );
 
 signals:
     // Signal to pass up the Qt stack to update the pretty information in the parent
     void updatePrettyInformation( gameNameButtonWidget &buttonwidget );
+    // Signal to pass up the Qt stack to update the game name of a specific button
     void gameTitleSigUpdateGameName( const QString text, gameNameButtonWidget * const thisNameButton );
+    // Signal to pass up the Qt stack to update the game icon of a specific button
+    void gameTitleSigUpdateGameIcon( const QString &text, gameNameButtonWidget * const thisNameButton );
+    // Signal to pass up the Qt stack to update the Launch Script of a specific button
+    void gameTitleSigUpdateLaunchScript( const QString &text, gameNameButtonWidget * const thisNameButton );
 };
 
 /*!
@@ -233,6 +264,9 @@ public:
 
     // Layout object
     QGridLayout *layout;
+
+    // The current icon path in use
+    QString *currentIconPath;
 };
 
 /*!
@@ -281,6 +315,8 @@ public:
 private slots:
     void redrawPrettyInformation( gameNameButtonWidget &buttonInformation );
     void changeGameName( const QString string, gameNameButtonWidget * const thisNameButton );
+    void changeGameIcon( const QString &string, gameNameButtonWidget * const thisNameButton );
+    void changeLaunchScript( const QString &string, gameNameButtonWidget * const thisNameButton );
 
 protected:
     void refreshAllGames( );

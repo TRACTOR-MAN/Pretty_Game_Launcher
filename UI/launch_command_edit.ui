@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>game_title_edit</class>
- <widget class="QDialog" name="game_title_edit">
+ <class>launch_command_edit</class>
+ <widget class="QDialog" name="launch_command_edit">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>109</height>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Game Name Edit</string>
+   <string>Launch Command Edit</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <spacer name="verticalSpacer_2">
+    <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
@@ -30,15 +30,15 @@
    <item alignment="Qt::AlignHCenter">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Edit Game Name</string>
+      <string>Launch Command</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QLineEdit" name="lineEdit"/>
+    <widget class="QPlainTextEdit" name="plainTextEdit"/>
    </item>
    <item>
-    <spacer name="verticalSpacer_3">
+    <spacer name="verticalSpacer_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
@@ -67,7 +67,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>game_title_edit</receiver>
+   <receiver>launch_command_edit</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -83,7 +83,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>game_title_edit</receiver>
+   <receiver>launch_command_edit</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
