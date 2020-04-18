@@ -13,11 +13,6 @@
 #include <QMenu>
 
 #include "sqliteDbAccess.h"
-#include "game_title_edit.h"
-#include "game_icon_edit.h"
-#include "launch_command_edit.h"
-#include "cmd_line_args_edit.h"
-#include "game_description_edit.h"
 
 struct proc_and_thread_data_st
 {
@@ -27,6 +22,8 @@ struct proc_and_thread_data_st
 
 // Forward decleration of the gameNameButtonWidget, defined later in this file
 class gameNameButtonWidget;
+// Forward decleration of the Add New Game Dialogue Class
+class Add_New_Game_Dialogue;
 
 /*!
  *  \author    Thomas Sutton
@@ -46,21 +43,14 @@ public:
     gameNameContextMenu( gameNameButtonWidget *parent );
     ~gameNameContextMenu( );
 
-    // Game title edit dialog
-    game_title_edit *titleEdit;
-    // Game icon edit dialog
-    game_icon_edit *iconEdit;
-    // Launch command edit dialog
-    launch_command_edit *launchEdit;
-    // Command line args edit dialog
-    cmd_line_args_edit *cmdArgsEdit;
-    // Game description edit dialog
-    game_description_edit *gameDescEdit;
+    // Game edit dialog
+    Add_New_Game_Dialogue *gameEditDialog;
 
 private:
     // Top level actions
     QAction *launchGame;
     QAction *removeGame;
+    QAction *editGameLaunchData;
 
     // Sub menu
     QMenu   *editGameLaunchParams;
@@ -75,30 +65,14 @@ private:
     gameNameButtonWidget *lclParent;
 
     // last variables
-    QString *lastGameName;
-    QString *lastGameIcon;
-    QString *lastLaunchCommand;
-    QString *lastCmdLineArgs;
-    QString *lastGameDescription;
+    GUI_game_information_st *gameInformation;
 
 private slots:
-    void gameTitleChangeEvent( );
-    void newGameTitleAccepted( const QString string );
-    void gameIconChangeEvent( );
-    void newGameIconAccepted( const QString &string );
-    void launchCommandChangeEvent( );
-    void newLaunchCommandAccepted( const QString &string );
-    void cmdLineArgsChangeEvent( );
-    void newCmdLineArgsAccepted( const QString &string );
-    void gameDescChangeEvent( );
-    void newGameDescAccepted( const QString &string );
+    void editGameParamsEvent( );
+    void newGameDataAccepted( );
 
 signals:
-    void gameContextUpdateGameName( const QString string );
-    void gameContextUpdateGameIcon( const QString &string );
-    void gameContextUpdateLaunchScript( const QString &string );
-    void gameContextUpdateCmdLineArgs( const QString &string );
-    void gameContextUpdateGameDesc( const QString &string );
+    void gameContextUpdateGameData( const GUI_game_information_st &data );
 };
 
 /*!
@@ -130,30 +104,14 @@ private:
 private slots:
     // Callback function for when the button is clicked
     void mousePressEvent(QMouseEvent *e) override;
-    // Callback function to update the game name
-    void gameNameSlotUpdateGameName( const QString string );
-    // Callback function to update the game icon
-    void gameNameSlotUpdateGameIcon( const QString &string );
-    // Callback function to update the Launch Script
-    void gameNameSlotUpdateLaunchScript( const QString &string );
-    // Callback function to update the command line args
-    void gameNameSlotUpdateCmdLineArgs( const QString &string );
-    // Callback function to update the game description
-    void gameNameSlotUpdateGameDescription( const QString &string );
+    // Callback function to update the game parameters
+    void gameNameSlotUpdateGameData( const GUI_game_information_st &data );
 
 signals:
     // Signal to pass up the Qt parent list to note that the button has been clicked, with the required args
     void nameBtnclicked( gameNameButtonWidget &buttonWidget);
-    // Signal to update the game name
-    void gameNameSignalUpdateGameName( const QString string, gameNameButtonWidget * const thisGameName );
-    // Signal to update the game icon
-    void gameNameSignalUpdateGameIcon( const QString &string, gameNameButtonWidget * const thisGameName );
-    // Signal to update the Launch Script
-    void gameNameSignalUpdateLaunchScript( const QString &string, gameNameButtonWidget * const thisGameName );
-    // Signal to update the command line args
-    void gameNameSignalUpdateCmdArgs( const QString &string, gameNameButtonWidget * const thisGameName );
-    // Signal to update the game description
-    void gameNameSignalUpdateGameDesc( const QString &string, gameNameButtonWidget * const thisGameName );
+    // Signal to update the game data
+    void gameNameSigUpdateGameData( const GUI_game_information_st &data, gameNameButtonWidget * const thisNameButton );
 };
 
 /*!
@@ -229,29 +187,13 @@ private slots:
     // Slot function to update the pretty game information
     void updatePrettyGameInfo( gameNameButtonWidget &buttonwidget );
     // Slot function for updating the game name only
-    void gameTitleSlotUpdateGameName( const QString text, gameNameButtonWidget * const thisNameButton  );
-    // Slot function for updating the game icon only
-    void gameTitleSlotUpdateGameIcon( const QString &text, gameNameButtonWidget * const thisNameButton  );
-    // Slot function for updating the game launch script only
-    void gameTitleSlotUpdateLaunchScript( const QString &text, gameNameButtonWidget * const thisNameButton  );
-    // Slot function for updating the command line args only
-    void gameTitleSlotUpdateCmdArgs( const QString &text, gameNameButtonWidget * const thisNameButton  );
-    // Slot function for updating the game description only
-    void gameTitleSlotUpdateGameDesc( const QString &text, gameNameButtonWidget * const thisNameButton  );
+    void gameTitleSlotUpdateGameData( const GUI_game_information_st & data, gameNameButtonWidget * const thisNameButton );
 
 signals:
     // Signal to pass up the Qt stack to update the pretty information in the parent
     void updatePrettyInformation( gameNameButtonWidget &buttonwidget );
-    // Signal to pass up the Qt stack to update the game name of a specific button
-    void gameTitleSigUpdateGameName( const QString text, gameNameButtonWidget * const thisNameButton );
-    // Signal to pass up the Qt stack to update the game icon of a specific button
-    void gameTitleSigUpdateGameIcon( const QString &text, gameNameButtonWidget * const thisNameButton );
-    // Signal to pass up the Qt stack to update the Launch Script of a specific button
-    void gameTitleSigUpdateLaunchScript( const QString &text, gameNameButtonWidget * const thisNameButton );
-    // Signal to pass up the Qt stack to update the command line args of a specific button
-    void gameTitleSigUpdateCmdArgs( const QString &text, gameNameButtonWidget * const thisNameButton );
-    // Signal to pass up the Qt stack to update the game description
-    void gameTitleSigUpdateGameDesc( const QString &text, gameNameButtonWidget * const thisNameButton );
+    // Signal to pass up the Qt stack to update the game data of a specific button
+    void gameTitleSigUpdateGameData( const GUI_game_information_st &data, gameNameButtonWidget * const thisNameButton );
 };
 
 /*!
@@ -344,11 +286,7 @@ public:
 
 private slots:
     void redrawPrettyInformation( gameNameButtonWidget &buttonInformation );
-    void changeGameName( const QString string, gameNameButtonWidget * const thisNameButton );
-    void changeGameIcon( const QString &string, gameNameButtonWidget * const thisNameButton );
-    void changeLaunchScript( const QString &string, gameNameButtonWidget * const thisNameButton );
-    void changeCmdArgs( const QString &string, gameNameButtonWidget * const thisNameButton );
-    void changeGameDesc( const QString &string, gameNameButtonWidget * const thisNameButton );
+    void changeGameData( const GUI_game_information_st & data, gameNameButtonWidget * const thisNameButton );
 
 protected:
     void refreshAllGames( );

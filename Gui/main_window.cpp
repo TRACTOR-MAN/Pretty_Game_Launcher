@@ -1,7 +1,9 @@
 #include <QMainWindow>
 #include <QDebug>
+#include <QMessageBox>
 #include "main_window.h"
 #include "ui_mainwindow.h"
+#include "ui_add_new_game_dialogue.h"
 #include "add_new_game_dialogue.h"
 #include "sqliteDbAccess.h"
 
@@ -85,9 +87,81 @@ void MainWindow::on_actionAdd_New_Game_triggered()
     if( addNewGame == nullptr )
     {
         addNewGame = new(Add_New_Game_Dialogue);
+
+        // Connect the signal to the slot for the dialog
+        connect( addNewGame, SIGNAL( accepted( ) ), this, SLOT( addNewGameToDbc( ) ) );
     }
 
     addNewGame->show();
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      11/04/2020
+ *
+ *  \par       Description:
+ *             Member function for adding a new game to the game launcher database
+ */
+void MainWindow::addNewGameToDbc( )
+{
+    bool okToAddNewGame_b = true;
+
+    Ui::Add_New_Game_Dialogue *newGameUi = addNewGame->returnUIPointer( );
+
+    // Check whether a Game Title has been entered
+    if( newGameUi->gameTitle->text() == "\0" )
+    {
+        okToAddNewGame_b = false;
+    }
+    else
+    {
+        // Do nothing
+    }
+
+    // Check whether a launch command has been entered
+    if( newGameUi->launchCommand->toPlainText() == "\0" )
+    {
+        okToAddNewGame_b = false;
+    }
+    else
+    {
+        // Do nothing
+    }
+
+    // Check whether a game description has been provided
+    if( newGameUi->gameDescription->toPlainText() == "\0" )
+    {
+        okToAddNewGame_b = false;
+    }
+    else
+    {
+        // Do nothing
+    }
+
+    // If it is OK to add the new game
+    if( okToAddNewGame_b != false )
+    {
+        if( lclGuiWidget != nullptr )
+        {
+            lclGuiWidget->AddNewGameToGuiAndDbc(
+                                                 newGameUi->gameTitle->text(),
+                                                 newGameUi->launchCommand->toPlainText(),
+                                                 newGameUi->commandLineArgs->text(),
+                                                 newGameUi->gameDescription->toPlainText(),
+                                                 newGameUi->gameIcon->text(),
+                                                 this
+                                               );
+
+        // Clear dialogue elements
+        addNewGame->clearDialogueElements( );
+        }
+        else
+        {
+            // Message pop up to the application
+            QMessageBox::warning( this, "Pretty Game Launcher", "All inputs not populated, ensure that Game Title, a Launch Command, and the Game description are populated" );
+        }
+    }
 }
 
 /*!
@@ -98,7 +172,7 @@ void MainWindow::on_actionAdd_New_Game_triggered()
  *  \par       Description:
  *             Slot function for the fullscr toggle toolbar button
  */
-void MainWindow::on_actionFullScr_triggered()
+void MainWindow::on_actionFullScr_triggered( )
 {
     if( isFullScreen() == true )
     {

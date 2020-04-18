@@ -47,10 +47,9 @@ class MainWindow : public QMainWindow
         // This member function is called when the Add New Game toolbar button 
         // is pressed. 
         void on_actionAdd_New_Game_triggered( );
-
         void on_actionFullScr_triggered( );
-
         void on_actionToggleTheme_triggered();
+        void addNewGameToDbc( );
 
 private:
         Ui::MainWindow * ui;

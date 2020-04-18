@@ -30,37 +30,22 @@ SOURCES += \
         ../Gui/main_window.cpp \
         ../Gui/add_new_game_dialogue.cpp \
         ../Control/sqliteDbAccess.cpp \
-        ../Gui/game_data_gui.cpp \
-        ../Gui/game_title_edit.cpp \
-        ../Gui/game_icon_edit.cpp \
-        ../Gui/launch_command_edit.cpp \
-        ../Gui/cmd_line_args_edit.cpp \
-        ../Gui/game_description_edit.cpp
+        ../Gui/game_data_gui.cpp
 
 HEADERS += \
         ../Gui/Include/main_window.h \
         ../Gui/Include/add_new_game_dialogue.h \
         ../Control/Include/sqliteDbAccess.h \
         ../Gui/Include/game_data_gui.h \
-        ../Gui/Include/main.h \
-        ../Gui/Include/game_title_edit.h \
-        ../Gui/Include/game_icon_edit.h \
-        ../Gui/Include/launch_command_edit.h \
-        ../Gui/Include/cmd_line_args_edit.h \
-        ../Gui/Include/game_description_edit.h
+        ../Gui/Include/main.h
 
 INCLUDEPATH += \
         ../Gui/Include \
         ../Control/Include 
 
 FORMS += \
-        ../UI/cmd_line_args_edit.ui \
-        ../UI/game_description_edit.ui \
-        ../UI/game_icon_edit.ui \
-        ../UI/launch_command_edit.ui \
         ../UI/mainwindow.ui \
-        ../UI/add_new_game_dialogue.ui \
-        ../UI/game_title_edit.ui
+        ../UI/add_new_game_dialogue.ui
 
 RESOURCES += \
              ../Icons/icons.qrc \

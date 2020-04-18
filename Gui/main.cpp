@@ -49,11 +49,8 @@ int main(int argc, char *argv[])
     // Create an instance of the game data GUI widget
     gameDataGuiWidget gameDataWidget( myDatabase );
 
-    // Set the reference to the game data gui widget
+    // Set the reference variable to the gui in the main window
     window.setLclGuiWidget( gameDataWidget );
-
-    // Initialise the lclGui element in Add_New_Game_Dialogue
-    Add_New_Game_Dialogue::setLclData( &gameDataWidget );
 
     // Set the gameData widget as the central widget
     window.setCentralWidget(&gameDataWidget);

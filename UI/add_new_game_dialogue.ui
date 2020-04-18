@@ -253,22 +253,6 @@
   </connection>
   <connection>
    <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>Add_New_Game_Dialogue</receiver>
-   <slot>addNewGameToDbc()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>410</x>
-     <y>671</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>421</x>
-     <y>691</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
    <signal>rejected()</signal>
    <receiver>Add_New_Game_Dialogue</receiver>
    <slot>clearDialogueElements()</slot>
