@@ -1,5 +1,7 @@
 #include <QtCore>
 #include <QPushButton>
+#include <QStyleOption>
+#include <QPainter>
 
 #include "game_data_gui.h"
 #include "add_new_game_dialogue.h"
@@ -21,13 +23,15 @@
  *  \par       Description:
  *             Constructor for the gameDatauiWidget class
  */
-gameDataGuiWidget::gameDataGuiWidget( sqLiteDbInterface &psdDatabase, QWidget *parent ) :
+gameDataGuiWidget::gameDataGuiWidget( sqLiteDbInterface &psdDatabase, MainWindow &psdMainWin, application_theme_c &psdTheme, QWidget *parent ) :
     QWidget(parent),
     scrollAreaMaxWidth( 200 ),
     horizLayout_p( new QHBoxLayout ),
     scrollArea( new QScrollArea ),
+    lclTheme( psdTheme ),
+    lclMainWindow( psdMainWin ),
     gameNameWidget( new gameTitleWidget( *this, (scrollAreaMaxWidth - 15) )),
-    prettyWidget( new gamePrettyWidget( *this )),
+    prettyWidget( new gamePrettyWidget( *this, lclMainWindow, lclTheme ) ),
     lclDatabase( psdDatabase )
 {
     connect( gameNameWidget, SIGNAL( updatePrettyInformation( gameNameButtonWidget &) ), this, SLOT(redrawPrettyInformation( gameNameButtonWidget & ) ) );
@@ -72,9 +76,15 @@ gameDataGuiWidget::gameDataGuiWidget( sqLiteDbInterface &psdDatabase, QWidget *p
  */
 void gameDataGuiWidget::redrawPrettyInformation( gameNameButtonWidget &buttonInformation )
 {
-    prettyWidget->changeGameIcon( buttonInformation );
+    // Ensure the key widgets are showing
+    prettyWidget->launchButton->show();
+    prettyWidget->playTimeBox->show();
+    prettyWidget->gameDescriptionBox->show();
+
+    prettyWidget->changeGameIconAndYtVideo( buttonInformation );
     prettyWidget->changeGameInfo( buttonInformation );
     prettyWidget->changePlayTime( buttonInformation );
+    prettyWidget->updateTheme( buttonInformation );
 
     prettyWidget->launchButton->launchCommand = buttonInformation.launchCommand;
     prettyWidget->launchButton->launchCommandArgs = buttonInformation.launchCommandArgs;
@@ -104,7 +114,7 @@ void gameDataGuiWidget::changeGameData( const GUI_game_information_st & data, ga
     }
     else
     {
-        // Do nothig
+        // Do nothing
     }
 
     // Now Game Icon
@@ -121,6 +131,9 @@ void gameDataGuiWidget::changeGameData( const GUI_game_information_st & data, ga
         {
             // Images are not the same
         }
+
+        // Now update game icon button
+        thisNameButton->gameIcon = data.gameIconPath;
     }
     else
     {
@@ -224,7 +237,7 @@ void gameDataGuiWidget::AddNewGameToGuiAndDbc(
                                                QWidget *parent
                                              )
 {
-    lclDatabase.addNewGame( gameTitle, launchCommand, launchCommandArgs, gameDescription, gameIcon, parent );
+    lclDatabase.addNewGame( gameTitle, launchCommand, launchCommandArgs, gameDescription, "", gameIcon, parent );
 
     refreshAllGames( );
 }
@@ -321,6 +334,10 @@ void gameTitleWidget::addGameTitle( GUI_game_information_st guiInformation )
     nameButton->gameDescription = guiInformation.gameDescription;
     nameButton->playTime = guiInformation.playTime;
     nameButton->gameIcon = guiInformation.gameIconPath;
+    nameButton->gameScreenshot = guiInformation.gameScreenShot;
+    nameButton->youtubeVideoID = guiInformation.youtubeVideoID;
+    nameButton->gameWallpaper = guiInformation.GameWallpaper;
+    nameButton->gameTextColor = guiInformation.gameTextColor;
     nameButton->launchCommandArgs = guiInformation.LaunchCommandArgs;
     nameButton->launchCommand = guiInformation.LaunchCommand;
 
@@ -422,18 +439,32 @@ gameTitleWidget::~gameTitleWidget( )
  *  \par       Description:
  *             Constructor for the gamePrettyWidget class
  */
-gamePrettyWidget::gamePrettyWidget( QWidget &parent ) :
-    QWidget( &parent ),
+gamePrettyWidget::gamePrettyWidget( QWidget &parent, MainWindow &psdMainWin, application_theme_c &psdTheme ) :
+    QLabel( &parent ),
     vertLayout( new QVBoxLayout ),
     timeVertLayout( new QVBoxLayout ),
     gameDescriptionBox( new QGroupBox( "Game Description" ) ),
     playTimeBox( new QGroupBox( "Game Play Time" ) ),
+    gameImageVLayout( new QVBoxLayout ),
+    maximumImageWidthMinimised( 350 ),
+    maximumImageHeightMinimised( 200 ),
+    maximumImageWidthMaximised( 500 ),
+    maximumImageHeightMaximised( 350 ),
+    lclTheme( psdTheme ),
+    gameImageBorder( new QWidget ),
     gameImage( new QLabel ),
     launchButton( new LaunchButtonWidget("Launch Game") ),
     gameInformation( new QLabel ),
     playTime( new QLabel ),
+    youtubeVideo( nullptr ),
+    youtubeVideoBorder( new QLabel ),
     layout( new QGridLayout(this) ),
-    currentIconPath( new QString )
+    currentIconPath( new QString ),
+    URLString1( new QString("https://www.youtube-nocookie.com/embed/") ),
+    URLString2NoAutoplay( new QString("?mute=1") ),
+    URLString2Autoplay( new QString("?autoplay=1&mute=1") ),
+    lclMainWindow( psdMainWin ),
+    last_windowed_state( false )
 {
     // Set the info widget to wrap text
     gameInformation->setWordWrap(true);
@@ -441,10 +472,11 @@ gamePrettyWidget::gamePrettyWidget( QWidget &parent ) :
     launchButton->setMinimumSize( 160, 40 );
     // Set the minimum size of the game time widget
     playTime->setMinimumSize( 160, 40 );
-    // Set the maximum size of the icon widget
-    gameImage->setMaximumSize( 350, 350 );
     // Set the game time widget to central justify text
     playTime->setAlignment(Qt::AlignCenter);
+
+    // Create a handler for rescale events
+    connect( &lclMainWindow, SIGNAL( changeEvent( QEvent* ) ), this, SLOT( rescaleYtVideoAndIcon( QEvent* ) ) );
 
     // Place the game information into the game description group box
     vertLayout->addWidget( gameInformation, 0, Qt::AlignTop );
@@ -456,14 +488,156 @@ gamePrettyWidget::gamePrettyWidget( QWidget &parent ) :
     // Set the layout of the play time box
     playTimeBox->setLayout( timeVertLayout );
 
-    // Add all of the widgets
-    layout->addWidget( gameImage, 1, 1, 1, 1, Qt::AlignCenter | Qt::AlignTop );
-    layout->addWidget( launchButton, 0, 0, 1, 1, Qt::AlignCenter  );
-    layout->addWidget( gameDescriptionBox, 2, 0, 1, 3);
-    layout->addWidget( playTimeBox, 0, 2, 1, 1, Qt::AlignCenter );
+    // Set up the V layout and image
+    gameImageVLayout->addWidget( gameImage, 0, Qt::AlignHCenter );
+    gameImageBorder->setLayout( gameImageVLayout );
+
+    // Start with the youtube video border hidden
+    youtubeVideoBorder->hide();
+
+    // Add the common widgets
+    layout->addWidget( launchButton, 0, 0, 1, 1, Qt::AlignCenter );
+    layout->addWidget( gameDescriptionBox, 2, 0, 1, 4);
+    layout->addWidget( playTimeBox, 0, 3, 1, 1, Qt::AlignCenter );
+
+    // Hide the widgets during start up
+    launchButton->hide();
+    gameDescriptionBox->hide();
+    playTimeBox->hide();
 
     this->setLayout(layout);
 }
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      19/04/2020
+ *
+ *  \par       Description:
+ *             Paint event function for paint event override
+ */
+void gamePrettyWidget::paintEvent( QPaintEvent * )
+{
+    QStyleOption opt;
+    opt.init(this);
+    QPainter p(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      19/04/2020
+ *
+ *  \par       Description:
+ *             Slot function for rescaling certain pretty widgets
+ */
+void gamePrettyWidget::rescaleYtVideoAndIcon( QEvent* event )
+{
+    // If the event is a window state change
+    if (event->type() == QEvent::WindowStateChange)
+    {
+
+        // Just here incase we ever need to access the raw window state info
+        #if(0)
+        // Cast the event to a window state change event
+        QWindowStateChangeEvent* ev = static_cast<QWindowStateChangeEvent*>(event);
+        qDebug() << ev->oldState();
+        qDebug() << lclMainWindow.windowState();
+        qDebug() << (lclMainWindow.windowState() == Qt::WindowFullScreen);
+        qDebug() << (lclMainWindow.windowState() == Qt::WindowMaximized);
+        qDebug() << (lclMainWindow.windowState() == Qt::WindowNoState);
+        #endif
+
+        // If we are maximising or entering full screen
+        if(
+            (lclMainWindow.windowState() == Qt::WindowFullScreen)
+            ||
+            (lclMainWindow.windowState() == Qt::WindowMaximized)
+          )
+        {
+            // If there is an icon in use
+            if( *currentIconPath != "" )
+            {
+                // When using a toggling image and screenshot, may need to change currentIconPath
+                QPixmap pic(*currentIconPath);
+                gameImage->setPixmap( pic.scaled( maximumImageWidthMaximised, maximumImageHeightMaximised, Qt::KeepAspectRatio ) );
+                gameImageBorder->repaint( );
+
+                if( youtubeVideo != nullptr )
+                {
+                    youtubeVideoBorder->setMinimumSize( gameImage->pixmap()->width() + 18, gameImage->pixmap()->height() + 18 );
+                    youtubeVideoBorder->setMaximumSize( gameImage->pixmap()->width() + 18, gameImage->pixmap()->height() + 18 );
+                    youtubeVideo->setMaximumSize( gameImage->pixmap()->width(), gameImage->pixmap()->height() );
+                    youtubeVideoBorder->repaint();
+                }
+                else
+                {
+                    // Do nothing
+                }
+            }
+            // If there is a youtube video in use
+            else
+            if(
+                (youtubeVideo != nullptr)
+                &&
+                (youtubeVideo->url() != QUrl(""))
+              )
+            {
+                youtubeVideoBorder->setMinimumSize( maximumImageWidthMaximised + 18, maximumImageHeightMaximised + 18 );
+                youtubeVideoBorder->setMaximumSize( maximumImageWidthMaximised + 18, maximumImageHeightMaximised + 18 );
+                youtubeVideo->setMaximumSize( maximumImageWidthMaximised, maximumImageHeightMaximised );
+                youtubeVideoBorder->repaint();
+            }
+            else
+            {
+                // Do nothing
+            }
+        }
+        // We must be in normal mode
+        else
+        {
+            // If there is an icon in use
+            if( *currentIconPath != "" )
+            {
+                // When using a toggling image and screenshot, may need to change currentIconPath
+                QPixmap pic(*currentIconPath);
+                gameImage->setPixmap( pic.scaled( maximumImageWidthMinimised, maximumImageHeightMinimised, Qt::KeepAspectRatio ) );
+                gameImageBorder->repaint( );
+
+                if( youtubeVideo != nullptr )
+                {
+                    youtubeVideoBorder->setMinimumSize( gameImage->pixmap()->width() + 18, gameImage->pixmap()->height() + 18 );
+                    youtubeVideoBorder->setMaximumSize( gameImage->pixmap()->width() + 18, gameImage->pixmap()->height() + 18 );
+                    youtubeVideo->setMaximumSize( gameImage->pixmap()->width(), gameImage->pixmap()->height() );
+                    youtubeVideoBorder->repaint();
+                }
+                else
+                {
+                    // Do nothing
+                }
+            }
+            // If there is a youtube video in use
+            else
+            if(
+                (youtubeVideo != nullptr)
+                &&
+                (youtubeVideo->url() != QUrl(""))
+              )
+            {
+                youtubeVideoBorder->setMinimumSize( maximumImageWidthMinimised + 18, maximumImageHeightMinimised + 18 );
+                youtubeVideoBorder->setMaximumSize( maximumImageWidthMinimised + 18, maximumImageHeightMinimised + 18 );
+                youtubeVideo->setMaximumSize( maximumImageWidthMinimised, maximumImageHeightMinimised );
+                youtubeVideoBorder->repaint();
+            }
+            else
+            {
+                // Do nothing
+            }
+        }
+    }
+}
+
 
 /*!
  *  \author    Thomas Sutton
@@ -473,14 +647,35 @@ gamePrettyWidget::gamePrettyWidget( QWidget &parent ) :
  *  \par       Description:
  *             Member function for changing the image widget
  */
-void gamePrettyWidget::changeGameIcon( gameNameButtonWidget &buttonInformation )
+void gamePrettyWidget::changeGameIconAndYtVideo( gameNameButtonWidget &buttonInformation )
 {
+    // Flags noting whether or not to add the widgets
+    bool gameIconToAdd = false;
+    bool videoToAdd = false;
+
+    // Initially remove the image border
+    gameImageBorder->hide();
+    layout->removeWidget( gameImageBorder );
+
     // Only Add the picture if there is one assigned
     if( buttonInformation.gameIcon != "" )
     {
         QPixmap picture( buttonInformation.gameIcon );
 
-        gameImage->setPixmap( picture.scaled(350, 350, Qt::KeepAspectRatio) );
+        if(
+            (lclMainWindow.isMaximized() != false)
+            ||
+            (lclMainWindow.isFullScreen() != false)
+          )
+        {
+            gameImage->setPixmap( picture.scaled(maximumImageWidthMaximised, maximumImageHeightMaximised, Qt::KeepAspectRatio) );
+        }
+        else
+        {
+            gameImage->setPixmap( picture.scaled(maximumImageWidthMinimised, maximumImageHeightMinimised, Qt::KeepAspectRatio) );
+        }
+
+        gameIconToAdd = true;
     }
     else
     {
@@ -489,7 +684,174 @@ void gamePrettyWidget::changeGameIcon( gameNameButtonWidget &buttonInformation )
         gameImage->setPixmap( picture );
     }
 
+    // Set the current icon path
     *currentIconPath = buttonInformation.gameIcon;
+
+    // Delete any present youtube videos widgets
+    if( youtubeVideo != nullptr )
+    {
+        layout->removeWidget( youtubeVideoBorder );
+        layout->removeWidget( youtubeVideo );
+        delete youtubeVideo;
+        youtubeVideo = nullptr;
+    }
+    else
+    {
+        // Do nothing
+    }
+
+    // Only add the youtube video if there is one assigned
+    if( buttonInformation.youtubeVideoID != "" )
+    {
+        // This is a requirement for the QWebEngineView to allow it to be interacted with,
+        // i.e. it needs to be deleted, then new'd.
+        youtubeVideo = new QWebEngineView;
+
+        // Load the URL
+        youtubeVideo->load(QUrl(*URLString1 + buttonInformation.youtubeVideoID + *URLString2NoAutoplay ));
+
+        // Constrain the size of the youtube video to the size of the game image
+        if( gameIconToAdd != false )
+        {
+            youtubeVideoBorder->setMinimumSize( gameImage->pixmap()->width() + 18, gameImage->pixmap()->height() + 18 );
+            youtubeVideo->setMaximumSize( gameImage->pixmap()->width(), gameImage->pixmap()->height() );
+        }
+        else
+        {
+            if(
+                ( lclMainWindow.isMaximized() != false )
+                ||
+                ( lclMainWindow.isFullScreen() != false )
+              )
+            {
+                youtubeVideoBorder->setMinimumSize( maximumImageWidthMaximised + 18, maximumImageHeightMaximised + 18 );
+                youtubeVideo->setMaximumSize( maximumImageWidthMaximised, maximumImageHeightMaximised );
+            }
+            else
+            {
+                youtubeVideoBorder->setMinimumSize( maximumImageWidthMinimised + 18, maximumImageHeightMinimised + 18 );
+                youtubeVideo->setMaximumSize( maximumImageWidthMinimised, maximumImageHeightMinimised );
+            }
+
+        }
+
+        // Show the border
+        youtubeVideoBorder->show();
+
+        // Make a note to add the video
+        videoToAdd = true;
+    }
+    else
+    {
+
+    }
+
+    // Now add the widgets
+    if(
+        (gameIconToAdd != false)
+        &&
+        (videoToAdd != false)
+      )
+    {
+        // Add the widgets
+        layout->addWidget( gameImageBorder, 1, 0, 1, 2, Qt::AlignCenter );
+        layout->addWidget( youtubeVideoBorder, 1, 2, 1, 2, Qt::AlignCenter );
+        layout->addWidget( youtubeVideo, 1, 2, 1, 2, Qt::AlignCenter );
+
+        gameImageBorder->show();
+    }
+    else
+    if(
+        (gameIconToAdd != false)
+        &&
+        (videoToAdd == false)
+      )
+    {
+        // Add the widgets
+        layout->addWidget( gameImageBorder, 1, 1, 1, 2, Qt::AlignCenter );
+    }
+    else
+    if(
+        (gameIconToAdd == false)
+        &&
+        (videoToAdd != false)
+      )
+    {
+        // Add the widgets
+        layout->addWidget( youtubeVideoBorder, 1, 1, 1, 2, Qt::AlignCenter );
+        layout->addWidget( youtubeVideo, 1, 1, 1, 2, Qt::AlignCenter );
+    }
+    else
+    {
+        // Do nothing
+    }
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      19/04/2020
+ *
+ *  \par       Description:
+ *             Function for updating the wallpaper and text color
+ */
+void gamePrettyWidget::updateTheme( gameNameButtonWidget &buttonInformation )
+{
+    // Initially set-up the theme in line with the current selection
+    if( lclTheme.current_theme_e == DARK )
+    {
+        QFile file(":/dark.qss");
+        file.open(QFile::ReadOnly | QFile::Text);
+        QTextStream stream(&file);
+        setStyleSheet(stream.readAll());
+    }
+    else
+    if( lclTheme.current_theme_e == LIGHT )
+    {
+        QFile file(":/light.qss");
+        file.open(QFile::ReadOnly | QFile::Text);
+        QTextStream stream(&file);
+        setStyleSheet(stream.readAll());
+    }
+    else
+    {
+        // Do nothing
+    }
+
+    // Now update local theme elements, depending on user selection
+    if( buttonInformation.gameWallpaper != "\0" )
+    {
+        // Configure the style sheets of all widgets
+        gameDescriptionBox->setStyleSheet("background-color:rgba(255,255,255,30);");
+        playTimeBox->setStyleSheet("background-color:rgba(255,255,255,30);");
+        launchButton->setStyleSheet("background-color:rgba(255,255,255,30);");
+        gameInformation->setStyleSheet("background-color:rgba(255,255,255,0);");
+        playTime->setStyleSheet("background-color:rgba(255,255,255,0);");
+        gameImageBorder->setStyleSheet("background-color:rgba(0,0,0,80);");
+        youtubeVideoBorder->setStyleSheet("background-color:rgba(0,0,0,80);");
+
+        QString styleText = "gamePrettyWidget{background-image:url(\"" + buttonInformation.gameWallpaper + "\"); background-position: center;} ";
+
+        if( buttonInformation.gameTextColor != "\0" )
+        {
+            styleText += "QLabel{color: " + buttonInformation.gameTextColor + ";} ";
+
+            styleText += "QPushButton{color: " + buttonInformation.gameTextColor + ";} ";
+
+            styleText += "QGroupBox{color: " + buttonInformation.gameTextColor + ";} ";
+        }
+        else
+        {
+            // Do nothing, no text color demanded
+        }
+
+        // Set the background image
+        setStyleSheet( styleText );
+    }
+    else
+    {
+        // Do nothing
+    }
 }
 
 /*!
@@ -547,10 +909,20 @@ gamePrettyWidget::~gamePrettyWidget( )
     delete layout;
     delete playTimeBox;
     delete vertLayout;
+    delete gameImageVLayout;
     delete launchButton;
     delete gameImage;
+    delete gameImageBorder;
     delete gameInformation;
     delete currentIconPath;
+    if( youtubeVideo != nullptr )
+    {
+        delete youtubeVideo;
+    }
+    delete youtubeVideoBorder;
+    delete URLString1;
+    delete URLString2NoAutoplay;
+    delete URLString2Autoplay;
 }
 
 /*******************************************************************************
@@ -802,7 +1174,7 @@ void gameNameContextMenu::editGameParamsEvent( )
  *  \date      14/04/2020
  *
  *  \par       Description:
- *             Slot function for openning acking an accepted game name change.
+ *             Slot function for opening acking an accepted game data change.
  */
 void gameNameContextMenu::newGameDataAccepted( )
 {

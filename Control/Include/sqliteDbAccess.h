@@ -12,10 +12,14 @@ struct GUI_game_information_st
 {
     QString gameName;
     QString gameIconPath;
+    QString GameWallpaper;
+    QString gameTextColor;
     QString gameDescription;
     QString playTime;
     QString LaunchCommand;
     QString LaunchCommandArgs;
+    QString youtubeVideoID;
+    QString gameScreenShot;
 };
 
 /*! 
@@ -44,6 +48,7 @@ public:
                      QString launchCommand,
                      QString launchCommandArgs,
                      QString gameDescription,
+                     QString gameWallpaper = "\0",
                      QString gameIcon = "\0",
                      QWidget *new_dialogue_parent = nullptr
                    );

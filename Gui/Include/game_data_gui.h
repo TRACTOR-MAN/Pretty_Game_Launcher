@@ -11,8 +11,13 @@
 #include <QProcess>
 #include <QMouseEvent>
 #include <QMenu>
+#include <QWebEngineView>
+#include <QWebEngineSettings>
+#include <QWebEngineFullScreenRequest>
 
 #include "sqliteDbAccess.h"
+#include "main.h"
+#include "main_window.h"
 
 struct proc_and_thread_data_st
 {
@@ -24,6 +29,8 @@ struct proc_and_thread_data_st
 class gameNameButtonWidget;
 // Forward decleration of the Add New Game Dialogue Class
 class Add_New_Game_Dialogue;
+// Forward decleration of the Add New Game Dialogue Class
+class MainWindow;
 
 /*!
  *  \author    Thomas Sutton
@@ -95,6 +102,10 @@ public:
     QString gameDescription;
     QString playTime;
     QString gameIcon;
+    QString gameScreenshot;
+    QString youtubeVideoID;
+    QString gameWallpaper;
+    QString gameTextColor;
     QString launchCommand;
     QString launchCommandArgs;
 
@@ -204,27 +215,43 @@ signals:
  *  \par       Description:
  *             This class defines the widget which displays the game data
  */
-class gamePrettyWidget : public QWidget
+class gamePrettyWidget : public QLabel
 {
     // Q object needed for the signals and slots mechanism
     Q_OBJECT
 public:
-    gamePrettyWidget( QWidget &parent );
-    ~gamePrettyWidget( );
+    gamePrettyWidget( QWidget &parent, MainWindow &psdMainWin, application_theme_c &psdTheme );
+    ~gamePrettyWidget( ) override;
 
     // Function for changing the icon that is being displayed
-    void changeGameIcon( gameNameButtonWidget &buttonInformation );
+    void changeGameIconAndYtVideo( gameNameButtonWidget &buttonInformation );
     // Function for changing the game information
     void changeGameInfo( gameNameButtonWidget &buttonInformation );
     // Function for changing the play time
     void changePlayTime( gameNameButtonWidget &buttonInformation );
+    // Function for updating the game's wallpaper and text color
+    void updateTheme( gameNameButtonWidget &buttonInformation );
+    // Function for paint event override, to support stylesheets
+    void paintEvent(QPaintEvent *) override;
 
     // Layout objects
     QVBoxLayout *vertLayout;
     QVBoxLayout *timeVertLayout;
     QGroupBox *gameDescriptionBox;
     QGroupBox *playTimeBox;
+    QVBoxLayout *gameImageVLayout;
 
+    // Maximum Heights
+    int maximumImageWidthMinimised;
+    int maximumImageHeightMinimised;
+    int maximumImageWidthMaximised;
+    int maximumImageHeightMaximised;
+
+    // Object to handle the interface to the theme system
+    application_theme_c &lclTheme;
+
+    // Surrounding widget to contain the game image
+    QWidget *gameImageBorder;
     // Main game Icon widget
     QLabel *gameImage;
     // Launch button widget
@@ -233,12 +260,31 @@ public:
     QLabel *gameInformation;
     // Play time widget
     QLabel *playTime;
+    // The game youtube video
+    QWebEngineView *youtubeVideo;
+    // The border for the youtube video
+    QLabel *youtubeVideoBorder;
 
     // Layout object
     QGridLayout *layout;
 
     // The current icon path in use
     QString *currentIconPath;
+
+    // The URL strings for the embedded youtube video
+    QString *URLString1;
+    QString *URLString2NoAutoplay;
+    QString *URLString2Autoplay;
+
+    // Handle to the mainwindow
+    MainWindow &lclMainWindow;
+
+    // The last windowed state
+    bool last_windowed_state;
+
+private slots:
+    // Function for rescaling the icon and youtube video widgets
+    void rescaleYtVideoAndIcon( QEvent* event );
 };
 
 /*!
@@ -255,7 +301,7 @@ class gameDataGuiWidget : public QWidget
     // Q object needed for the signals and slots mechanism
     Q_OBJECT
 public:
-    gameDataGuiWidget( sqLiteDbInterface &psdDatabase, QWidget *parent = nullptr);
+    gameDataGuiWidget( sqLiteDbInterface &psdDatabase, MainWindow &psdMainWin, application_theme_c &psdTheme, QWidget *parent = nullptr);
     ~gameDataGuiWidget( );
 
     // Member function for adding a new game to the database and GUI
@@ -276,6 +322,12 @@ public:
 
     // Scroll area objects
     QScrollArea *scrollArea;
+
+    // Object to handle the interface to the theme system
+    application_theme_c &lclTheme;
+
+    // Handle to the MainWindow Class
+    MainWindow &lclMainWindow;
 
     // Widget objects for the game data GUI
     gameTitleWidget *gameNameWidget;

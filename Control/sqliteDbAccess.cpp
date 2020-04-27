@@ -160,7 +160,7 @@ sqLiteDbInterface::sqLiteDbInterface( QWidget *parent ) :
 
             // Call the create table command, this ensures that the database is created, if it doesn't already exist
             QSqlQuery query;
-            query.exec( "CREATE TABLE \"GameLauncherData\" (\"gameName\" TEXT NOT NULL, \"gameIconPath\" TEXT, \"launchCommand\"	TEXT NOT NULL, \"launchCommandArgs\" TEXT, \"gameDescription\" TEXT NOT NULL, \"playTime\" TEXT)");
+            query.exec( "CREATE TABLE \"GameLauncherData\" (\"gameName\" TEXT NOT NULL, \"gameIconPath\" TEXT, \"gameScreenshotPath\" TEXT, \"YoutubeVideoId\" TEXT, \"gameWallpaper\" TEXT, \"gameTextColor\" TEXT NOT NULL, \"launchCommand\" TEXT NOT NULL, \"launchCommandArgs\" TEXT, \"gameDescription\" TEXT NOT NULL, \"playTime\" TEXT)");
 
             // Read GUI related information from the sqlite database
             readGameGuiInformation( );
@@ -196,7 +196,7 @@ void sqLiteDbInterface::readGameGuiInformation( )
 {
     // Query the database for the information to display
     QSqlQuery query;
-    query.prepare("SELECT gameName, gameIconPath, gameDescription, playTime, launchCommand, launchCommandArgs FROM GameLauncherData ORDER BY gameName COLLATE NOCASE ASC");
+    query.prepare("SELECT gameName, gameIconPath, gameScreenshotPath, YoutubeVideoId, gameWallpaper, gameTextColor, gameDescription, playTime, launchCommand, launchCommandArgs FROM GameLauncherData ORDER BY gameName COLLATE NOCASE ASC");
     
     // Excecute the query
     if( query.exec( ) == false )
@@ -223,6 +223,10 @@ void sqLiteDbInterface::readGameGuiInformation( )
             // Store the information in a vector
             lcl_GUI_game_information_ps->gameName = query.value("gameName").toString();
             lcl_GUI_game_information_ps->gameIconPath = query.value("gameIconPath").toString();
+            lcl_GUI_game_information_ps->gameScreenShot = query.value("gameScreenshotPath").toString();
+            lcl_GUI_game_information_ps->youtubeVideoID = query.value("YoutubeVideoId").toString();
+            lcl_GUI_game_information_ps->GameWallpaper = query.value("gameWallpaper").toString();
+            lcl_GUI_game_information_ps->gameTextColor = query.value("gameTextColor").toString();
             lcl_GUI_game_information_ps->gameDescription = query.value("gameDescription").toString();
             lcl_GUI_game_information_ps->playTime = query.value("playTime").toString();
             lcl_GUI_game_information_ps->LaunchCommand = query.value("launchCommand").toString();
@@ -248,6 +252,7 @@ void sqLiteDbInterface::addNewGame(
                                     QString launchCommand,
                                     QString launchCommandArgs,
                                     QString gameDescription,
+                                    QString gameWallpaper,
                                     QString gameIcon,
                                     QWidget *new_dialogue_parent
                                   )
@@ -255,7 +260,7 @@ void sqLiteDbInterface::addNewGame(
     QSqlQuery query;
 
     // prepare the query
-    query.prepare( "INSERT INTO GameLauncherData(gameName, gameIconPath, gameDescription, playTime, launchCommand, launchCommandArgs) values (:gameName, :gameIconPath, :gameDescription, :playTime, :launchCommand, :launchCommandArgs)" );
+    query.prepare( "INSERT INTO GameLauncherData(gameName, gameIconPath, gameDescription, playTime, launchCommand, launchCommandArgs, gameWallpaper) values (:gameName, :gameIconPath, :gameDescription, :playTime, :launchCommand, :launchCommandArgs)" );
 
     // Now bind the values
     query.bindValue( ":gameName", gameTitle );
@@ -264,6 +269,7 @@ void sqLiteDbInterface::addNewGame(
     query.bindValue( ":playTime", "00h:00m:00s" );
     query.bindValue( ":launchCommand", launchCommand );
     query.bindValue( ":launchCommandArgs", launchCommandArgs );
+    query.bindValue( ":gameWallpaper", gameWallpaper );
 
     // Execute the query
     if(query.exec() == false)

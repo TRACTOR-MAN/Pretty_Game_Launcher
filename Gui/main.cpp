@@ -47,13 +47,13 @@ int main(int argc, char *argv[])
     sqLiteDbInterface myDatabase( &window );
 
     // Create an instance of the game data GUI widget
-    gameDataGuiWidget gameDataWidget( myDatabase );
+    gameDataGuiWidget gameDataWidget( myDatabase, window, theme );
 
     // Set the reference variable to the gui in the main window
     window.setLclGuiWidget( gameDataWidget );
 
     // Set the gameData widget as the central widget
-    window.setCentralWidget(&gameDataWidget);
+    window.setCentralWidget( &gameDataWidget );
 
     // Show the window
     window.show();
