@@ -150,6 +150,10 @@ void MainWindow::addNewGameToDbc( )
                                                  newGameUi->commandLineArgs->text(),
                                                  newGameUi->gameDescription->toPlainText(),
                                                  newGameUi->gameIcon->text(),
+                                                 newGameUi->textColorComboBox->currentText(),
+                                                 newGameUi->gameWallpaper->text(),
+                                                 newGameUi->gameScreenshot->text(),
+                                                 newGameUi->youtubeID->text(),
                                                  this
                                                );
 

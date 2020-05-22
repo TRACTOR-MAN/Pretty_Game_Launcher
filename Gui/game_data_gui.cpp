@@ -234,10 +234,14 @@ void gameDataGuiWidget::AddNewGameToGuiAndDbc(
                                                QString launchCommandArgs,
                                                QString gameDescription,
                                                QString gameIcon,
+                                               QString gameTextColor,
+                                               QString gameWallpaper,
+                                               QString gameScreenshot,
+                                               QString gameYoutubeVideo,
                                                QWidget *parent
                                              )
 {
-    lclDatabase.addNewGame( gameTitle, launchCommand, launchCommandArgs, gameDescription, "", gameIcon, parent );
+    lclDatabase.addNewGame( gameTitle, launchCommand, launchCommandArgs, gameDescription, gameIcon, gameTextColor, gameWallpaper, gameScreenshot, gameYoutubeVideo, parent );
 
     refreshAllGames( );
 }
@@ -255,7 +259,7 @@ void gameDataGuiWidget::refreshAllGames( )
     gameNameWidget->deleteAllGameButtons( );
 
     // If there is data to process
-    if(  lclDatabase.displayData_v.empty( ) == false )
+    if( lclDatabase.displayData_v.empty( ) == false )
     {
         // Itterate through the entire database, and add every game name
         for( uint16_t i = 0U; i < lclDatabase.displayData_v.size(); i++ )
@@ -456,7 +460,7 @@ gamePrettyWidget::gamePrettyWidget( QWidget &parent, MainWindow &psdMainWin, app
     launchButton( new LaunchButtonWidget("Launch Game") ),
     gameInformation( new QLabel ),
     playTime( new QLabel ),
-    youtubeVideo( nullptr ),
+    youtubeVideo( new QWebEngineView ),
     youtubeVideoBorder( new QLabel ),
     layout( new QGridLayout(this) ),
     currentIconPath( new QString ),
@@ -504,6 +508,11 @@ gamePrettyWidget::gamePrettyWidget( QWidget &parent, MainWindow &psdMainWin, app
     launchButton->hide();
     gameDescriptionBox->hide();
     playTimeBox->hide();
+
+    // Load a dummy page to initialise the QWebEngineView, without this the application is initially
+    // quite slow to load the first page.
+    youtubeVideo->load(QUrl("https://duckduckgo.com"));
+    youtubeVideo->hide();
 
     this->setLayout(layout);
 }
@@ -769,6 +778,9 @@ void gamePrettyWidget::changeGameIconAndYtVideo( gameNameButtonWidget &buttonInf
     {
         // Add the widgets
         layout->addWidget( gameImageBorder, 1, 1, 1, 2, Qt::AlignCenter );
+
+        // Show the image
+        gameImageBorder->show();
     }
     else
     if(

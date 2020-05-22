@@ -48,8 +48,11 @@ public:
                      QString launchCommand,
                      QString launchCommandArgs,
                      QString gameDescription,
-                     QString gameWallpaper = "\0",
                      QString gameIcon = "\0",
+                     QString gameTextColor = "\0",
+                     QString gameWallpaper = "\0",
+                     QString gameScreenshot = "\0",
+                     QString gameYoutubeVideo = "\0",
                      QWidget *new_dialogue_parent = nullptr
                    );
     // Function for changing a games name

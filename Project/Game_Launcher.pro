@@ -41,13 +41,13 @@ HEADERS += \
 
 INCLUDEPATH += \
         ../Gui/Include \
-        ../Control/Include 
+        ../Control/Include
 
 FORMS += \
         ../UI/mainwindow.ui \
         ../UI/add_new_game_dialogue.ui
 
 RESOURCES += \
-             ../Icons/icons.qrc \
-             ./Style_Sheets/breeze.qrc
+       ../Icons/icons.qrc \
+       ./Style_Sheets/breeze.qrc
 

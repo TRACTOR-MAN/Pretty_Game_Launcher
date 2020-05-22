@@ -44,13 +44,21 @@ public slots:
 private slots:
     void searchForGameIcon( );
     void updateGameIcon( const QString selectedFile );
+    void searchForGameWallpaper( );
+    void updateGameWallpaper( const QString selectedFile );
+    void searchForGameScreenshot( );
+    void updateGameScreenshot( const QString selectedFile );
 
 signals:
     void gameIconTextChanged( const QString newString );
+    void gameWallpaperTextChanged( const QString newString );
+    void gameScreenshotTextChanged( const QString newString );
 
 private:
     Ui::Add_New_Game_Dialogue * ui;
     QFileDialog *gameIconFileDialog;
+    QFileDialog *gameWallpaperFileDialog;
+    QFileDialog *gameScreenshotFileDialog;
     static gameDataGuiWidget *lclGui;
     QString *fileDialogStartDir;
 };

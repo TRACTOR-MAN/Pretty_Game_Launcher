@@ -23,6 +23,8 @@ Add_New_Game_Dialogue::Add_New_Game_Dialogue( QWidget *parent ) :
     QDialog(parent),
     ui(new Ui::Add_New_Game_Dialogue),
     gameIconFileDialog(nullptr),
+    gameWallpaperFileDialog(nullptr),
+    gameScreenshotFileDialog(nullptr),
     fileDialogStartDir( new QString )
 {
     ui->setupUi(this);
@@ -88,6 +90,68 @@ void Add_New_Game_Dialogue::searchForGameIcon( )
 /*!
  *  \author    Thomas Sutton
  *  \version   1.0
+ *  \date      30/04/2020
+ *
+ *  \par       Description:
+ *             Member functrion for searching for a game wallpaper.
+ */
+void Add_New_Game_Dialogue::searchForGameWallpaper( )
+{
+    if( gameWallpaperFileDialog == nullptr )
+    {
+        gameWallpaperFileDialog = new( QFileDialog );
+        // Ensure that file open events are connected to a callback function
+        connect( gameWallpaperFileDialog, SIGNAL(fileSelected( QString )), this, SLOT(updateGameWallpaper( QString )) );
+    }
+
+    // Set the start directory
+    if( *fileDialogStartDir != "\0" )
+    {
+        gameWallpaperFileDialog->setDirectory( *fileDialogStartDir );
+    }
+    else
+    {
+        // Do nothing
+    }
+
+    // Show the file dialog
+    gameWallpaperFileDialog->show( );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      30/04/2020
+ *
+ *  \par       Description:
+ *             Member functrion for searching for a game screenshot.
+ */
+void Add_New_Game_Dialogue::searchForGameScreenshot( )
+{
+    if( gameScreenshotFileDialog == nullptr )
+    {
+        gameScreenshotFileDialog = new( QFileDialog );
+        // Ensure that file open events are connected to a callback function
+        connect( gameScreenshotFileDialog, SIGNAL(fileSelected( QString )), this, SLOT(updateGameScreenshot( QString )) );
+    }
+
+    // Set the start directory
+    if( *fileDialogStartDir != "\0" )
+    {
+        gameScreenshotFileDialog->setDirectory( *fileDialogStartDir );
+    }
+    else
+    {
+        // Do nothing
+    }
+
+    // Show the file dialog
+    gameScreenshotFileDialog->show( );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
  *  \date      03/03/2020
  *
  *  \par       Description:
@@ -97,6 +161,34 @@ void Add_New_Game_Dialogue::updateGameIcon( const QString selectedFile )
 {
     // Emit the textChanged signal, passing in the selected file.
     emit gameIconTextChanged( selectedFile );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      30/04/2020
+ *
+ *  \par       Description:
+ *             Member functrion for updating the game wallpaper.
+ */
+void Add_New_Game_Dialogue::updateGameWallpaper( const QString selectedFile )
+{
+    // Emit the textChanged signal, passing in the selected file.
+    emit gameWallpaperTextChanged( selectedFile );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      30/04/2020
+ *
+ *  \par       Description:
+ *             Member functrion for updating the game screenshot.
+ */
+void Add_New_Game_Dialogue::updateGameScreenshot( const QString selectedFile )
+{
+    // Emit the textChanged signal, passing in the selected file.
+    emit gameScreenshotTextChanged( selectedFile );
 }
 
 /*!
@@ -114,6 +206,9 @@ void Add_New_Game_Dialogue::clearDialogueElements( )
     ui->launchCommand->setPlainText("\0");
     ui->commandLineArgs->setText("\0");
     ui->gameDescription->setPlainText("\0");
+    ui->gameWallpaper->setText("\0");
+    ui->gameScreenshot->setText("\0");
+    ui->youtubeID->setText("\0");
 }
 
 /*!

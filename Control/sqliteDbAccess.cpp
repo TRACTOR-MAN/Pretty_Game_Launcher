@@ -252,15 +252,18 @@ void sqLiteDbInterface::addNewGame(
                                     QString launchCommand,
                                     QString launchCommandArgs,
                                     QString gameDescription,
-                                    QString gameWallpaper,
                                     QString gameIcon,
+                                    QString gameTextColor,
+                                    QString gameWallpaper,
+                                    QString gameScreenshot,
+                                    QString gameYoutubeVideo,
                                     QWidget *new_dialogue_parent
                                   )
 {
     QSqlQuery query;
 
     // prepare the query
-    query.prepare( "INSERT INTO GameLauncherData(gameName, gameIconPath, gameDescription, playTime, launchCommand, launchCommandArgs, gameWallpaper) values (:gameName, :gameIconPath, :gameDescription, :playTime, :launchCommand, :launchCommandArgs)" );
+    query.prepare( "INSERT INTO GameLauncherData(gameName, gameIconPath, gameScreenshotPath, YoutubeVideoId, gameWallpaper, gameTextColor, gameDescription, playTime, launchCommand, launchCommandArgs) values (:gameName, :gameIconPath, :gameScreenshotPath, :YoutubeVideoId, :gameWallpaper, :gameTextColor, :gameDescription, :playTime, :launchCommand, :launchCommandArgs)" );
 
     // Now bind the values
     query.bindValue( ":gameName", gameTitle );
@@ -270,6 +273,9 @@ void sqLiteDbInterface::addNewGame(
     query.bindValue( ":launchCommand", launchCommand );
     query.bindValue( ":launchCommandArgs", launchCommandArgs );
     query.bindValue( ":gameWallpaper", gameWallpaper );
+    query.bindValue( ":gameTextColor", gameTextColor );
+    query.bindValue( ":YoutubeVideoId", gameYoutubeVideo );
+    query.bindValue( ":gameScreenshotPath", gameScreenshot );
 
     // Execute the query
     if(query.exec() == false)

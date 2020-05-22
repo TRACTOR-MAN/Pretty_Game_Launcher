@@ -311,6 +311,10 @@ public:
                                 QString launchCommandArgs,
                                 QString gameDescription,
                                 QString gameIcon = "\0",
+                                QString gameTextColor = "\0",
+                                QString gameWallpaper = "\0",
+                                QString gameScreenshot = "\0",
+                                QString gameYoutubeVideo = "\0",
                                 QWidget *parent = nullptr
                               );
 
