@@ -308,11 +308,127 @@ void sqLiteDbInterface::addNewGame(
  *  \par       Description:
  *             Member function for changing a records game name
  */
-void sqLiteDbInterface::changeGameName( const QString oldName, const QString newName )
+void sqLiteDbInterface::changeGameName( const QString &oldName, const QString &newName )
 {
     QSqlQuery query;
 
     query.prepare( "UPDATE gameLauncherData SET gameName=\"" + newName + "\" WHERE gameName=\"" + oldName + "\"");
+
+    // Execute the query
+    if(query.exec() == false)
+    {
+        // Message pop up to the application
+        if( lclParent != nullptr )
+        {
+            QMessageBox::warning( lclParent, "Pretty Game Launcher", query.lastError().text() );
+        }
+        else
+        {
+            // Do nothing
+        }
+    }
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      08/11/2020
+ *
+ *  \par       Description:
+ *             Member function for changing a records game text colour
+ */
+void sqLiteDbInterface::changeGameColour( const QString &gameName, const QString &newColour )
+{
+    QSqlQuery query;
+
+    query.prepare( "UPDATE gameLauncherData SET gameTextColor=\"" + newColour + "\" WHERE gameName=\"" + gameName + "\"");
+
+    // Execute the query
+    if(query.exec() == false)
+    {
+        // Message pop up to the application
+        if( lclParent != nullptr )
+        {
+            QMessageBox::warning( lclParent, "Pretty Game Launcher", query.lastError().text() );
+        }
+        else
+        {
+            // Do nothing
+        }
+    }
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      08/11/2020
+ *
+ *  \par       Description:
+ *             Member function for changing a records game screenshot
+ */
+void sqLiteDbInterface::changeGameScreenshot( const QString &gameName, const QString &newScreenshot )
+{
+    QSqlQuery query;
+
+    query.prepare( "UPDATE gameLauncherData SET gameScreenshotPath=\"" + newScreenshot + "\" WHERE gameName=\"" + gameName + "\"");
+
+    // Execute the query
+    if(query.exec() == false)
+    {
+        // Message pop up to the application
+        if( lclParent != nullptr )
+        {
+            QMessageBox::warning( lclParent, "Pretty Game Launcher", query.lastError().text() );
+        }
+        else
+        {
+            // Do nothing
+        }
+    }
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      08/11/2020
+ *
+ *  \par       Description:
+ *             Member function for changing a records game wallpaper
+ */
+void sqLiteDbInterface::changeGameWallpaper( const QString &gameName, const QString &newWallpaper)
+{
+    QSqlQuery query;
+
+    query.prepare( "UPDATE gameLauncherData SET gameWallpaper=\"" + newWallpaper + "\" WHERE gameName=\"" + gameName + "\"");
+
+    // Execute the query
+    if(query.exec() == false)
+    {
+        // Message pop up to the application
+        if( lclParent != nullptr )
+        {
+            QMessageBox::warning( lclParent, "Pretty Game Launcher", query.lastError().text() );
+        }
+        else
+        {
+            // Do nothing
+        }
+    }
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      08/11/2020
+ *
+ *  \par       Description:
+ *             Member function for changing a records games youtube video ID
+ */
+void sqLiteDbInterface::changeGameYtId( const QString &gameName, const QString &newYtId)
+{
+    QSqlQuery query;
+
+    query.prepare( "UPDATE gameLauncherData SET YoutubeVideoId\"" + newYtId + "\" WHERE gameName=\"" + gameName + "\"");
 
     // Execute the query
     if(query.exec() == false)

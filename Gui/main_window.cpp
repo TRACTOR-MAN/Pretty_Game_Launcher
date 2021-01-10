@@ -36,7 +36,9 @@ MainWindow::MainWindow(application_theme_c &psdTheme, QWidget *parent) :
     ui->setupUi( this );
 
     // Start in normal mode
+    //showNormal( );
     showNormal( );
+    showMaximized();
 
     // Need to ensure this opens up in screen one
 }
@@ -160,11 +162,11 @@ void MainWindow::addNewGameToDbc( )
         // Clear dialogue elements
         addNewGame->clearDialogueElements( );
         }
-        else
-        {
-            // Message pop up to the application
-            QMessageBox::warning( this, "Pretty Game Launcher", "All inputs not populated, ensure that Game Title, a Launch Command, and the Game description are populated" );
-        }
+    }
+    else
+    {
+        // Message pop up to the application
+        QMessageBox::warning( this, "Pretty Game Launcher", "All inputs not populated, ensure that Game Title, a Launch Command, and the Game description are populated" );
     }
 }
 

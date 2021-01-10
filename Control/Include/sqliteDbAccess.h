@@ -56,7 +56,7 @@ public:
                      QWidget *new_dialogue_parent = nullptr
                    );
     // Function for changing a games name
-    void changeGameName( const QString oldName, const QString newName );
+    void changeGameName( const QString &oldName, const QString &newName );
     // Function for changing a games icon
     void changeGameIcon( const QString &gameName, const QString &newIcon );
     // Function for changing a games launch script
@@ -65,6 +65,17 @@ public:
     void changeCmdArgs( const QString &gameName, const QString &newArgs );
     // Function for changing a games description
     void changeGameDesc( const QString &gameName, const QString &newDesc );
+    // Function for changing a games text colour
+    void changeGameColour( const QString &gameName, const QString &newColour );
+    // Function for changing a games screenshot
+    void changeGameScreenshot( const QString &gameName, const QString &newScreenshot );
+    // Function for changing a games wallpaper
+    void changeGameWallpaper( const QString &gameName, const QString &newWallpaper);
+    // Function for changing a games youtube video ID
+    void changeGameYtId( const QString &gameName, const QString &newYtId);
+
+
+
 
     // Constant pointer to an sqlite database
     QSqlDatabase * const my_db;

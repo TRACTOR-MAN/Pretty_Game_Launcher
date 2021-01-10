@@ -140,6 +140,7 @@ void gameDataGuiWidget::changeGameData( const GUI_game_information_st & data, ga
         // Do nothing
     }
 
+    // Now launch command
     if( thisNameButton->launchCommand != data.LaunchCommand )
     {
         // First update the database with the new data
@@ -186,7 +187,39 @@ void gameDataGuiWidget::changeGameData( const GUI_game_information_st & data, ga
         // Do nothing
     }
 
-    // Finally Game description
+    // Now game text colour and background wallpaper
+    if( thisNameButton->gameTextColor != data.gameTextColor )
+    {
+        // First update the database with the new data
+        lclDatabase.changeGameColour( thisNameButton->text(), data.gameTextColor );
+
+        // Create a current stylesheet QString
+        QString CurrentStyleSheet( prettyWidget->styleSheet() );
+
+        // Obtain the current style sheet in use
+        QString styleText;
+        prettyWidget->prepTextColourStlSht( styleText, thisNameButton->gameTextColor, thisNameButton->gameWallpaper );
+
+        // Updat the current display if we are currently displaying data for this button
+        if( styleText == prettyWidget->styleSheet() )
+        {
+            update_pretty_info_b = true;
+        }
+        else
+        {
+            // Game text colour not the same
+        }
+
+        // Now update the text colour and background image
+        thisNameButton->gameTextColor = data.gameTextColor;
+        thisNameButton->gameWallpaper = data.GameWallpaper;
+    }
+    else
+    {
+        // Do nothing
+    }
+
+    // Now the Game description
     if( thisNameButton->gameDescription != data.gameDescription )
     {
         // First update the database with the new data
@@ -203,6 +236,29 @@ void gameDataGuiWidget::changeGameData( const GUI_game_information_st & data, ga
 
         // Now update the launch command button
         thisNameButton->gameDescription = data.gameDescription;
+    }
+    else
+    {
+        // Do nothing
+    }
+
+    // Now the youtube video ID
+    if( thisNameButton->youtubeVideoID != data.youtubeVideoID )
+    {
+        // First update the database with the new data
+        lclDatabase.changeGameYtId( thisNameButton->text(), data.youtubeVideoID );
+
+        if( prettyWidget->youtubeVideo->url() == QUrl(prettyWidget->URLString1 + thisNameButton->youtubeVideoID + prettyWidget->URLString2NoAutoplay ) )
+        {
+            update_pretty_info_b = true;
+        }
+        else
+        {
+            // Game desc not the same
+        }
+
+        // Now update the youtube video ID
+        thisNameButton->youtubeVideoID = data.youtubeVideoID;
     }
     else
     {
@@ -830,39 +886,53 @@ void gamePrettyWidget::updateTheme( gameNameButtonWidget &buttonInformation )
         // Do nothing
     }
 
-    // Now update local theme elements, depending on user selection
-    if( buttonInformation.gameWallpaper != "\0" )
+
+    // Configure the style sheets of all widgets
+    gameDescriptionBox->setStyleSheet("background-color:rgba(255,255,255,30);");
+    playTimeBox->setStyleSheet("background-color:rgba(255,255,255,30);");
+    launchButton->setStyleSheet("background-color:rgba(255,255,255,30);");
+    gameInformation->setStyleSheet("background-color:rgba(255,255,255,0);");
+    playTime->setStyleSheet("background-color:rgba(255,255,255,0);");
+    gameImageBorder->setStyleSheet("background-color:rgba(0,0,0,80);");
+    youtubeVideoBorder->setStyleSheet("background-color:rgba(0,0,0,80);");
+
+    QString styleText;
+    prepTextColourStlSht( styleText, buttonInformation.gameTextColor, buttonInformation.gameWallpaper );
+
+    // Set the background image
+    setStyleSheet( styleText );
+}
+
+/*!
+ *  \author    Thomas Sutton
+ *  \version   1.0
+ *  \date      04/01/2021
+ *
+ *  \par       Description:
+ *             Function for preparing a stylesheet for updating the game wallpaper and text colour
+ */
+void gamePrettyWidget::prepTextColourStlSht( QString &styleText, const QString &Colour , const QString &Wallpaper )
+{
+    if( Wallpaper != "\0" )
     {
-        // Configure the style sheets of all widgets
-        gameDescriptionBox->setStyleSheet("background-color:rgba(255,255,255,30);");
-        playTimeBox->setStyleSheet("background-color:rgba(255,255,255,30);");
-        launchButton->setStyleSheet("background-color:rgba(255,255,255,30);");
-        gameInformation->setStyleSheet("background-color:rgba(255,255,255,0);");
-        playTime->setStyleSheet("background-color:rgba(255,255,255,0);");
-        gameImageBorder->setStyleSheet("background-color:rgba(0,0,0,80);");
-        youtubeVideoBorder->setStyleSheet("background-color:rgba(0,0,0,80);");
-
-        QString styleText = "gamePrettyWidget{background-image:url(\"" + buttonInformation.gameWallpaper + "\"); background-position: center;} ";
-
-        if( buttonInformation.gameTextColor != "\0" )
-        {
-            styleText += "QLabel{color: " + buttonInformation.gameTextColor + ";} ";
-
-            styleText += "QPushButton{color: " + buttonInformation.gameTextColor + ";} ";
-
-            styleText += "QGroupBox{color: " + buttonInformation.gameTextColor + ";} ";
-        }
-        else
-        {
-            // Do nothing, no text color demanded
-        }
-
-        // Set the background image
-        setStyleSheet( styleText );
+        styleText = "gamePrettyWidget{background-image:url(\"" + Wallpaper + "\"); background-position: center;} ";
     }
     else
     {
         // Do nothing
+    }
+
+    if( Colour != "\0" )
+    {
+        styleText += "QLabel{color: " + Colour + ";} ";
+
+        styleText += "QPushButton{color: " + Colour + ";} ";
+
+        styleText += "QGroupBox{color: " + Colour+ ";} ";
+    }
+    else
+    {
+        // Do nothing, no text color demanded
     }
 }
 
@@ -1132,7 +1202,7 @@ gameNameContextMenu::gameNameContextMenu( gameNameButtonWidget *parent ) :
  *  \date      14/04/2020
  *
  *  \par       Description:
- *             Slot function for openning a game parameters edit dialog.
+ *             Slot function for opening a game parameters edit dialog.
  */
 void gameNameContextMenu::editGameParamsEvent( )
 {
@@ -1159,8 +1229,11 @@ void gameNameContextMenu::editGameParamsEvent( )
 
     // Set the current game Icon
     QFileInfo fullStartPath( lclParent->gameIcon );
+    // Get the filename alone from the full icon start path
     QString fileName( fullStartPath.fileName( ) );
+    // Setup a start directory string
     QString startDirectory( lclParent->gameIcon );
+    // Remove the filename from the string
     startDirectory.remove( ( lclParent->gameIcon.size() - fileName.size() ), fileName.size() );
 
     // With the file params understood set the start directory and text
@@ -1175,6 +1248,21 @@ void gameNameContextMenu::editGameParamsEvent( )
 
     // Set the game description
     lclEditDialogUi->gameDescription->setPlainText( lclParent->gameDescription );
+
+    // Set the screenshot image name
+    lclEditDialogUi->gameScreenshot->setText( lclParent->gameScreenshot );
+
+    // Set the game text colour    
+    int index = lclEditDialogUi->textColorComboBox->findText( lclParent->gameTextColor );
+    if ( index != -1 ) { // -1 for not found
+       lclEditDialogUi->textColorComboBox->setCurrentIndex(index);
+    }
+
+    // Set the wallpaper image name
+    lclEditDialogUi->gameWallpaper->setText( lclParent->gameWallpaper );
+
+    // Set the youtube video ID
+    lclEditDialogUi->youtubeID->setText( lclParent->youtubeVideoID );
 
     // Show the dialog
     gameEditDialog->show( );
@@ -1198,6 +1286,10 @@ void gameNameContextMenu::newGameDataAccepted( )
     gameInformation->LaunchCommand = lclEditDialogUi->launchCommand->toPlainText( );
     gameInformation->LaunchCommandArgs = lclEditDialogUi->commandLineArgs->text( );
     gameInformation->gameDescription = lclEditDialogUi->gameDescription->toPlainText( );
+    gameInformation->gameScreenShot = lclEditDialogUi->gameScreenshot->text( );
+    gameInformation->GameWallpaper = lclEditDialogUi->gameWallpaper->text( );
+    gameInformation->youtubeVideoID = lclEditDialogUi->youtubeID->text( );
+    gameInformation->gameTextColor = lclEditDialogUi->textColorComboBox->currentText();
 
     // Emit the signal
     emit gameContextUpdateGameData( *gameInformation );

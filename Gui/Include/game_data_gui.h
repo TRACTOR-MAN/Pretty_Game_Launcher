@@ -108,7 +108,6 @@ public:
     QString gameTextColor;
     QString launchCommand;
     QString launchCommandArgs;
-
 private:
     gameNameContextMenu *contextMenu;
 
@@ -231,6 +230,8 @@ public:
     void changePlayTime( gameNameButtonWidget &buttonInformation );
     // Function for updating the game's wallpaper and text color
     void updateTheme( gameNameButtonWidget &buttonInformation );
+    // Function for preparing a style sheet for changing widget text colours
+    void prepTextColourStlSht( QString &styleText, const QString &Colour, const QString &Wallpaper );
     // Function for paint event override, to support stylesheets
     void paintEvent(QPaintEvent *) override;
 
